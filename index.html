@@ -182,116 +182,14 @@ Exprs &amp; \rightarrow Expr  ,  Exprs\\\\
     </header>
     <div>
       
-        <p>撸了个 <a href="https://github.com/nameoverflow/LittleScheme" target="_blank" rel="external">Scheme 解释器</a>，也算是拿 Haskell 做过东西了（虽然只是个玩具</p>
+        <p>撸了个 <a href="https://github.com/nameoverflow/LittleScheme">Scheme 解释器</a>，也算是拿 Haskell 做过东西了（虽然只是个玩具</p>
 <p>最大的体会就是，既熟悉了 Haskell，也巩固了 Scheme （虽然看过 SICP 但是并不是很明白它的 quosiquote 和 call/cc 之类的鬼东西</p>
-<p>本来是打算自己定义一门语言（像<a href="https://hcyue.me/article/56eb92c6d09a19dd0956c469" target="_blank" rel="external">这个</a>），但是发现挺麻烦的（大雾），而且我比较关心的也是解释执行的过程，于是还是决定把 Scheme 实现一下。大体上是跟着 <a href="https://en.wikibooks.org/wiki/Write_Yourself_a_Scheme_in_48_Hours" target="_blank" rel="external">Write Yourself a Scheme in 48 Hours</a> 来的，在它的基础上增加了 Continuation 之类的玩意儿</p>
-<h3 id="0-Parser"><a href="#0-Parser" class="headerlink" title="0. Parser"></a>0. Parser</h3><p>虽然 Lisp 的语法接近没有，但是还是总还是需要一个 Parser。Haskell 写Parser 的利器便是 <code>parsec</code> 。其实一开始有点想自己实现一个简单的 parser combiner ，但是最后还是懒（</p>
-<p>Lisp 语法——所谓 S-expressions ，其实就是嵌套的列表，语法定义非常的简单</p>
-<pre><code class="text">List → Expr (spaces) List | Expr
-Expr → &apos;(&apos; List &apos;)&apos; | Atom
-</code></pre>
-<p>当然其实还有 quote 、dotted 之类的语法糖，也就是多加几个分支而已。</p>
-<p>接下来便开始愉快的写代码了。写 Haskell 第一步当然是考虑类型。Scheme 语言内的数据类型这个解释器暂且实现四种：<code>Number</code> 整型、<code>Float</code> 浮点、<code>String</code> 字符串以及 <code>Bool</code> 。再加上语法中的 <code>List</code> 和 <code>DottedList</code> 以及通用的标识符 <code>Atom</code> ，便可以定义一个有 7 个值（ constructor ）的类型 <code>LispVal</code></p>
-<pre><code class="haskell"><span class="class"><span class="keyword">data</span> <span class="type">LispVal</span> = <span class="type">Atom</span> <span class="type">String</span></span>
-             | <span class="type">List</span> [<span class="type">LispVal</span>]
-             | <span class="type">DottedList</span> [<span class="type">LispVal</span>] <span class="type">LispVal</span>
-             | <span class="type">Number</span> <span class="type">Integer</span>
-             | <span class="type">Float</span> <span class="type">Double</span>
-             | <span class="type">String</span> <span class="type">String</span>
-             | <span class="type">Bool</span> <span class="type">Bool</span>
-</code></pre>
-<p>当然，顺便让他们能够被 <code>show</code> 一下</p>
-<pre><code class="haskell"><span class="class"><span class="keyword">instance</span> <span class="type">Show</span> <span class="type">LispVal</span> <span class="keyword">where</span></span>
-    show (<span class="type">Atom</span> name) = name
-    show (<span class="type">List</span> contents) = <span class="string">"("</span> ++ unwordsList contents ++ <span class="string">")"</span>
-    show (<span class="type">DottedList</span> h t) = <span class="string">"("</span> ++ unwordsList h ++ <span class="string">" . "</span> ++ show t ++ <span class="string">")"</span>
-    show (<span class="type">String</span> ctns) = <span class="string">"\""</span> ++ ctns ++ <span class="string">"\""</span>
-    show (<span class="type">Number</span> num) = show num
-    show (<span class="type">Float</span> num) = show num
-    show (<span class="type">Bool</span> <span class="type">True</span>) = <span class="string">"#t"</span>
-    show (<span class="type">Bool</span> <span class="type">False</span>) = <span class="string">"#f"</span>
-
-<span class="title">unwordsList</span> :: [<span class="type">LispVal</span>] -&gt; <span class="type">String</span>
-<span class="title">unwordsList</span> = unwords . map show
-</code></pre>
-<p>然后便是拼 parsec 的组合子，将语法对应解析到七个 constructor 上</p>
-<pre><code class="haskell"><span class="class"><span class="keyword">type</span> <span class="type">LispParser</span> = <span class="type">Parser</span> <span class="type">LispVal</span></span>
-
-<span class="title">parseExpr</span> :: <span class="type">LispParser</span>
-<span class="title">parseExpr</span> = parseString &lt;|&gt; parseNumber &lt;|&gt; parseListSugar &lt;|&gt; parseAtom &lt;|&gt; <span class="keyword">do</span>
-    _ &lt;- char '('
-    x &lt;- try parseList &lt;|&gt; parseDottedList
-    _ &lt;- char ')'
-    return x
-</code></pre>
-<p>分别按照对应的语法规则实现 <code>parseString</code> <code>parseNumber</code> <code>parseAtom</code> <code>parseList</code> <code>parseDottedList</code> 即可（<a href="https://github.com/nameoverflow/LittleScheme/blob/master/src/Hscheme/Parser.hs" target="_blank" rel="external">参考</a>），其中 <code>parseListSugar</code> 用于解析 quote 之类的语法糖。</p>
-<h2 id="1-执行、规约"><a href="#1-执行、规约" class="headerlink" title="1. 执行、规约"></a>1. 执行、规约</h2><p>如何将一个 S 表达式变成一个值？</p>
-<p>最普通的情况，考虑一个 S 表达式表达函数调用。我们都知道 lambda calculus 的三条规则：</p>
-<blockquote>
-<p>α-conversion: changing bound variables (alpha);</p>
-<p>β-reduction: applying functions to their arguments (beta);</p>
-<p>η-conversion: which captures a notion of extensionality (eta).</p>
-</blockquote>
-<p>实现执行 Lisp 语句，实际上就是实现 β 规约——代换求值的过程。将一个 List 看作为 <code>((λV1.λV2.λV3.(...).E) ...) E3&#39;) E2&#39;) E1&#39;)</code> ，作代换 <code>E [V:=E&#39;]</code> 直到得到一个不能再规约的 β 范式。</p>
-<p>得到了 β 范式之后呢？在实际的编程中表达式总会有一个值。经过上述过程之后得到的 β 范式，在实际中可能有两种形式：只包含一个自由变量的表达式 M，或者一个 lambda 表达式 λV.E 。</p>
-<p>显然，如果最后的结果是只包含一个自由变量的表达式，我们的程序运行结果就是这个自由变量所对应的值。那么这个值到底是多少呢？这就涉及到一个很常见的 <code>闭包</code> 概念。如果规约结果是个函数，类似的，程序的运行结果可能是一个函数，而在这里还有另外一种可能—— Lisp 是一种不支持默认的函数部分应用的语言，如果规约出的 β 范式结果是一个函数，也有可能是程序出错——参数数目不一致。</p>
-<p>这里暂且不讨论如何得到最后的结果，先实现对一个 Lisp 表达式进行 β 规约的 <code>eval</code> 函数。</p>
-<p>由于存在抛错（参数数目不匹配）的情况，首先需要定义一个异常类型（利用 <code>Control.Monad.Error</code> 包），并实现从 <code>Either</code> 类型中获取值</p>
-<pre><code class="haskell"><span class="comment">-- import</span>
-<span class="keyword">import</span> Control.Monad.Error
-
-<span class="comment">-- type</span>
-<span class="class"><span class="keyword">data</span> <span class="type">LispError</span> = <span class="type">NumArgs</span> <span class="type">Integer</span> [<span class="type">LispVal</span>]</span>
-
-<span class="title">extractValue</span> :: <span class="type">ThrowsError</span> a -&gt; a
-<span class="title">extractValue</span> (<span class="type">Right</span> val) = val
-<span class="title">extractValue</span> _           = undefined
-<span class="class">
-<span class="keyword">instance</span> <span class="type">Show</span> <span class="type">LispError</span> <span class="keyword">where</span></span>
-    show (<span class="type">NumArgs</span> expr found) = <span class="string">"Expected "</span> ++ show expr ++ <span class="string">" args; found values "</span> ++ unwordsList found
-<span class="class">
-<span class="keyword">instance</span> <span class="type">Error</span> <span class="type">LispError</span> <span class="keyword">where</span></span>
-    noMsg = <span class="type">Default</span> <span class="string">"An error has occurred"</span>
-    strMsg = <span class="type">Default</span>
-
-<span class="class"><span class="keyword">type</span> <span class="type">ThrowsError</span> = <span class="type">Either</span> <span class="type">LispError</span></span>
-</code></pre>
-<p>目前为止，我们的 <code>eval</code> 过程只是对表达式进行规约，接受的参数类型为 <code>LispVal</code> ，返回值也是一个 <code>LispVal</code> ，当然也可能抛异常。</p>
-<pre><code class="haskell"><span class="title">eval</span> :: <span class="type">LispVal</span> -&gt; <span class="type">ThrowsError</span> <span class="type">LispVal</span>
-</code></pre>
-<p>接着我们考虑如何表达一个函数。</p>
-<p>从 λ 表达式和 Lisp 函数的形式来看，有两个要素——形参和函数体。我们可以用一个包含两个字段的 <code>record</code> 来表示。</p>
-<pre><code class="haskell"><span class="class"><span class="keyword">data</span> <span class="type">LispFunc</span> = <span class="type">LispFunc</span> {
-    <span class="title">paramsList</span> :: [<span class="type">String</span>],
-    <span class="title">body</span> :: [<span class="type">LispVal</span>]
-}</span>
-</code></pre>
-<p>并且函数应该作为语言中的一个类型</p>
-<pre><code class="haskell"><span class="class"><span class="keyword">data</span> <span class="type">LispVal</span> = <span class="type">Atom</span> <span class="type">String</span></span>
-             | <span class="type">List</span> [<span class="type">LispVal</span>]
-             | <span class="type">DottedList</span> [<span class="type">LispVal</span>] <span class="type">LispVal</span>
-             | <span class="type">Number</span> <span class="type">Integer</span>
-             | <span class="type">Float</span> <span class="type">Double</span>
-             | <span class="type">String</span> <span class="type">String</span>
-             | <span class="type">Bool</span> <span class="type">Bool</span>
-             | <span class="type">Lambda</span> <span class="type">LispFunc</span>
-</code></pre>
-<p>然后 <code>show</code> 一下</p>
-<pre><code class="haskell"><span class="title">show</span> (<span class="type">Lambda</span> <span class="type">LispFunc</span> { paramsList = params }) =
-  <span class="string">"(lambda ("</span> ++ unwords (map show params) ++ <span class="string">") ...)"</span>
-</code></pre>
-<p>在 Scheme 中，表示一个函数的语法为 <code>(lambda (params) (body))</code> 。如果在执行过程中碰到这种形式的表达式，我们会把它规约为一个函数。用模式匹配很容易做到。</p>
-<pre><code class="haskell"><span class="title">eval</span> (<span class="type">List</span> (<span class="type">Atom</span> <span class="string">"lambda"</span> : <span class="type">List</span> params : funcBody)) =
-     makeFunction params funcBody
-
-<span class="comment">-- makeFunction</span>
-<span class="title">makeFunction</span> :: [<span class="type">LispVal</span>] -&gt; [<span class="type">LispVal</span>] -&gt; <span class="type">LispVal</span>
-<span class="title">makeFunction</span> args funcBody = <span class="type">Lambda</span> $ <span class="type">LispFunc</span> (map show args) funcBody
-</code></pre>
-<p>然后考虑通用的函数调用语句 <code>(function params...)</code></p>
-<p>{- 妈呀写的好累 -}</p>
-<p>{- TODO -}</p>
-
+<p>本来是打算自己定义一门语言（像<a href="https://hcyue.me/article/56eb92c6d09a19dd0956c469">这个</a>），但是发现挺麻烦的（大雾），而且我比较关心的也是解释执行的过程，于是还是决定把 Scheme 实现一下。大体上是跟着 <a href="https://en.wikibooks.org/wiki/Write_Yourself_a_Scheme_in_48_Hours">Write Yourself a Scheme in 48 Hours</a> 来的，在它的基础上增加了 Continuation 之类的玩意儿</p>
+        
+          <div class="more-link">
+            <a href="/2016/08/01/Write-You-a-Scheme/#more">Read On »</a>
+          </div>
+        
       
     </div>
 </article>
