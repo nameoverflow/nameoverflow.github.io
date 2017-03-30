@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <ul class="Index">
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2015/10/16/重新启用https/">重新启用https</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2015-10-16T05:58:10.000Z" itemprop="datePublished">
+    2015-10-16
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/server/">server</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>之前因为误操作把老版站点的服务器给挂了【手残把iptables drop all了orz】，新版博客弄到了另一台服务器，于是便没有开启https。</p>
+<p>今天把证书弄了回来，于是重新开启了https访问。</p>
+<p>然而个人小站开https存粹装逼罢了= =</p>
+<p>开启https需要把证书放在指定的位置，然后配置nginx开启ssl</p>
+<pre><code class="nginx"><span class="section">server</span> {
+  <span class="attribute">listen</span> <span class="number">80</span>;
+  <span class="attribute">server_name</span> hcyue.me www.hcyue.me;
+  <span class="attribute">rewrite</span><span class="regexp"> ^</span> https://<span class="variable">$server_name</span><span class="variable">$request_uri</span>? <span class="literal">permanent</span>;
+}
+<span class="section">server</span> {
+    <span class="attribute">listen</span> <span class="number">443</span> ssl http2;
+    <span class="attribute">server_name</span> www.hcyue.me hcyue.me;
+    <span class="attribute">include</span> <span class="literal">none</span>.conf;
+    <span class="attribute">location</span> / {
+        <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;  
+        <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;  
+        <span class="attribute">proxy_set_header</span> Host <span class="variable">$http_host</span>;  
+        <span class="attribute">proxy_set_header</span> X-NginX-Proxy <span class="literal">true</span>;  
+        <span class="attribute">proxy_pass</span> http://127.0.0.1:4000/;  
+        <span class="attribute">proxy_redirect</span> <span class="literal">off</span>;  
+    }
+    <span class="attribute">location</span> /static/ {
+        <span class="attribute">alias</span> [打码];
+        <span class="attribute">expires</span> <span class="number">30d</span>;
+        <span class="attribute">autoindex</span> <span class="literal">on</span>;
+    }
+    <span class="attribute">access_log</span>  [打码]  access;
+    <span class="attribute">ssl</span> <span class="literal">on</span>;
+    <span class="attribute">ssl_certificate</span> [打码]/hcyue_me.crt;
+    <span class="attribute">ssl_certificate_key</span> [打码]/hcyue_me.key;
+}
+</code></pre>
+<p>然后打开iptables的443端口</p>
+<pre><code class="bash">iptables -A INPUT -p tcp -m multiport --dports 80,443 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p tcp -m multiport --dports 80,443 -m state --state NEW,ESTABLISHED -j ACCEPT
+</code></pre>
+<p>重启nginx，小绿锁就回来咯</p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+</ul>
+
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

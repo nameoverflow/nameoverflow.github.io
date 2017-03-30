@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>H大综合楼，一跃解千愁 | Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>H大综合楼，一跃解千愁</h1>
+    </header>
+
+    <section>
+      <figure class="highlight haskell"><table><tr><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">-- fuck**u.hs</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> Data.List</div><div class="line"></div><div class="line"><span class="keyword">import</span> Data.List.Split</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">-- *大综合楼</span></div><div class="line"></div><div class="line"><span class="comment">-- 一跃解千愁</span></div><div class="line"></div><div class="line"><span class="title">getFloor</span> :: <span class="type">Int</span> -&gt; <span class="type">String</span> -&gt; <span class="type">String</span></div><div class="line"></div><div class="line"><span class="title">getFloor</span> count char =</div><div class="line"></div><div class="line">    <span class="string">"│"</span> ++ fuck char ++ <span class="string">"│"</span></div><div class="line"></div><div class="line">    <span class="keyword">where</span></div><div class="line"></div><div class="line">        fuck = concat.replicate count</div><div class="line"></div><div class="line"><span class="title">build</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">String</span></div><div class="line"></div><div class="line"><span class="title">build</span> width height jump =</div><div class="line"></div><div class="line">    concat (top : fuck ++ [ground])</div><div class="line"></div><div class="line">    <span class="keyword">where</span></div><div class="line"></div><div class="line">        top = '┌' : replicate (width * <span class="number">2</span>) '─' ++ <span class="string">"┐\n"</span></div><div class="line"></div><div class="line">        ground = '┴' : replicate (width * <span class="number">2</span>) '─' ++ <span class="string">"┴"</span> ++ replicate <span class="number">10</span> '─'</div><div class="line"></div><div class="line">        fuck = zipWith `++` (concat (replicate height floors)) overflow</div><div class="line"></div><div class="line">                <span class="keyword">where</span></div><div class="line"></div><div class="line">                    floors = map (getFloor width) [<span class="string">"┌┐"</span>, <span class="string">"└┘"</span>]</div><div class="line"></div><div class="line">                    body = [<span class="string">"  ╰O╯\n"</span>, <span class="string">"   /\n"</span>, <span class="string">"  /)\n"</span>]</div><div class="line"></div><div class="line">                    repl' p c = replicate c p</div><div class="line"></div><div class="line">                    overflow = replicate ((height - jump) * <span class="number">2</span> - <span class="number">1</span>) <span class="string">"\n"</span> ++ body ++ replicate (jump * <span class="number">2</span> - <span class="number">1</span>) <span class="string">"\n"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="title">main</span> :: <span class="type">IO</span> ()</div><div class="line"></div><div class="line"><span class="title">main</span> = <span class="keyword">do</span></div><div class="line"></div><div class="line">    putStrLn <span class="string">"综合楼高 综合楼宽 飞翔层数"</span></div><div class="line"></div><div class="line">    params &lt;- getLine</div><div class="line"></div><div class="line">    <span class="keyword">let</span> [width, height, jump] = splitOn <span class="string">" "</span> params <span class="keyword">in</span></div><div class="line"></div><div class="line">        putStrLn $ build (read width :: <span class="type">Int</span>) (read height :: <span class="type">Int</span>) (read jump :: <span class="type">Int</span>)</div><div class="line"></div><div class="line">    putStrLn <span class="string">"*大综合楼\n一跃解千愁"</span></div></pre></td></tr></table></figure>
+<p><img src="https://dn-hcyue.qbox.me/img/QQ%E6%88%AA%E5%9B%BE20151114022522_1.png" alt="hehe"></p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2015-11-13T18:27:11.000Z" itemprop="datePublished">
+              2015-11-14
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/haskell/">haskell</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

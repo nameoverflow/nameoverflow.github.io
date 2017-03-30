@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>撸了个node的微型web server | Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>撸了个node的微型web server</h1>
+    </header>
+
+    <section>
+      <p><a href="https://github.com/NameIsUseless/yue" target="_blank" rel="external">Github 链接在此</a></p>
+<p>（明明是全是coffee文件强行叫.js，凑表碾）</p>
+<hr>
+<blockquote>
+<p>yue.js is a tiny web server based on Node.js and CoffeeScript, supporting <code>route</code>, <code>session</code>, <code>database</code> (based on mongodb and is not completed yet..) and <code>static file</code>.</p>
+</blockquote>
+<p>已经实现的功能有：路由(<code>Router</code>)，静态文件(<code>Static File</code>)， Session相关。</p>
+<p>Router用了一种简单粗暴的实现，即把输入的uri解析之后拼成正则保存下来，接受请求的时候一个个正则去match。</p>
+<p>主要的想法是做成松散的结构，支持各种中间件，虽然现有的核心功能都是写的比较死的，但是后续的扩展方式应该是各种中间件。</p>
+<p>其中把对request和response的相关操作封装在了一个connection对象里，各种中间件可以给它添加属性方法之类。</p>
+<p>这东西其实是为了我的新版博客写的，然后新版博客是想做成spa，于是还有一堆前端的东西要写=。=</p>
+<p>（然而说好的函数式信徒结果写成了依赖副作用的架构）</p>
+<p>（以后再重构吧）</p>
+<p>（以后===说不定就忘记了）</p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2015-08-02T17:16:00.000Z" itemprop="datePublished">
+              2015-08-03
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/nodejs/">nodejs</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

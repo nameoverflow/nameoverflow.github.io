@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vitrualenv:Python虚拟环境 | Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Vitrualenv:Python虚拟环境</h1>
+    </header>
+
+    <section>
+      <blockquote>
+<p>virtualenv 有什么用？如果你象我一样热爱 Python ，那么除了基于 Flask 的项目外 还会有其他项目用到 Python 。当项目越来越多时就会面对使用不同版本的 Python 的 问题，或者至少会遇到使用不同版本的 Python 库的问题。摆在你面前的是：库常常不能 向后兼容，更不幸的是任何成熟的应用都不是零依赖。如果两个项目依赖出现冲突， 怎么办？</p>
+<p>Virtualenv 就是救星！它的基本原理是为每个项目安装一套 Python ，多套 Python 并存。但它不是真正地安装多套独立的 Python 拷贝，而是使用了一种巧妙的方法让不同 的项目处于各自独立的环境中。<br>（来自flask官方文档）</p>
+</blockquote>
+<p>（再次深刻认识到我的渣英语和渣翻译）</p>
+<p>在linux下安装：</p>
+<pre><code>$ pip install vitrualenv
+</code></pre><p><a id="more"></a>在项目文件夹下创建虚拟环境<br>    $ virtualenv venv<br>    New python executable in venv/bin/python<br>    Installing setuptools, pip…done.<br>venv为虚拟环境所在目录。</p>
+<p>开启虚拟环境：<br>    $ source venv/bin/activate<br>此时进入了名为venv的虚拟环境。</p>
+<p>在虚拟环境下安装python套件<br>    (venv)$ pip install Flask<br>    Collecting Flask<br>        Downloading Flask-0.10.1.tar.gz (544kB)<br>            100% |################################| 544kB 69kB/s<br>    Collecting Werkzeug&gt;=0.7 (from Flask)<br>        Downloading Werkzeug-0.10.tar.gz (1.1MB)<br>            100% |################################| 1.1MB 18kB/s<br>    Collecting Jinja2&gt;=2.4 (from Flask)<br>        Downloading Jinja2-2.7.3.tar.gz (378kB)<br>            100% |################################| 380kB 42kB/s<br>    Collecting itsdangerous&gt;=0.21 (from Flask)<br>        Downloading itsdangerous-0.24.tar.gz (46kB)<br>            100% |################################| 49kB 30kB/s<br>    Collecting markupsafe (from Jinja2&gt;=2.4-&gt;Flask)<br>        Downloading MarkupSafe-0.23.tar.gz<br>    Installing collected packages: markupsafe, itsdangerous, Jinja2, Werkzeug, Flask<br>        Running setup.py install for markupsafe<br>            building ‘markupsafe._speedups’ extension<br>            x86_64-linux-gnu-gcc -pthread -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fno-strict-aliasing -D_FORTIFY_SOURCE=2 -g -fstack-protector-strong -Wformat -Werror=format-security -fPIC -I/usr/include/python2.7 -c markupsafe/_speedups.c -o build/temp.linux-x86_64-2.7/markupsafe/_speedups.o<br>            markupsafe/_speedups.c:12:20: fatal error: Python.h: 没有那个文件或目录</p>
+<pre><code>         #include &amp;lt;Python.h&amp;gt;
+                                                ^
+        compilation terminated.
+        ==========================================================================
+        WARNING: The C extension could not be compiled, speedups are not enabled.
+        Failure information, if any, is above.
+        Retrying the build without the C extension now.
+        ==========================================================================
+        WARNING: The C extension could not be compiled, speedups are not enabled.
+        Plain-Python installation succeeded.
+        ==========================================================================
+    Running setup.py install for itsdangerous
+    Running setup.py install for Jinja2
+    Running setup.py install for Werkzeug
+    Running setup.py install for Flask
+Successfully installed Flask-0.10.1 Jinja2-2.7.3 Werkzeug-0.10 itsdangerous-0.24 markupsafe-0.23
+</code></pre><p>&nbsp;</p>
+<p>之后便可在项目文件夹下编辑.py文件，并用python命令运行。</p>
+<p>退出虚拟环境<br>    $ deactivate<br>&nbsp;</p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2015-02-01T13:39:08.000Z" itemprop="datePublished">
+              2015-02-01
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/python/">python</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Linux/">Linux</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

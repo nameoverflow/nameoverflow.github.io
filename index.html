@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="ch-Hans">
 <head>
-  <meta charset="UTF-8">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Hexo</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <title>Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css'><!-- hexo-inject:end -->
 </head>
 
 <body>
-<div class="Shell">
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
     <aside class='SideBar'>
     <section class='avatar'>
         <div class='av-pic'/>
@@ -63,23 +64,27 @@
     <header class="title">
       
         <h1>
-          <a href="/2017/03/29/chinese-test/">Chinese Test 中文测试</a>
+          <a href="/2017/03/03/使用-Parsec-处理左递归/">使用 Parsec 处理左递归</a>
         </h1>
       
       <div class='ListMeta'>
-  <time datetime="2017-03-29T05:25:46.000Z" itemprop="datePublished">
-    2017-03-29
+  <time datetime="2017-03-03T12:41:36.000Z" itemprop="datePublished">
+    2017-03-03
   </time>
   
   | 
   <ul>
     
   <li class="meta-text">
-  { <a href="/tags/test/">test</a> }
+  { <a href="/tags/haskell/">haskell</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/chinese/">chinese</a> }
+  { <a href="/tags/parsec/">parsec</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/compiler/">compiler</a> }
   </li>
 
 
@@ -90,11 +95,400 @@
     </header>
     <div>
       
-        <p>田鮮壌当公愛界捜飛打合紙歩次経。治緒原面金井画能央医音化定目航図戒現権再。展統通鈴断読式刊入条者群将散早支売。東居麻祝重県暮方対者金国努成塁紀座権取。投内事覚群掲水報経開変功況利田表毎土遺。踏冷待浩覧久告商日断長朝外果本必意周開。事秀実害幕活衣自広料人滞情新。変期用接暗毎観旋駅文院手本輝営記没気刑。</p>
-<p>部野送当覧売未禁追者上接智要周校。整求事変契別月速案式学値検稿心別子探者。材南命購陸好新消末億写裏懲将毎井。命個来精多航履画進次考馬命固最共供。四辺糸野意料芸所乳講賞進女更技任回国見。小児取記試属城更通都残野訴。吹半平青士愛響休江要部雑投逮要強過統名菱。当国索日是言走静見店挙活成界読便午続抗。</p>
+        <p>在给之前写的 Lisp 解释器之前套上表达式语法时，遇到这样几条文法</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtable><mtr><mtd><mrow><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi><mi>s</mi></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi><mo separator="true">,</mo><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi><mi>s</mi></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi>I</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>g</mi><mi>e</mi><mi>r</mi><mi mathvariant="normal">∣</mi><mi>A</mi><mi>p</mi><mi>p</mi><mi>l</mi><mi>y</mi><mi mathvariant="normal">∣</mi><mi>I</mi><mi>d</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>i</mi><mi>f</mi><mi>y</mi><mi mathvariant="normal">∣</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">∣</mi><mrow><mo>(</mo></mrow><mrow><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi></mrow><mrow><mo>)</mo></mrow></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><mi>I</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>g</mi><mi>e</mi><mi>r</mi></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><mi>A</mi><mi>p</mi><mi>p</mi><mi>l</mi><mi>y</mi></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi><mo>(</mo><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi><mi>s</mi><mo>)</mo></mrow></mtd></mtr></mtable></mrow><annotation encoding="application/x-tex">\begin{aligned}
+Expr &amp; \rightarrow Factor ... \\\\
+Exprs &amp; \rightarrow Expr  ,  Exprs\\\\
+ Factor &amp; \rightarrow Integer|Apply|Identify|...|{(}  {Expr} {)} \\\\
+  Integer &amp; \rightarrow... \\\\
+...\\\\
+ Apply &amp; \rightarrow  Factor  (  Exprs  )
+\end{aligned}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:6.849999999999999em;"></span><span class="strut bottom" style="height:13.2em;vertical-align:-6.35em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist"><span style="top:-6.009999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span></span><span style="top:-4.809999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:-3.609999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">s</span></span></span><span style="top:-2.409999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:-1.209999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit">a</span><span class="mord mathit">c</span><span class="mord mathit">t</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span></span><span style="top:-0.009999999999997733em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:1.1900000000000024em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.07847em;">I</span><span class="mord mathit">n</span><span class="mord mathit">t</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span></span><span style="top:2.390000000000002em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:3.590000000000001em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span></span></span><span style="top:4.79em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:5.989999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit">A</span><span class="mord mathit">p</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="col-align-l"><span class="vlist"><span style="top:-6.009999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit">a</span><span class="mord mathit">c</span><span class="mord mathit">t</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span></span></span><span style="top:-3.6099999999999985em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">s</span></span></span><span style="top:-1.2099999999999989em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathit" style="margin-right:0.07847em;">I</span><span class="mord mathit">n</span><span class="mord mathit">t</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathrm">∣</span><span class="mord mathit">A</span><span class="mord mathit">p</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mord mathrm">∣</span><span class="mord mathit" style="margin-right:0.07847em;">I</span><span class="mord mathit">d</span><span class="mord mathit">e</span><span class="mord mathit">n</span><span class="mord mathit">t</span><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mord mathrm">∣</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">∣</span><span class="mord displaystyle textstyle uncramped"><span class="mopen">(</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span><span class="mord displaystyle textstyle uncramped"><span class="mclose">)</span></span></span></span><span style="top:1.1900000000000015em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span></span></span><span style="top:5.989999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit">a</span><span class="mord mathit">c</span><span class="mord mathit">t</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">s</span><span class="mclose">)</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></span></span>
+<p>显然，non-terminal <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi>p</mi><mi>p</mi><mi>l</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">Apply</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">A</span><span class="mord mathit">p</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span></span> 的派生最左端会进入  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi></mrow><annotation encoding="application/x-tex">Factor</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit">a</span><span class="mord mathit">c</span><span class="mord mathit">t</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span></span></span> ，之后又会回到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi>p</mi><mi>p</mi><mi>l</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">Apply</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">A</span><span class="mord mathit">p</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span></span> 。教科书式的左递归。</p>
+<p>龙书中告诉我们，左递归可以通过提取出一个产生式来消除。</p>
+<p>对于</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>→</mo><mi>A</mi><msub><mi>α</mi><mn>1</mn></msub><mi mathvariant="normal">∣</mi><mi>A</mi><msub><mi>α</mi><mn>2</mn></msub><mi mathvariant="normal">∣</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">∣</mi><mi>β</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">A \rightarrow A \alpha_1|A \alpha_2|...|\beta..</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord mathit">A</span><span class="mrel">→</span><span class="mord mathit">A</span><span class="mord"><span class="mord mathit" style="margin-right:0.0037em;">α</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.0037em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathrm">∣</span><span class="mord mathit">A</span><span class="mord"><span class="mord mathit" style="margin-right:0.0037em;">α</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.0037em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathrm">∣</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">∣</span><span class="mord mathit" style="margin-right:0.05278em;">β</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span></span></span></span></span>
+<p>在所有不以 A 开头的 A 的派生 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.05278em;">β</span></span></span></span> 后加入非终结符 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>A</mi><mrow><mi mathvariant="normal">′</mi></mrow></msup></mrow><annotation encoding="application/x-tex">A&#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.751892em;"></span><span class="strut bottom" style="height:0.751892em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">A</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span> ，然后 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>A</mi><mrow><mi mathvariant="normal">′</mi></mrow></msup></mrow><annotation encoding="application/x-tex">A&#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.751892em;"></span><span class="strut bottom" style="height:0.751892em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">A</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span> 派生出 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.43056em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.0037em;">α</span></span></span></span> ，即可消除左递归。</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtable><mtr><mtd><mrow><mi>A</mi></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi>β</mi><msup><mi>A</mi><mrow><mi mathvariant="normal">′</mi></mrow></msup><mi mathvariant="normal">∣</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><msup><mi>A</mi><mrow><mi mathvariant="normal">′</mi></mrow></msup></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><msub><mi>α</mi><mn>1</mn></msub><msup><mi>A</mi><mrow><mi mathvariant="normal">′</mi></mrow></msup><mi mathvariant="normal">∣</mi><msub><mi>α</mi><mn>2</mn></msub><msup><mi>A</mi><mrow><mi mathvariant="normal">′</mi></mrow></msup><mi mathvariant="normal">∣</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">∣</mi><mi>ϵ</mi></mrow></mtd></mtr></mtable></mrow><annotation encoding="application/x-tex">\begin{aligned}
+A &amp;\rightarrow \beta A&#x27; | ... \\\\
+A&#x27; &amp;\rightarrow \alpha_1 A&#x27;|\alpha_2 A&#x27; |...|\epsilon
+\end{aligned}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:2.05em;"></span><span class="strut bottom" style="height:3.6000000000000005em;vertical-align:-1.5500000000000007em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist"><span style="top:-1.2099999999999997em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit">A</span></span></span><span style="top:-0.00999999999999951em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:1.1900000000000006em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord"><span class="mord mathit">A</span><span class="vlist"><span style="top:-0.413em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="col-align-l"><span class="vlist"><span style="top:-1.2099999999999997em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathit" style="margin-right:0.05278em;">β</span><span class="mord"><span class="mord mathit">A</span><span class="vlist"><span style="top:-0.413em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathrm">∣</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span></span></span><span style="top:1.1900000000000002em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord"><span class="mord mathit" style="margin-right:0.0037em;">α</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.0037em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit">A</span><span class="vlist"><span style="top:-0.413em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathrm">∣</span><span class="mord"><span class="mord mathit" style="margin-right:0.0037em;">α</span><span class="vlist"><span style="top:0.15em;margin-right:0.05em;margin-left:-0.0037em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord mathrm">2</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit">A</span><span class="vlist"><span style="top:-0.413em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathrm">∣</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">∣</span><span class="mord mathit">ϵ</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></span></span>
+<p>道理都懂，但是怎么写代码呢？</p>
+<p><code>parsec</code> 的代码的一个特点是可以很直观的将文法和返回的结果对应。我们按照最开始的有左递归的文法可以很容易的写出这样的组合子</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><div class="line"><span class="title">parseFactor</span> = spaces &gt;&gt; value &gt;&gt;= \v -&gt; return v</div><div class="line">    <span class="keyword">where</span> parenExpr = between (char '(') (char ')') parseExpr</div><div class="line">          value     = choice [ parseNumber, try parseFunCall, </div><div class="line">                               <span class="comment">-- lots of parsers...</span></div><div class="line">                               parenExpr ]</div><div class="line"></div><div class="line"><span class="title">parseExpr</span> = <span class="comment">-- based on `Text.Parsec.Expr`</span></div><div class="line"></div><div class="line"><span class="title">theComma</span> = spaces &gt;&gt; char ','</div><div class="line"></div><div class="line"><span class="title">parseApply</span> :: <span class="type">Parser</span> <span class="type">Expr</span></div><div class="line"><span class="title">parseApply</span> = <span class="keyword">do</span></div><div class="line">    fun &lt;- parseExpr</div><div class="line">    spaces</div><div class="line">    args &lt;- between (char '(') (char ')') $ sepBy parseExpr theComma</div><div class="line">    return $ <span class="type">Apply</span> fun args</div></pre></td></tr></table></figure>
+<p>原文法中的每一个非终结符都可以对应到相应的 <code>parser</code> ，相应的 <code>parser</code> 进行适当的处理返回 AST 的节点。一切都那么尽然有序，除了它会陷入无穷的递归然后电脑被不会爆栈的 Haskell 撑爆内存。</p>
+<p>然而进行消除左递归后的文法中，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>A</mi><mrow><mi mathvariant="normal">′</mi></mrow></msup></mrow><annotation encoding="application/x-tex">A&#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.751892em;"></span><span class="strut bottom" style="height:0.751892em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord"><span class="mord mathit">A</span><span class="vlist"><span style="top:-0.363em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span> 的意义是不明的，不能对应到 AST 中的某个节点；甚至 A 本身意义也是不明的。这种情况下，我们就需要进行一些特殊的间接处理让 <code>parser</code> 能返回正确的结果。</p>
+<p>把原来的文法的左递归消除。</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtable><mtr><mtd><mrow><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi>I</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>g</mi><mi>e</mi><mi>r</mi><mi mathvariant="normal">∣</mi><mi>I</mi><mi>d</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>i</mi><mi>f</mi><mi>y</mi><mi mathvariant="normal">∣</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">∣</mi><mrow><mo>(</mo></mrow><mrow><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi></mrow><mrow><mo>)</mo></mrow></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><msup><mi>r</mi><mrow><mi mathvariant="normal">′</mi></mrow></msup></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi>A</mi><mi>p</mi><mi>p</mi><mi>l</mi><msup><mi>y</mi><mrow><mi mathvariant="normal">′</mi></mrow></msup></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><mi>A</mi><mi>p</mi><mi>p</mi><mi>l</mi><msup><mi>y</mi><mrow><mi mathvariant="normal">′</mi></mrow></msup></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mo>(</mo><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi><mi>s</mi><mo>)</mo><mi>A</mi><mi>p</mi><mi>p</mi><mi>l</mi><msup><mi>y</mi><mrow><mi mathvariant="normal">′</mi></mrow></msup><mi mathvariant="normal">∣</mi><mi>ϵ</mi></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr></mtable></mrow><annotation encoding="application/x-tex">\begin{aligned}
+Factor &amp; \rightarrow Integer| Identify|...|{(}  {Expr} {)} \\\\
+Factor&#x27; &amp; \rightarrow Factor   Apply&#x27;\\\\
+Apply&#x27; &amp; \rightarrow   (  Exprs  )  Apply&#x27; | \epsilon \\\\
+\end{aligned}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:4.45em;"></span><span class="strut bottom" style="height:8.4em;vertical-align:-3.95em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist"><span style="top:-3.6100000000000003em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit">a</span><span class="mord mathit">c</span><span class="mord mathit">t</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span></span><span style="top:-2.4100000000000006em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:-1.2100000000000006em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit">a</span><span class="mord mathit">c</span><span class="mord mathit">t</span><span class="mord mathit">o</span><span class="mord"><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="vlist"><span style="top:-0.413em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span><span style="top:-0.010000000000000397em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:1.1899999999999997em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit">A</span><span class="mord mathit">p</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="vlist"><span style="top:-0.413em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span><span style="top:2.39em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:3.5900000000000003em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="col-align-l"><span class="vlist"><span style="top:-3.6100000000000003em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathit" style="margin-right:0.07847em;">I</span><span class="mord mathit">n</span><span class="mord mathit">t</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathrm">∣</span><span class="mord mathit" style="margin-right:0.07847em;">I</span><span class="mord mathit">d</span><span class="mord mathit">e</span><span class="mord mathit">n</span><span class="mord mathit">t</span><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mord mathrm">∣</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">∣</span><span class="mord displaystyle textstyle uncramped"><span class="mopen">(</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span><span class="mord displaystyle textstyle uncramped"><span class="mclose">)</span></span></span></span><span style="top:-1.2100000000000006em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit">a</span><span class="mord mathit">c</span><span class="mord mathit">t</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">A</span><span class="mord mathit">p</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="vlist"><span style="top:-0.413em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span><span style="top:1.1899999999999997em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">s</span><span class="mclose">)</span><span class="mord mathit">A</span><span class="mord mathit">p</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="vlist"><span style="top:-0.413em;margin-right:0.05em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathrm">∣</span><span class="mord mathit">ϵ</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></span></span>
+<p>第一条产生式很好表达，和之前只是删掉了直接派生 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi>p</mi><mi>p</mi><mi>l</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">Apply</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">A</span><span class="mord mathit">p</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span></span> </p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><div class="line"><span class="title">parseFactor</span> = spaces &gt;&gt; noLeft &lt;|&gt; parenExpr</div><div class="line">  <span class="keyword">where</span> split = many splitter</div><div class="line">        parenExpr = between (char '(') (char ')') parseExpr</div><div class="line">        noLeft = choice [ parseString, parseNumber, parenExpr,</div><div class="line">                          <span class="comment">-- lots of parsers...</span></div><div class="line">        				]</div></pre></td></tr></table></figure>
+<p>接下来需要处理第二条和第三条。显然，这两条规则对应的 AST 节点有两种，普通的 <code>Factor</code> 或 <code>Apply</code> 。我们可以把这两条规则视为一个整体的过程：在 <code>parse</code> 出一个 <code>Factor</code> 之后，尝试 <code>char &#39;(&#39;</code> ，满足则继续，不满足则直接返回之前的 <code>Factor</code> 。</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><div class="line"><span class="title">parseFactorOrApply</span> = <span class="keyword">do</span></div><div class="line">    factor &lt;- parseFactor</div><div class="line">    rest fun</div><div class="line">    <span class="keyword">where</span> rest x = (<span class="keyword">do</span> args &lt;- between (char '(') (char ')') $ sepBy parseExpr theComma</div><div class="line">                           rest pos' . <span class="type">Expr</span> pos $ <span class="type">Apply</span> x args) &lt;|&gt; return x</div></pre></td></tr></table></figure>
+<p>成功完成任务。</p>
+<p><code>parsec</code> 自带的组合子中的 <code>chainr1</code> 也是使用的类似方法处理左递归，它的功能是构造右结合的双目操作符的表达式的解析。</p>
+<figure class="highlight haskell"><table><tr><td class="code"><pre><div class="line"><span class="title">chainr1</span> :: (<span class="type">Stream</span> s m t) =&gt; <span class="type">ParsecT</span> s u m a -&gt; <span class="type">ParsecT</span> s u m (a -&gt; a -&gt; a) -&gt; <span class="type">ParsecT</span> s u m a</div><div class="line"><span class="title">chainr1</span> p op        = scan</div><div class="line">                    <span class="keyword">where</span></div><div class="line">                      scan      = <span class="keyword">do</span>&#123; x &lt;- p; rest x &#125;</div><div class="line">                      rest x    = <span class="keyword">do</span>&#123; f &lt;- op</div><div class="line">                                    ; y &lt;- scan</div><div class="line">                                    ; return (f x y)</div><div class="line">                                    &#125;</div><div class="line">                                &lt;|&gt; return x</div></pre></td></tr></table></figure>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2016/08/24/Call-With-Current-Continuation-Coroutine/">Call With Current Continuation: Coroutine</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2016-08-24T14:33:53.000Z" itemprop="datePublished">
+    2016-08-24
+  </time>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>通过嵌套 <code>call/cc</code> 可以方便的实现协程</p>
+<figure class="highlight"><table><tr><td class="code"><pre><div class="line">(define (coroutine routine)</div><div class="line">  (let ((current routine)</div><div class="line">        (status 'suspended))</div><div class="line">    (lambda args</div><div class="line">      (cond ((null? args) </div><div class="line">             (if (eq? status 'dead)</div><div class="line">                 (error 'dead-coroutine)</div><div class="line">                 (let ((continuation-and-value</div><div class="line">                        (call/cc (lambda (return)</div><div class="line">                                   (let ((returner</div><div class="line">                                          (lambda (value)</div><div class="line">                                            (call/cc (lambda (next)</div><div class="line">                                                       (return (cons next value)))))))</div><div class="line">                                     (current returner)</div><div class="line">                                     (set! status 'dead))))))</div><div class="line">                   (if (pair? continuation-and-value)</div><div class="line">                       (begin (set! current (car continuation-and-value))</div><div class="line">                              (cdr continuation-and-value))</div><div class="line">                       continuation-and-value))))</div><div class="line">            ((eq? (car args) 'status?) status)</div><div class="line">            ((eq? (car args) 'dead?) (eq? status 'dead))</div><div class="line">            ((eq? (car args) 'alive?) (not (eq? status 'dead)))</div><div class="line">            ((eq? (car args) 'kill!) (set! status 'dead))</div><div class="line">            (true nil)))))</div></pre></td></tr></table></figure>
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2016/08/01/Write-You-a-Scheme/">Write You a Scheme</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2016-08-01T01:33:57.000Z" itemprop="datePublished">
+    2016-08-01
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/haskell/">haskell</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/scheme/">scheme</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/interpreter/">interpreter</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/lambda-calculus/">lambda calculus</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>撸了个 <a href="https://github.com/nameoverflow/LittleScheme" target="_blank" rel="external">Scheme 解释器</a>，也算是拿 Haskell 做过东西了（虽然只是个玩具</p>
+<p>最大的体会就是，既熟悉了 Haskell，也巩固了 Scheme （虽然看过 SICP 但是并不是很明白它的 quosiquote 和 call/cc 之类的鬼东西</p>
+<p>本来是打算自己定义一门语言（像<a href="https://hcyue.me/article/56eb92c6d09a19dd0956c469" target="_blank" rel="external">这个</a>），但是发现挺麻烦的（大雾），而且我比较关心的也是解释执行的过程，于是还是决定把 Scheme 实现一下。大体上是跟着 <a href="https://en.wikibooks.org/wiki/Write_Yourself_a_Scheme_in_48_Hours" target="_blank" rel="external">Write Yourself a Scheme in 48 Hours</a> 来的，在它的基础上增加了 Continuation 之类的玩意儿</p>
+<h3 id="0-Parser"><a href="#0-Parser" class="headerlink" title="0. Parser"></a>0. Parser</h3><p>虽然 Lisp 的语法接近没有，但是还是总还是需要一个 Parser。Haskell 写Parser 的利器便是 <code>parsec</code> 。其实一开始有点想自己实现一个简单的 parser combiner ，但是最后还是懒（</p>
+<p>Lisp 语法——所谓 S-expressions ，其实就是嵌套的列表，语法定义非常的简单</p>
+<pre><code class="text">List → Expr (spaces) List | Expr
+Expr → &apos;(&apos; List &apos;)&apos; | Atom
+</code></pre>
+<p>当然其实还有 quote 、dotted 之类的语法糖，也就是多加几个分支而已。</p>
+<p>接下来便开始愉快的写代码了。写 Haskell 第一步当然是考虑类型。Scheme 语言内的数据类型这个解释器暂且实现四种：<code>Number</code> 整型、<code>Float</code> 浮点、<code>String</code> 字符串以及 <code>Bool</code> 。再加上语法中的 <code>List</code> 和 <code>DottedList</code> 以及通用的标识符 <code>Atom</code> ，便可以定义一个有 7 个值（ constructor ）的类型 <code>LispVal</code></p>
+<pre><code class="haskell"><span class="class"><span class="keyword">data</span> <span class="type">LispVal</span> = <span class="type">Atom</span> <span class="type">String</span></span>
+             | <span class="type">List</span> [<span class="type">LispVal</span>]
+             | <span class="type">DottedList</span> [<span class="type">LispVal</span>] <span class="type">LispVal</span>
+             | <span class="type">Number</span> <span class="type">Integer</span>
+             | <span class="type">Float</span> <span class="type">Double</span>
+             | <span class="type">String</span> <span class="type">String</span>
+             | <span class="type">Bool</span> <span class="type">Bool</span>
+</code></pre>
+<p>当然，顺便让他们能够被 <code>show</code> 一下</p>
+<pre><code class="haskell"><span class="class"><span class="keyword">instance</span> <span class="type">Show</span> <span class="type">LispVal</span> <span class="keyword">where</span></span>
+    show (<span class="type">Atom</span> name) = name
+    show (<span class="type">List</span> contents) = <span class="string">"("</span> ++ unwordsList contents ++ <span class="string">")"</span>
+    show (<span class="type">DottedList</span> h t) = <span class="string">"("</span> ++ unwordsList h ++ <span class="string">" . "</span> ++ show t ++ <span class="string">")"</span>
+    show (<span class="type">String</span> ctns) = <span class="string">"\""</span> ++ ctns ++ <span class="string">"\""</span>
+    show (<span class="type">Number</span> num) = show num
+    show (<span class="type">Float</span> num) = show num
+    show (<span class="type">Bool</span> <span class="type">True</span>) = <span class="string">"#t"</span>
+    show (<span class="type">Bool</span> <span class="type">False</span>) = <span class="string">"#f"</span>
+
+<span class="title">unwordsList</span> :: [<span class="type">LispVal</span>] -&gt; <span class="type">String</span>
+<span class="title">unwordsList</span> = unwords . map show
+</code></pre>
+<p>然后便是拼 parsec 的组合子，将语法对应解析到七个 constructor 上</p>
+<pre><code class="haskell"><span class="class"><span class="keyword">type</span> <span class="type">LispParser</span> = <span class="type">Parser</span> <span class="type">LispVal</span></span>
+
+<span class="title">parseExpr</span> :: <span class="type">LispParser</span>
+<span class="title">parseExpr</span> = parseString &lt;|&gt; parseNumber &lt;|&gt; parseListSugar &lt;|&gt; parseAtom &lt;|&gt; <span class="keyword">do</span>
+    _ &lt;- char '('
+    x &lt;- try parseList &lt;|&gt; parseDottedList
+    _ &lt;- char ')'
+    return x
+</code></pre>
+<p>分别按照对应的语法规则实现 <code>parseString</code> <code>parseNumber</code> <code>parseAtom</code> <code>parseList</code> <code>parseDottedList</code> 即可（<a href="https://github.com/nameoverflow/LittleScheme/blob/master/src/Hscheme/Parser.hs" target="_blank" rel="external">参考</a>），其中 <code>parseListSugar</code> 用于解析 quote 之类的语法糖。</p>
+<h2 id="1-执行、规约"><a href="#1-执行、规约" class="headerlink" title="1. 执行、规约"></a>1. 执行、规约</h2><p>如何将一个 S 表达式变成一个值？</p>
+<p>最普通的情况，考虑一个 S 表达式表达函数调用。我们都知道 lambda calculus 的三条规则：</p>
+<blockquote>
+<p>α-conversion: changing bound variables (alpha);</p>
+<p>β-reduction: applying functions to their arguments (beta);</p>
+<p>η-conversion: which captures a notion of extensionality (eta).</p>
+</blockquote>
+<p>实现执行 Lisp 语句，实际上就是实现 β 规约——代换求值的过程。将一个 List 看作为 <code>((λV1.λV2.λV3.(...).E) ...) E3&#39;) E2&#39;) E1&#39;)</code> ，作代换 <code>E [V:=E&#39;]</code> 直到得到一个不能再规约的 β 范式。</p>
+<p>得到了 β 范式之后呢？在实际的编程中表达式总会有一个值。经过上述过程之后得到的 β 范式，在实际中可能有两种形式：只包含一个自由变量的表达式 M，或者一个 lambda 表达式 λV.E 。</p>
+<p>显然，如果最后的结果是只包含一个自由变量的表达式，我们的程序运行结果就是这个自由变量所对应的值。那么这个值到底是多少呢？这就涉及到一个很常见的 <code>闭包</code> 概念。如果规约结果是个函数，类似的，程序的运行结果可能是一个函数，而在这里还有另外一种可能—— Lisp 是一种不支持默认的函数部分应用的语言，如果规约出的 β 范式结果是一个函数，也有可能是程序出错——参数数目不一致。</p>
+<p>这里暂且不讨论如何得到最后的结果，先实现对一个 Lisp 表达式进行 β 规约的 <code>eval</code> 函数。</p>
+<p>由于存在抛错（参数数目不匹配）的情况，首先需要定义一个异常类型（利用 <code>Control.Monad.Error</code> 包），并实现从 <code>Either</code> 类型中获取值</p>
+<pre><code class="haskell"><span class="comment">-- import</span>
+<span class="keyword">import</span> Control.Monad.Error
+
+<span class="comment">-- type</span>
+<span class="class"><span class="keyword">data</span> <span class="type">LispError</span> = <span class="type">NumArgs</span> <span class="type">Integer</span> [<span class="type">LispVal</span>]</span>
+
+<span class="title">extractValue</span> :: <span class="type">ThrowsError</span> a -&gt; a
+<span class="title">extractValue</span> (<span class="type">Right</span> val) = val
+<span class="title">extractValue</span> _           = undefined
+<span class="class">
+<span class="keyword">instance</span> <span class="type">Show</span> <span class="type">LispError</span> <span class="keyword">where</span></span>
+    show (<span class="type">NumArgs</span> expr found) = <span class="string">"Expected "</span> ++ show expr ++ <span class="string">" args; found values "</span> ++ unwordsList found
+<span class="class">
+<span class="keyword">instance</span> <span class="type">Error</span> <span class="type">LispError</span> <span class="keyword">where</span></span>
+    noMsg = <span class="type">Default</span> <span class="string">"An error has occurred"</span>
+    strMsg = <span class="type">Default</span>
+
+<span class="class"><span class="keyword">type</span> <span class="type">ThrowsError</span> = <span class="type">Either</span> <span class="type">LispError</span></span>
+</code></pre>
+<p>目前为止，我们的 <code>eval</code> 过程只是对表达式进行规约，接受的参数类型为 <code>LispVal</code> ，返回值也是一个 <code>LispVal</code> ，当然也可能抛异常。</p>
+<pre><code class="haskell"><span class="title">eval</span> :: <span class="type">LispVal</span> -&gt; <span class="type">ThrowsError</span> <span class="type">LispVal</span>
+</code></pre>
+<p>接着我们考虑如何表达一个函数。</p>
+<p>从 λ 表达式和 Lisp 函数的形式来看，有两个要素——形参和函数体。我们可以用一个包含两个字段的 <code>record</code> 来表示。</p>
+<pre><code class="haskell"><span class="class"><span class="keyword">data</span> <span class="type">LispFunc</span> = <span class="type">LispFunc</span> {
+    <span class="title">paramsList</span> :: [<span class="type">String</span>],
+    <span class="title">body</span> :: [<span class="type">LispVal</span>]
+}</span>
+</code></pre>
+<p>并且函数应该作为语言中的一个类型</p>
+<pre><code class="haskell"><span class="class"><span class="keyword">data</span> <span class="type">LispVal</span> = <span class="type">Atom</span> <span class="type">String</span></span>
+             | <span class="type">List</span> [<span class="type">LispVal</span>]
+             | <span class="type">DottedList</span> [<span class="type">LispVal</span>] <span class="type">LispVal</span>
+             | <span class="type">Number</span> <span class="type">Integer</span>
+             | <span class="type">Float</span> <span class="type">Double</span>
+             | <span class="type">String</span> <span class="type">String</span>
+             | <span class="type">Bool</span> <span class="type">Bool</span>
+             | <span class="type">Lambda</span> <span class="type">LispFunc</span>
+</code></pre>
+<p>然后 <code>show</code> 一下</p>
+<pre><code class="haskell"><span class="title">show</span> (<span class="type">Lambda</span> <span class="type">LispFunc</span> { paramsList = params }) =
+  <span class="string">"(lambda ("</span> ++ unwords (map show params) ++ <span class="string">") ...)"</span>
+</code></pre>
+<p>在 Scheme 中，表示一个函数的语法为 <code>(lambda (params) (body))</code> 。如果在执行过程中碰到这种形式的表达式，我们会把它规约为一个函数。用模式匹配很容易做到。</p>
+<pre><code class="haskell"><span class="title">eval</span> (<span class="type">List</span> (<span class="type">Atom</span> <span class="string">"lambda"</span> : <span class="type">List</span> params : funcBody)) =
+     makeFunction params funcBody
+
+<span class="comment">-- makeFunction</span>
+<span class="title">makeFunction</span> :: [<span class="type">LispVal</span>] -&gt; [<span class="type">LispVal</span>] -&gt; <span class="type">LispVal</span>
+<span class="title">makeFunction</span> args funcBody = <span class="type">Lambda</span> $ <span class="type">LispFunc</span> (map show args) funcBody
+</code></pre>
+<p>然后考虑通用的函数调用语句 <code>(function params...)</code></p>
+<p>{- 妈呀写的好累 -}</p>
+<p>{- TODO -}</p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2016/05/14/什么是函数式编程思维/">什么是函数式编程思维？</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2016-05-14T06:00:30.000Z" itemprop="datePublished">
+    2016-05-14
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/functional-programming/">functional programming</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>我为什么要把我的知乎回答搬到这里呢……大概是太久没发东西了来凑数吧。</p>
+<p>作者：nameoverflow</p>
+<p>链接：<a href="https://www.zhihu.com/question/28292740/answer/100284611" target="_blank" rel="external">https://www.zhihu.com/question/28292740/answer/100284611</a></p>
+<p>来源：知乎</p>
+<p>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+<p>函数式编程与命令式编程最大的不同其实在于：</p>
+<p><strong>函数式编程关心数据的映射，命令式编程关心解决问题的步骤</strong></p>
+<p>这里的映射就是数学上“函数”的概念——一种东西和另一种东西之间的对应关系。</p>
+<p>这也是为什么“函数式编程”叫做“函数式编程”。</p>
+<p>这是什么意思呢？</p>
+<p>假如，现在你来到 google 面试，面试官让你把二叉树镜像反转一下（大雾</p>
+<p>几乎不假思索的，就可以写出这样的 Python 代码：</p>
+<pre><code class="python"><span class="function"><span class="keyword">def</span> <span class="title">invertTree</span><span class="params">(root)</span>:</span>
+    <span class="keyword">if</span> root <span class="keyword">is</span> <span class="keyword">None</span>:
+        <span class="keyword">return</span> <span class="keyword">None</span>
+    <span class="keyword">if</span> root.left:
+        invertTree(root.left)
+    <span class="keyword">if</span> root.right:
+        invertTree(root.right)
+    root.left, root.right = root.right, root.left
+    <span class="keyword">return</span> root
+</code></pre>
+<p>好了，现在停下来看看这段代码究竟代表着什么——</p>
+<p>它的含义是：首先判断节点是否为空；然后翻转左树；然后翻转右树；最后左右互换。</p>
+<p>这就是命令式编程——你要做什么事情，你得把达到目的的步骤详细的描述出来，然后交给机器去运行。</p>
+<p>这也正是命令式编程的理论模型——图灵机的特点。一条写满数据的纸带，一条根据纸带内容运动的机器，机器每动一步都需要纸带上写着如何达到。</p>
+<p>那么，不用这种方式，如何翻转二叉树呢？</p>
+<p>函数式思维提供了另一种思维的途径——</p>
+<p>所谓“翻转二叉树”，可以看做是要得到一颗和原来二叉树对称的新二叉树。</p>
+<p>这颗新二叉树的特点是每一个节点都递归地和原树相反。</p>
+<p>用 haskell 代码表达出来就是：</p>
+<pre><code class="haskell"><span class="class"><span class="keyword">data</span> <span class="type">Tree</span> a = <span class="type">Node</span> a (<span class="type">Maybe</span> (<span class="type">Tree</span> <span class="title">a</span>)) (<span class="type">Maybe</span> (<span class="type">Tree</span> <span class="title">a</span>))</span>
+            <span class="keyword">deriving</span> (<span class="type">Show</span>, <span class="type">Eq</span>)
+
+<span class="title">invert</span> :: <span class="type">Maybe</span> (<span class="type">Tree</span> a) -&gt; <span class="type">Maybe</span> (<span class="type">Tree</span> a)
+<span class="title">invert</span> <span class="type">Nothing</span> = <span class="type">Nothing</span>
+<span class="title">invert</span> (<span class="type">Just</span> <span class="type">Node</span> v l r) = <span class="type">Just</span> (<span class="type">Node</span> v (invert r) (invert l))
+</code></pre>
+<p>（防止看不懂，翻译成等价的 python ）</p>
+<pre><code class="python"><span class="function"><span class="keyword">def</span> <span class="title">invert</span><span class="params">(node)</span>:</span>
+    <span class="keyword">if</span> node <span class="keyword">is</span> <span class="keyword">None</span>:
+        <span class="keyword">return</span> <span class="keyword">None</span>
+    <span class="keyword">else</span>
+        <span class="keyword">return</span> Tree(node.value, invert(node.right), invert(node.left))
+</code></pre>
+<p>这段代码体现的思维，就是旧树到新树的映射——对一颗二叉树而言，它的镜像树就是左右节点递归镜像的树。</p>
+<p>这段代码最终达到的目的同样是翻转二叉树，但是它得到结果的方式和 python 代码有着本质的差别：通过描述一个 旧树-&gt;新树 的映射，而不是描述“从旧树得到新树应该怎样做”来达到目的。</p>
+<p>那么这样思考有什么好处呢？</p>
+<p>首先，最直观的角度来说，函数式风格的代码可以写得很精简，大大减少了键盘的损耗（</p>
+<p>更重要的是，函数式的代码是“对映射的描述”，它不仅可以描述二叉树这样的数据结构之间的对应关系，任何能在计算机中体现的东西之间的对应关系都可以描述——比如函数和函数之间的映射（比如 functor）；比如外部操作到 GUI 之间的映射（就是现在前端热炒的所谓 FRP）。它的抽象程度可以很高，这就意味着函数式的代码可以更方便的复用。</p>
+<p>同时，将代码写成这种样子可以方便用数学的方法进行研究（这就是为什么可以扯上“___范畴上的___”这种数学上的高深概念）</p>
+<p>至于什么科里化、什么数据不可变，都只是外延体现而已。</p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2016/05/14/Let-s-Encrypt/">Let&#39;s Encrypt!</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2016-05-14T05:40:54.000Z" itemprop="datePublished">
+    2016-05-14
+  </time>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <blockquote>
+<p>世界因自由软件而美好。</p>
+</blockquote>
+<p>昨天（5月13日）发现 SSL 证书到期了。想起之前谭总说过的 Let’s Encrypt，决定体验一下。</p>
+<p>相比起<a href="https://tms.im/tms/letsencrypt-beta" target="_blank" rel="external">半年前</a>，这玩意完善了很多、傻瓜了很多。</p>
+<p>全程需要做的只需要 clone 一个<a href="https://github.com/certbot/certbot" target="_blank" rel="external">傻瓜工具包</a>，然后运行一行命令</p>
+<pre><code class="bash">./certbot-auto certonly --standalone --email admin@hcyue.me <span class="_">-d</span> hcyue.me
+</code></pre>
+<p>之后坐等几秒，SSL 验证所需要的全部证书就都被放在了 <code>/etc/letsencrypt/live/hcyue.me/</code></p>
+<p>然后把 nginx 配置对应的项目修改为生成的 pem 即可。</p>
+<p><img src="https://dn-hcyue.qbox.me/img%2FS60514-133728.jpg" alt=""></p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2016/05/08/Haskeller-的-PureScript-试水/">Haskeller 的 PureScript 试水</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2016-05-07T16:21:33.000Z" itemprop="datePublished">
+    2016-05-08
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/haskell/">haskell</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/purescript/">purescript</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/functional-programming/">functional programming</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>– 讲道理虽然自称 Haskeller ，但是其实我根本不会 Haskell（</p>
+<blockquote>
+<p>为什么我要尝试 PureScript ？</p>
+<p>因为它是 Haskell 和 JavaScript 生的娃啊。</p>
+</blockquote>
+<p>Facebook 的 React.js 可以说是给 JavaScript 社区带来了一次 functional programming 的热潮。然而 JavaScript 毕竟不是真正的函数式编程语言——虽然有着 closure 等特性让它可以支持这种独特的范式，但是整体而言它还是基于顺序指令和事件回调的语言。</p>
+<p>PureScript 是一门年轻的语言——现在在 github 上可以查到的最早提交来自于 30 Sep 2013 。它致力于创造一种“类似 haskell 的编程体验”和“生成可读的 JavaScript 代码”。于是，有了它，我们终于可以在项目前端部分中愉快的写“ monoid in the category of endofunctors of X, with product × replaced by composition of endofunctors and unit set by the identity endofunctor ”了（</p>
         
           <div class="more-link">
-            <a href="/2017/03/29/chinese-test/#more">Read On »</a>
+            <a href="/2016/05/08/Haskeller-的-PureScript-试水/#more">Read On »</a>
           </div>
         
       
@@ -108,27 +502,23 @@
     <header class="title">
       
         <h1>
-          <a href="/2017/03/29/long-text-test/">Long Text Test</a>
+          <a href="/2016/03/27/又是一篇lambda演算介绍-过程与数据结构-一/">又是一篇lambda演算介绍：过程与数据结构（一）</a>
         </h1>
       
       <div class='ListMeta'>
-  <time datetime="2017-03-29T05:21:23.000Z" itemprop="datePublished">
-    2017-03-29
+  <time datetime="2016-03-27T08:30:54.000Z" itemprop="datePublished">
+    2016-03-27
   </time>
   
   | 
   <ul>
     
   <li class="meta-text">
-  { <a href="/tags/test/">test</a> }
+  { <a href="/tags/computer-science/">computer science</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/long/">long</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/text/">text</a> }
+  { <a href="/tags/lambda-calculus/">lambda calculus</a> }
   </li>
 
 
@@ -139,13 +529,208 @@
     </header>
     <div>
       
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam id nisi et leo ornare consequat ac id mauris. Ut finibus rutrum enim et posuere. Curabitur mollis nulla non massa vulputate condimentum. Phasellus fringilla efficitur enim sit amet mattis. Ut consectetur arcu vitae dapibus interdum. Donec neque arcu, cursus in turpis sit amet, eleifend luctus tellus. Aenean auctor, tellus at scelerisque lacinia, urna massa ullamcorper lectus, ut varius nunc lacus ac mauris. Duis fermentum id lectus sed semper. Nam justo erat, gravida eu semper nec, laoreet imperdiet ante. Nulla a malesuada lorem. Proin non auctor risus, eget lobortis urna.</p>
-<p>Phasellus sit amet erat volutpat, ultrices sem sed, consequat erat. Phasellus iaculis dui nec est tempus, in aliquam orci tincidunt. Aenean mattis, ex id maximus mollis, nibh nisl elementum nunc, non bibendum orci sem in quam. Sed pellentesque efficitur congue. Sed tortor sapien, volutpat vitae venenatis at, faucibus vel nulla. Donec metus leo, ullamcorper eget tortor eu, vehicula placerat odio. Sed felis arcu, rutrum vel eros a, faucibus aliquam quam. Proin tincidunt bibendum erat, et porta urna ullamcorper sit amet. Ut blandit ipsum turpis, a tincidunt sem lobortis ut. Nunc sodales est in risus pharetra, id egestas urna malesuada. Pellentesque ac varius massa. Vestibulum ac lorem quis sapien vulputate aliquam vitae eleifend purus. Sed laoreet purus at arcu gravida auctor.</p>
+        <h2 id="λ-calculus"><a href="#λ-calculus" class="headerlink" title="λ-calculus"></a>λ-calculus</h2><blockquote>
+<p>自从了解了lambda演算，我就觉得，每个写代码的人都应该学学它。——沃兹·基硕德</p>
+</blockquote>
+<p>λ演算的详细介绍可以从 <a href="https://zh.wikipedia.org/wiki/%CE%9B%E6%BC%94%E7%AE%97">Wikipedia</a> 找到。</p>
+<p>简单来说，这是一个比图灵机早提出几个月的可计算性模型，表达优美形式简洁反正比图灵机高到不知道哪里去了，但是愚蠢的人类没办法在机器上直接实现它所以只能照着图灵机来造计算机，导致图灵那家伙小人得志真正的大神却退居二线（相对图灵来说的二线）</p>
+<p>（为了方便表示，以下将 <code>λV.E</code> 记为 <code>V -&gt; E</code> ）</p>
+<h2 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h2><p>在原始的 lambda 演算中，没有直接的“数字”概念。</p>
+<p>lambda 演算的全部规则仅有两条（其实也可以说是三条），在这种简洁的体系中没有一个容纳原生“数字”概念的空间。</p>
+<p>但是神奇的是，仅仅只有两条“运算方法”，却能够构造出整个直觉上的“数字”体系。这种通过“过程”构造的“数字”，我们叫它“Church Numerals”，因为它正是由引入 lambda 演算的那位神人提出的。</p>
         
           <div class="more-link">
-            <a href="/2017/03/29/long-text-test/#more">Read On »</a>
+            <a href="/2016/03/27/又是一篇lambda演算介绍-过程与数据结构-一/#more">Read On »</a>
           </div>
         
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2016/03/21/找到了一个炒鸡好的-MacType-配置/">找到了一个炒鸡好的 MacType 配置</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2016-03-21T14:27:42.000Z" itemprop="datePublished">
+    2016-03-21
+  </time>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>穷逼买不起 mac 但是受不了 windows 的辣鸡字体渲染，只能自己动手丰衣足食。</p>
+<p>效果图：</p>
+<p><img src="https://dn-hcyue.qbox.me/img%2FQQ%E6%88%AA%E5%9B%BE20160321222022.png" alt=""></p>
+<p><a href="https://github.com/renkun-ken/MacType.Decency" target="_blank" rel="external">原配置</a> 是我从<a href="https://www.zhihu.com/question/22425454/answer/21930065" target="_blank" rel="external">知乎这个回答</a>上扒的。但是他用到了很多魔改字体然而我懒得装，于是 <code>fork</code> 了一份把魔改字体都删了嗯。</p>
+<p>所以修改版<a href="https://github.com/nameoverflow/MacType.Decency" target="_blank" rel="external">在这</a></p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2016/03/18/The-Mind-Language/">The Mind Language</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2016-03-18T05:31:50.000Z" itemprop="datePublished">
+    2016-03-18
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/computer-science/">computer science</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>最近开的一个坑，预想中是一门 Lisp 方言。</p>
+<p>另外，手撸状态机真是天坑，一辈子没写过这么多 <code>switch</code></p>
+<h2 id="Example-Code"><a href="#Example-Code" class="headerlink" title="Example Code"></a>Example Code</h2><pre><code class="text"># Definition of cons, car, cdr
+
+def cons fst, snd =
+    sel -&gt; sel fst, snd
+
+def car pair =
+    pair (fst, snd) -&gt; fst
+
+def cdr pair =
+    pair (fst, snd) -&gt; snd
+
+# Definition of boolean
+
+def true x, y =
+    x
+def false x, y =
+    y
+
+def fakeIf condi, fst, snd =
+    condi fst, snd
+
+
+# Codes above are not the real definitions
+# In fact they are implemented in interpreter
+
+def fib n =
+    if n == 0 || n == 1,
+        n,
+        fib (n - 1) + fib (n - 2)
+
+def fizzBuss =
+    def buildList start, end =
+        if start == end then end
+        else cons start, (buildList (start + 1), end)
+    def helper n =
+        if n % 3 == 0 &amp;&amp; n % 5 == 0 then &quot;Fizz Buzz&quot;
+        else if n % 3 == 0 then &quot;Fizz&quot;
+        else if n % 5 == 0 then &quot;Buzz&quot;
+        else n
+    print map (buildList 1, 100), helper
+</code></pre>
+<h2 id="Grammar"><a href="#Grammar" class="headerlink" title="Grammar"></a>Grammar</h2><pre><code class="text">&lt;MindProgram&gt; := &lt;Declarations&gt;
+
+&lt;Declarations&gt; := &lt;Definition&gt; [ &quot;\n+&quot; &lt;Declarations&gt; ]
+
+&lt;Definition&gt; := &quot;def&quot; &quot;(&quot; &lt;ValueDefinition&gt; | &lt;FunctionDefinition&gt; )
+
+&lt;ValueDefinition&gt; := &lt;DefinitionHead&gt; &lt;DefinitionTail&gt;
+
+&lt;FunctionDefinition&gt; := &lt;DefinitionHead&gt; &lt;ParamList&gt; &lt;DefinitionTail&gt;
+
+&lt;DefinitionHead&gt; := &lt;Identifier&gt;
+
+&lt;DefinitionTail&gt; := &lt;DeclarOperator&gt; [ &lt;Declarations&gt; &quot;\n&quot;]  [ &lt;LetBlock&gt; ] &lt;Expression&gt;
+
+&lt;ParamList&gt; := &lt;ParamDeclaration&gt; [&quot;,&quot; &lt;ParamList&gt; ]
+
+&lt;ParamDeclaration&gt; := &lt;Identifier&gt; 
+
+&lt;LetBlock&gt; := &quot;let&quot; &lt;Declarations&gt; &quot;in&quot;
+
+&lt;LetDeclarations&gt; := &lt;Assignment&gt; [&quot;\n&quot; &lt;LetDeclarations&gt;]
+
+&lt;Assignment&gt; := &lt;ValueDefinition&gt; | &lt;FunctionDefinition&gt;
+
+&lt;Expression&gt; := &lt;Value&gt; | &lt;Literal&gt; | &lt;FunctionCall&gt; | &lt;Expression&gt; &lt;Operator&gt; &lt;Expression&gt; 
+
+&lt;Value&gt; := &lt;Identifier&gt;
+
+&lt;Literal&gt; := &lt;StringLiteral&gt; | &lt;CharLiteral&gt; | &lt;NumberLiteral&gt; | &lt;LambdaFunction&gt; | &lt;ListLiteral&gt;
+
+&lt;StringLiteral&gt; := &quot;&quot;* [^&quot;]* &quot;&quot;
+
+&lt;CharLiteral&gt; := &quot;&apos; [^&apos;] &apos;&quot;
+
+&lt;NumberLiteral&gt; := &quot;[0-9]+(&quot;.&quot;[0-9]+)?&quot;
+
+&lt;LambdaFunction&gt; := &lt;Identifier&gt; &quot;-&gt;&quot; &lt;Expression&gt;
+
+&lt;ListLiteral&gt; := &quot;[&quot; &lt;ListElements&gt; &quot;]&quot;
+
+&lt;ListElements&gt; := &lt;ListElement&gt; [&quot;,&quot; &lt;ListElement&gt;]
+
+&lt;ListElement&gt; := &lt;Identifier&gt; | &lt;Literal&gt;
+
+&lt;Identifier&gt; := &quot;[_a-zA-Z][_0-9a-zA-z]&quot;*
+</code></pre>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2016/03/15/重构半衰期/">重构半衰期</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2016-03-15T05:41:01.000Z" itemprop="datePublished">
+    2016-03-15
+  </time>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>所谓“重构半衰期”，就是“写一段代码，在时间T之后你会觉得这一段代码写得像坨 shit ”中 T 的最小值。</p>
+<p>之所以突然想到这个概念，是因为我发现，现在的我看几个月之前的文章简直就是羞耻 play ：</p>
+<p><a href="/article/56462b7f149b44851f0e03a7">*大综合楼，一跃解千愁</a></p>
+<p><a href="/article/561d28e92da1ec4753e8a5b6">Haskell 练习</a></p>
+<p><a href="/article/5606d46dc8cf12e30db29d49">记一次离散作业</a></p>
+<p>第一、二篇，就算不说每次都写一遍的 <code>replicate</code>，那两级 <code>where</code> 就足够让人迷醉，更不用说当时完全不知道用 <code>monad</code> ， 甚至 <code>lambda</code></p>
+<p>第三篇简直令人发指，双手颤抖的想要毁尸灭迹——当然最后被理智所制止。</p>
+<p>根据马克思主义“自我否定，螺旋上升”的事物发展理论，这个 min(T) 可以代表你的学习进展。之所以会觉得之前的东西是 shit 正是因为现在的水平和当初已经不是同一层面。</p>
+<p>想通了这点，我便心安理得的继续写着 shit 一样的代码了。</p>
+
       
     </div>
 </article>
@@ -156,7 +741,7 @@
 
   <section id="nav-wrapper">
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">next »</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">next »</a>
     </nav>
   </section>
 
@@ -175,6 +760,6 @@
 <script>
 var sp = new Pager('data-pager-shell')
 
-</script>
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

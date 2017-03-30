@@ -441,11 +441,16 @@ a:hover {
   color: #0e0e0e;
   border-bottom: 1px #0e0e0e solid;
 }
+.highlight > table {
+  width: 100%;
+}
+.code,
 code {
   font-family: Monaco, Menlo, Consolas, 'Microsoft Yahei', monospace;
   font-size: 13px;
   margin: auto 5px;
 }
+.code pre,
 code pre {
   width: 90%;
   margin: auto;
@@ -993,4 +998,70 @@ time {
   margin: 0;
   padding: 0;
   overflow: hidden;
+}
+.hljs {
+    display: block;
+    background: white;
+    padding: 0.5em;
+    color: #333333;
+    overflow-x: auto
+}
+
+.comment,
+.meta {
+    color: #969896
+}
+
+.string,
+.variable,
+.template-variable,
+.strong,
+.emphasis,
+.quote {
+    color: #df5000
+}
+
+.keyword,
+.selector-tag,
+.type {
+    color: #a71d5d
+}
+
+.literal,
+.symbol,
+.bullet,
+.attribute {
+    color: #0086b3
+}
+
+.section,
+.name {
+    color: #63a35c
+}
+
+.tag {
+    color: #333333
+}
+
+.title,
+.attr,
+.selector-id,
+.selector-class,
+.selector-attr,
+.selector-pseudo {
+    color: #795da3
+}
+
+.addition {
+    color: #55a532;
+    background-color: #eaffea
+}
+
+.deletion {
+    color: #bd2c00;
+    background-color: #ffecec
+}
+
+.link {
+    text-decoration: underline
 }

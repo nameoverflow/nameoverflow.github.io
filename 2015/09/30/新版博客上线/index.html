@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>新版博客上线 | Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>新版博客上线</h1>
+    </header>
+
+    <section>
+      <p>从上个期末开始到上个星期，总算撸完了这个<a href="https://github.com/NameIsUseless/blog" target="_blank" rel="external">新版博客</a>wwwww</p>
+<p>采用的是后端nodejs+mongodb前端react渲染的架构，其中后台使用的是顺便撸的web框架<a href="http://hcyue.me/article/5606d46dc8cf12e30db29d54" target="_blank" rel="external">yue.js</a>。前端本来也想造轮子，后来中了react的毒就用了react（比传统的渲染方便多了啊摔）</p>
+<p>大体目录结构附下。handler即路由处理模块（controller层）；model即m层；view中放置的是html静态文件和jade模板文件。</p>
+<p>整个博客的前端是spa形式，使用<a href="https://github.com/rackt/react-router" target="_blank" rel="external">React-Router</a>实现前端路由控制.</p>
+<p>文本部分的样式使用了<a href="http://typo.sofi.sh/" target="_blank" rel="external">Typo</a>样式，不得不说中文排版确实挺赞的</p>
+<p>style使用sass编写，调用了轻量的<a href="https://github.com/marvin1023/sassCore" target="_blank" rel="external">sassCore</a>库（其实只用了clearfix）</p>
+<p>构建最后采用的是gulp，简单粗暴，嗯。</p>
+<p>目前blog功能较简单，只实现了基本的curd和登录登出。计划下一个实现标签云（现在的标签只是摆看。。。）</p>
+<pre><code>├─handler
+│  ├─admin
+│  └─api
+│      └─article
+├─model
+├─public
+│  ├─img
+│  ├─script
+│  └─style
+├─src
+│  ├─script
+│  │  └─components
+│  │      └─_partial
+│  └─style
+│      ├─sassCore
+│      └─_partial
+└─view
+    └─admin
+</code></pre>
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2015-09-29T16:03:52.000Z" itemprop="datePublished">
+              2015-09-30
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/blog/">blog</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

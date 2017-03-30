@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Generating Identicons by Python | Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Generating Identicons by Python</h1>
+    </header>
+
+    <section>
+      <p>If a github’s user has not upload an avatar, github will use gvatar or generate an image basing on the email(gvatar also offers this service).This kind of image called identicon.</p>
+<p>This code does the similar thing in a simple way,using the md5 of a string to generate an identicon.</p>
+<p>#英语渣表示写这段话好吃力啊= =</p>
+<p>example:</p>
+<p>input: hello world</p>
+<p>generated:</p>
+<p><img src="https://dn-hcyue.qbox.me/img/bbe01eeed093cb22bb8f5acdc3.png" alt=""></p>
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> md5</div><div class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image, ImageDraw</div><div class="line"></div><div class="line">IMAGE_SIZE = <span class="number">5</span></div><div class="line">SQUARE_SIZE = <span class="number">10</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">newIcon</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""generate new identicon"""</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, str, bgc = <span class="string">'#fff'</span>, size = IMAGE_SIZE)</span>:</span></div><div class="line">        self.h = size</div><div class="line">        <span class="keyword">if</span> self.h % <span class="number">2</span> == <span class="number">0</span>:</div><div class="line">            self.w = self.h / <span class="number">2</span></div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            self.w = (self.h + <span class="number">1</span>) / <span class="number">2</span></div><div class="line">        self.hash = self.gMD5(str)</div><div class="line">        self.image = Image.new(<span class="string">'RGB'</span>, (IMAGE_SIZE*SQUARE_SIZE, IMAGE_SIZE*SQUARE_SIZE), bgc)</div><div class="line">        self.draw = ImageDraw.Draw(self.image)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">gMD5</span><span class="params">(self, str)</span>:</span></div><div class="line">        <span class="string">"""get a md5 hash"""</span></div><div class="line">        hash = md5()</div><div class="line">        hash.update(str)</div><div class="line">        <span class="keyword">return</span> hash.hexdigest()</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">generate</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="string">"""caculate and generate the image"""</span></div><div class="line">        <span class="comment">#usng the first six hexadecimal num to decide the color</span></div><div class="line">        color = tuple([int(x, <span class="number">16</span>) <span class="keyword">for</span> x <span class="keyword">in</span> (self.hash[<span class="number">0</span>:<span class="number">2</span>], self.hash[<span class="number">2</span>:<span class="number">4</span>], self.hash[<span class="number">4</span>:<span class="number">6</span>])])</div><div class="line">        print(color)</div><div class="line">        self.hash = self.hash[<span class="number">6</span>:]</div><div class="line">        hash_list = [int(x, <span class="number">16</span>) <span class="keyword">for</span> x <span class="keyword">in</span> self.hash]</div><div class="line"></div><div class="line">        <span class="keyword">for</span> x <span class="keyword">in</span> range(int(self.w)):</div><div class="line">            <span class="keyword">for</span> y <span class="keyword">in</span> range(int(self.h)):</div><div class="line">                <span class="keyword">if</span> hash_list[y * IMAGE_SIZE + x] &amp; <span class="number">1</span>:</div><div class="line">                    <span class="comment">#Draw the left side</span></div><div class="line">                    self.draw.rectangle(    </div><div class="line">                        (x*SQUARE_SIZE, y*SQUARE_SIZE, (x+<span class="number">1</span>)*SQUARE_SIZE, (y+<span class="number">1</span>)*SQUARE_SIZE),</div><div class="line">                        fill=color,</div><div class="line">                        outline=color)</div><div class="line">                    <span class="comment">#Draw the mirror side</span></div><div class="line">                    self.draw.rectangle(    </div><div class="line">                        ((self.h-x)*SQUARE_SIZE, y*SQUARE_SIZE, (self.h-(x+<span class="number">1</span>))*SQUARE_SIZE, (y+<span class="number">1</span>)*SQUARE_SIZE),</div><div class="line">                        fill=color,</div><div class="line">                        outline=color)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">save</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="string">"""save and show the image"""</span></div><div class="line">        self.generate()</div><div class="line">        self.image.save(self.hash+<span class="string">'.png'</span>, <span class="string">'PNG'</span>)</div><div class="line"></div><div class="line">pic = newIcon(input(<span class="string">"the string:"</span>).encode(<span class="string">'utf8'</span>))</div><div class="line">pic.save()</div></pre></td></tr></table></figure>
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2015-03-07T20:53:35.000Z" itemprop="datePublished">
+              2015-03-08
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/python/">python</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

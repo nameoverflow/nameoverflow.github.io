@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Call With Current Continuation: Coroutine | Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Call With Current Continuation: Coroutine</h1>
+    </header>
+
+    <section>
+      <p>通过嵌套 <code>call/cc</code> 可以方便的实现协程</p>
+<figure class="highlight"><table><tr><td class="code"><pre><div class="line">(define (coroutine routine)</div><div class="line">  (let ((current routine)</div><div class="line">        (status 'suspended))</div><div class="line">    (lambda args</div><div class="line">      (cond ((null? args) </div><div class="line">             (if (eq? status 'dead)</div><div class="line">                 (error 'dead-coroutine)</div><div class="line">                 (let ((continuation-and-value</div><div class="line">                        (call/cc (lambda (return)</div><div class="line">                                   (let ((returner</div><div class="line">                                          (lambda (value)</div><div class="line">                                            (call/cc (lambda (next)</div><div class="line">                                                       (return (cons next value)))))))</div><div class="line">                                     (current returner)</div><div class="line">                                     (set! status 'dead))))))</div><div class="line">                   (if (pair? continuation-and-value)</div><div class="line">                       (begin (set! current (car continuation-and-value))</div><div class="line">                              (cdr continuation-and-value))</div><div class="line">                       continuation-and-value))))</div><div class="line">            ((eq? (car args) 'status?) status)</div><div class="line">            ((eq? (car args) 'dead?) (eq? status 'dead))</div><div class="line">            ((eq? (car args) 'alive?) (not (eq? status 'dead)))</div><div class="line">            ((eq? (car args) 'kill!) (set! status 'dead))</div><div class="line">            (true nil)))))</div></pre></td></tr></table></figure>
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2016-08-24T14:33:53.000Z" itemprop="datePublished">
+              2016-08-24
+            </time>
+          </div>
+          
+      </section>
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

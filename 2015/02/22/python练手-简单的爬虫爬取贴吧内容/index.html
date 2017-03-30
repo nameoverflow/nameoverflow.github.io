@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>python练手：简单的爬虫爬取贴吧内容 | Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>python练手：简单的爬虫爬取贴吧内容</h1>
+    </header>
+
+    <section>
+      <p>（顺便做了寒假作业）</p>
+<p>需求：</p>
+<ol>
+<li>爬取指定贴吧第一页所有帖子内容</li>
+<li>简单的去除内容中的图片标签<br>用python写一个简单爬虫应该是最初级的东西吧= =</li>
+</ol>
+<p>设计思路：get指定链接的html内容，正则表达式获取所有帖子链接，get链接内容html，处理链接内容，写入文本文件（打印）。</p>
+<p>首先导入需要的模块,设置两个全局变量表示要爬的站点（贴吧）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"><span class="keyword">import</span> httplib2</div><div class="line"><span class="keyword">import</span> re</div><div class="line"></div><div class="line">site = <span class="string">"http://tieba.baidu.com"</span></div><div class="line">bing = <span class="string">"http://tieba.baidu.com/f?kw=%E6%B9%96%E5%8D%97%E5%A4%A7%E5%AD%A6&amp;amp;fr=index&amp;amp;fp=0&amp;amp;ie=utf-8"</span></div></pre></td></tr></table></figure>
+<p>（此处为湖南大学吧）</p>
+<a id="more"></a>
+<p>第一个函数：获取首页html，返回string字符串。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHtml</span><span class="params">(url)</span>:</span></div><div class="line">    h = httplib2.Http(<span class="string">".cache"</span>)</div><div class="line">    (resp, page) = h.request(url,<span class="string">"GET"</span>)</div><div class="line">    <span class="keyword">return</span> page.decode()</div></pre></td></tr></table></figure>
+<p>函数：获取html中帖子链接</p>
+<p>首先分析贴吧页面结构</p>
+<p><a href="http://blogr.hcyue.ml/wp-content/uploads/2015/02/QQ图片20150221153838.png" target="_blank" rel="external"><img src="http://blogr.hcyue.ml/wp-content/uploads/2015/02/QQ图片20150221153838-1024x348.png" alt="QQ图片20150221153838"></a></p>
+<p>&nbsp;</p>
+<p>每个帖子链接指向类似/p/&lt;id&gt;的绝对链接。</p>
+<p>于是编写函数用正则表达式获取链接地址：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">getLink</span><span class="params">(self)</span>:</span></div><div class="line">    reg = <span class="string">r'href="(/p/\d*)"'</span></div><div class="line">    <span class="keyword">return</span> re.findall(reg, self)</div></pre></td></tr></table></figure>
+<p>然后分析帖子页面</p>
+<p><a href="http://blogr.hcyue.ml/wp-content/uploads/2015/02/QQ图片20150221155504.png" target="_blank" rel="external"><img src="http://blogr.hcyue.ml/wp-content/uploads/2015/02/QQ图片20150221155504-1024x460.png" alt="QQ图片20150221155504"></a></p>
+<p>每一楼的内容部分由最外层的&lt;cc&gt;包括，然后是一个带有唯一数字id和通用class的div。</p>
+<p>所以编写函数用正则表达式筛选</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">getContent</span><span class="params">(self)</span>:</span></div><div class="line">    reg = <span class="string">r'&amp;lt;div id="post_content_\d*" class="d_post_content j_d_post_content "&amp;gt;\</span></div><div class="line">            (.*)&amp;lt;/div&amp;gt;&amp;lt;br&amp;gt;&amp;lt;/cc&amp;gt;'</div><div class="line">    <span class="keyword">return</span> re.findall(reg,self)</div></pre></td></tr></table></figure>
+<p>返回每一楼的内容的list。</p>
+<p>然后是对提取的内容进行整理，去除html标签，简单排版。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">cleanContext</span><span class="params">(text)</span>:</span></div><div class="line">    text = re.sub(<span class="string">r'&amp;lt;br&amp;gt;'</span>, <span class="string">'\r\n'</span>, text)</div><div class="line">    text = re.sub(<span class="string">r'&amp;lt;.*&amp;gt;'</span>, <span class="string">''</span>, text)</div><div class="line">    <span class="keyword">return</span> text</div></pre></td></tr></table></figure>
+<p>最后是调用蜘蛛的函数。</p>
+<figure class="highlight"><table><tr><td class="code"><pre><div class="line">def spaider(url):</div><div class="line">    html = getHtml(url)</div><div class="line">    link_list = getLink(html)</div><div class="line"></div><div class="line">    with open('a.txt', 'wt') as f:</div><div class="line">        i=1</div><div class="line">        for link in link_list:</div><div class="line">            page = getHtml(site+link)</div><div class="line">            h = getContent(page)</div><div class="line">            for text in h:</div><div class="line">                text = cleanContext(text)</div><div class="line">                f.write(text+'\r\n')</div><div class="line">            f.write('\r\n')</div><div class="line">            print('writing',i,'th\n')</div><div class="line">            i+=1&lt;/code&gt;&lt;/pre&gt;</div></pre></td></tr></table></figure>
+<p>先获取首页，再逐个链接获取筛选，写入a.txt。</p>
+<p>最后全部源码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"><span class="keyword">import</span> httplib2</div><div class="line"><span class="keyword">import</span> re</div><div class="line"></div><div class="line">site = <span class="string">"http://tieba.baidu.com"</span></div><div class="line">bing = <span class="string">"http://tieba.baidu.com/f?kw=%E6%B9%96%E5%8D%97%E5%A4%A7%E5%AD%A6&amp;amp;fr=index&amp;amp;fp=0&amp;amp;ie=utf-8"</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHtml</span><span class="params">(url)</span>:</span></div><div class="line">    h = httplib2.Http(<span class="string">".cache"</span>)</div><div class="line">    (resp, page) = h.request(url,<span class="string">"GET"</span>)</div><div class="line">    <span class="keyword">return</span> page.decode()</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">getLink</span><span class="params">(self)</span>:</span></div><div class="line">    reg = <span class="string">r'href="(/p/\d*)"'</span></div><div class="line">    <span class="keyword">return</span> re.findall(reg, self)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">getContent</span><span class="params">(self)</span>:</span></div><div class="line">    reg = <span class="string">r'&amp;lt;div id="post_content_\d*" class="d_post_content j_d_post_content "&amp;gt;(.*)&amp;lt;/div&amp;gt;&amp;lt;br&amp;gt;&amp;lt;/cc&amp;gt;'</span></div><div class="line">    <span class="keyword">return</span> re.findall(reg,self)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">cleanContext</span><span class="params">(text)</span>:</span></div><div class="line">    text = re.sub(<span class="string">r'&amp;lt;br&amp;gt;'</span>, <span class="string">'\r\n'</span>, text)</div><div class="line">    text = re.sub(<span class="string">r'&amp;lt;.*&amp;gt;'</span>, <span class="string">''</span>, text)</div><div class="line">    <span class="keyword">return</span> text</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">spaider</span><span class="params">(url)</span>:</span></div><div class="line">    html = getHtml(url)</div><div class="line">    link_list = getLink(html)</div><div class="line"></div><div class="line">    <span class="keyword">with</span> open(<span class="string">'a.txt'</span>, <span class="string">'wt'</span>) <span class="keyword">as</span> f:</div><div class="line">        i=<span class="number">1</span></div><div class="line">        <span class="keyword">for</span> link <span class="keyword">in</span> link_list:</div><div class="line">            page = getHtml(site+link)</div><div class="line">            h = getContent(page)</div><div class="line">            <span class="keyword">for</span> text <span class="keyword">in</span> h:</div><div class="line">                text = cleanContext(text)</div><div class="line">                f.write(text+<span class="string">'\r\n'</span>)</div><div class="line">            f.write(<span class="string">'\r\n'</span>)</div><div class="line">            print(<span class="string">'writing'</span>,i,<span class="string">'th\n'</span>)</div><div class="line">            i+=<span class="number">1</span></div><div class="line"></div><div class="line">spaider(bing)</div></pre></td></tr></table></figure>
+<p>&nbsp;</p>
+<p>执行结果（a.txt）：</p>
+<p><a href="http://blogr.hcyue.ml/wp-content/uploads/2015/02/QQ截图20150221172533.jpg" target="_blank" rel="external"><img src="http://blogr.hcyue.ml/wp-content/uploads/2015/02/QQ截图20150221172533.jpg" alt="QQ截图20150221172533"></a></p>
+<p>看起来还不错wwwww</p>
+<p>&nbsp;</p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2015-02-21T16:03:39.000Z" itemprop="datePublished">
+              2015-02-22
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/Python/">Python</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

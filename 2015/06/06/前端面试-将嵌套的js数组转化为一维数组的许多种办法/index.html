@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>前端面试：将嵌套的js数组转化为一维数组的许多种办法 | Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>前端面试：将嵌套的js数组转化为一维数组的许多种办法</h1>
+    </header>
+
+    <section>
+      <p>事件起源于一道饿了么的前端面试题。</p>
+<blockquote>
+<p>编写一个方法，将嵌套的多维数组转化为一维数组输出。<br>示例：<code>var a = [1, [2, [3, 4]], 5, 6];</code> 输出 <code>[1, 2, 3, 4, 5, 6]</code></p>
+</blockquote>
+<p>这种嵌套的数据结构的处理，最常规的无疑就是递归。例如：</p>
+<pre><code class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">parseArr</span>(<span class="params">arr</span>) </span>{
+    <span class="keyword">var</span> i = <span class="number">0</span>;
+    <span class="keyword">var</span> result = [];
+    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; arr.length; i++) {
+        <span class="keyword">if</span> (arr[i] <span class="keyword">instanceof</span> <span class="built_in">Array</span>) {
+            parseArr(arr[i]);
+        } <span class="keyword">else</span> {
+            result.push(a[i]);
+        }
+    }
+    <span class="keyword">return</span> result;
+}
+</code></pre>
+<p>递归虽然好写，但是劣势也广为人知。而且作为一道面试题，递归这种常规的解法当然是不够吸引眼球的（大雾），于是便有大神提出了js特色的解法：使用<code>toString</code></p>
+<blockquote>
+<p><code>toString()</code> 方法可把数组转换为字符串，并返回结果。</p>
+</blockquote>
+<p>例如<code>[1, [2, [3, 4]], 5, 6].toString()</code> 返回 <code>&quot;1,2,3,4,5,6&quot;</code>，毫不费力的便转化成了一位数组的形式。</p>
+<p>什么，这是一个字符串，需要的是一个数组？</p>
+<p><code>[1, [2, [3, 4]], 5, 6].toString().spilt(&#39;,&#39;).map(function(v){return +v});</code> 就是这样。</p>
+<p><code>join</code>方法也是同样的效果。</p>
+<p>利用es6的<code>reduce</code>方法也能写出漂亮的解。</p>
+<pre><code class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">parseArr</span>(<span class="params">arr</span>) </span>{
+    <span class="keyword">return</span> arr.reduce(<span class="function"><span class="keyword">function</span> (<span class="params">prev, cur, index</span>) </span>{
+        <span class="keyword">var</span> deeparr = [].concat(cur).some(<span class="built_in">Array</span>.isArray);
+        <span class="keyword">return</span> prev.contact(deeparr ? flatarray(cur) : cur);
+    }, []);
+}
+</code></pre>
+<p>然而，一位大神默默写了一个利用正则的神奇的解</p>
+<pre><code class="javascript"><span class="built_in">JSON</span>.stringify([<span class="number">1</span>,[<span class="number">2</span>,<span class="number">3</span>,[<span class="number">4</span>,<span class="number">5</span>]],<span class="number">6</span>]).replace(<span class="regexp">/[\[\]]/g</span>,<span class="string">""</span>).split(<span class="string">","</span>);
+</code></pre>
+<p>直接转化为字符串，将方括号删除，然后用json解析之，牛逼闪闪。</p>
+<p>然而我是看到递归总想转化成循环的人，于是便写了一个不那么js的非递归方法</p>
+<pre><code class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">parseArr</span>(<span class="params">arr</span>) </span>{
+    <span class="keyword">while</span> (!!a[<span class="number">0</span>]) {
+        tmp = a.pop();
+        <span class="keyword">if</span> (tmp <span class="keyword">instanceof</span> <span class="built_in">Array</span>) {
+            <span class="keyword">for</span> (i = <span class="number">0</span>;i &lt; tmp.length; i++) {
+                a.push(tmp[i]);
+            }
+        } <span class="keyword">else</span> {
+            result.push(tmp);
+        }
+    }
+    <span class="keyword">return</span> result.reverse();
+}
+</code></pre>
+<p>直接把原数组当做栈，如果取出的元素是数组则把数组内元素一个个压入栈中，最后把结果反转一下。</p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2015-06-06T00:49:21.000Z" itemprop="datePublished">
+              2015-06-06
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/javascript/">javascript</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

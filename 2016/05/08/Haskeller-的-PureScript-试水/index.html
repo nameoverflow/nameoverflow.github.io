@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Haskeller 的 PureScript 试水 | Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Haskeller 的 PureScript 试水</h1>
+    </header>
+
+    <section>
+      <p>– 讲道理虽然自称 Haskeller ，但是其实我根本不会 Haskell（</p>
+<blockquote>
+<p>为什么我要尝试 PureScript ？</p>
+<p>因为它是 Haskell 和 JavaScript 生的娃啊。</p>
+</blockquote>
+<p>Facebook 的 React.js 可以说是给 JavaScript 社区带来了一次 functional programming 的热潮。然而 JavaScript 毕竟不是真正的函数式编程语言——虽然有着 closure 等特性让它可以支持这种独特的范式，但是整体而言它还是基于顺序指令和事件回调的语言。</p>
+<p>PureScript 是一门年轻的语言——现在在 github 上可以查到的最早提交来自于 30 Sep 2013 。它致力于创造一种“类似 haskell 的编程体验”和“生成可读的 JavaScript 代码”。于是，有了它，我们终于可以在项目前端部分中愉快的写“ monoid in the category of endofunctors of X, with product × replaced by composition of endofunctors and unit set by the identity endofunctor ”了（</p>
+<a id="more"></a>
+<h2 id="上手"><a href="#上手" class="headerlink" title="上手"></a>上手</h2><p>如果“这门语言的目的是创造类似 haskell 的编程体验”这句话所言不虚的话，那么，它确实做到了。熟悉 Haskell 的初学者是完全可以平滑迁移的。</p>
+<p>在项目主页上有这样一个栗子：</p>
+<pre><code class="haskell"><span class="keyword">import</span> Control.Monad.Aff
+<span class="keyword">import</span> Control.Monad.Aff.Par
+
+<span class="class"><span class="keyword">data</span> <span class="type">Model</span> = <span class="type">Model</span> (<span class="type">List</span> <span class="type">Product</span>)</span>
+
+<span class="title">loadModel</span> = <span class="keyword">do</span>
+    popular &lt;- get <span class="string">"/products/popular"</span>
+    products &lt;- runPar $ for_ popular \product -&gt; <span class="type">Par</span> (get product.uri)
+    return $ <span class="type">Model</span> products
+</code></pre>
+<p>和 Haskell 的相似程度不言而喻。</p>
+<h2 id="差异"><a href="#差异" class="headerlink" title="差异"></a>差异</h2><p>PureScript 的 <a href="https://github.com/purescript/purescript/wiki/Differences-from-Haskell" target="_blank" rel="external">wiki</a> 上列出了几点和 Haskell 的不同之处。</p>
+<p>除了 List 、 Tuple 这些语法糖的不同之外，最能体现 PureScript 与 JavaScript 亲密关系的就是 PureScript 对 Record 的加强。</p>
+<p>Haskell 中的 Record 在创建类型时会自动创建各字段对应的函数</p>
+<pre><code class="haskell"><span class="class"><span class="keyword">data</span> <span class="type">Point</span> = <span class="type">Point</span> { <span class="title">x</span> :: <span class="type">Number</span>, <span class="title">y</span> :: <span class="type">Number</span> }</span>
+</code></pre>
+<p>这样的声明会创建三个东西：类型构造器<code>Point</code>和 <code>x</code> 、 <code>y</code> 字段对应的两个函数</p>
+<pre><code class="haskell"><span class="type">Point</span> :: <span class="type">Number</span> -&gt; <span class="type">Number</span> -&gt; <span class="type">Point</span>
+<span class="title">x</span> :: <span class="type">Point</span> -&gt; <span class="type">Number</span>
+<span class="title">y</span> :: <span class="type">Point</span> -&gt; <span class="type">Number</span>
+</code></pre>
+<p>而 PureScript 直接给了一个方便的 <code>.</code> 操作符，直接可以像操作 JavaScript 对象一样操作 Record</p>
+<pre><code class="haskell"><span class="title">originX</span> :: <span class="type">Number</span>
+<span class="title">originX</span>  = origin.x
+</code></pre>
+<p>不过这样就导致 Haskell 中常用的用来构建复合函数的 <code>.</code> 被占用了，于是 PureScript 给了它另外的名字：<code>&lt;&lt;&lt;</code></p>
+<p>然后，在语法上， PureScript 有一个很蛋疼的点：不支持在 <code>let</code> 或者 <code>where</code> 中的 type destructure 。</p>
+<p>在 Haskell 中，如果你想拿到一个类型里面的值，除了在函数参数里面写模式匹配外，还可以在函数里面写模式匹配的绑定</p>
+<pre><code class="haskell"><span class="class"><span class="keyword">data</span> <span class="type">SomeType</span> a = <span class="type">SomeType</span> a</span>
+
+<span class="title">fuck</span> (<span class="type">SomeType</span> a) = a
+
+<span class="title">fuckU</span> theAWrapper =
+    <span class="keyword">let</span> <span class="type">SomeType</span> a = theAWrapper <span class="keyword">in</span>
+        a
+</code></pre>
+<p>然而在 PureScript 中并不可以这样，想在 <code>let</code> 里面拆装只能用 <code>case of</code></p>
+<pre><code class="haskell"><span class="title">fuckIt</span> theAWrapper =
+    <span class="keyword">let</span> <span class="type">SomeThing</span> a = theAWrapper <span class="keyword">in</span>
+        a <span class="comment">-- BOOM!!!!</span>
+
+<span class="title">shit</span> theAWrapper =
+    <span class="keyword">let</span> a = <span class="keyword">case</span> theAWrapper <span class="keyword">of</span> <span class="type">SomeThing</span> b -&gt; b <span class="keyword">in</span>
+        a <span class="comment">-- 妈的智障</span>
+</code></pre>
+<p>据<a href="https://github.com/purescript/purescript/issues/764" target="_blank" rel="external">作者说</a>不加这个糖的原因是没有可以生成优雅的 js 的脱糖模式……</p>
+<p>（于是我们用 case of 写的话生成的代码就很优雅吗……）</p>
+<p>[随地挖坑有空填]</p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2016-05-07T16:21:33.000Z" itemprop="datePublished">
+              2016-05-08
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/haskell/">haskell</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/purescript/">purescript</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/functional-programming/">functional programming</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

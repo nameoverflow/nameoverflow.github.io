@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>使用git部署网站 | Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>使用git部署网站</h1>
+    </header>
+
+    <section>
+      <p>(Someone said a coder who’s blog is full of “using some tools to do sth” is totally unreliable….)</p>
+<p>大致方法是创建一个bare repository，然后利用hook脚本在每次push时更新网站内容。</p>
+<p>##服务端</p>
+<p>创建git用户和，禁用shell登陆</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">$ sudo useradd git &amp;&amp; sudo groupadd git</div><div class="line">#创建并修改密码</div><div class="line">$ passwd git </div><div class="line">$ sudo vi /etc/passwd</div><div class="line">将git一行设置为:/home/git:/usr/bin/git-shell</div></pre></td></tr></table></figure>
+<p>选一个喜欢的目录建立bare repository</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">$ cd &lt;path&gt;</div><div class="line">$ mkdir website.git</div><div class="line">$ sudo git init --bare website.git</div><div class="line">#赋予给git用户</div><div class="line">$ sudo chown -R git:git website.git</div><div class="line">#配置hook</div><div class="line">$ sudo vi website.git/hooks/post-receive</div><div class="line"></div><div class="line">#!/bin/sh</div><div class="line">GIT_WORK_TREE=path/to/websiteroot  git checkout -f</div><div class="line"></div><div class="line">$ chmod +x post-receive</div><div class="line">$ sudo chown -R git:git path/to/websiteroot</div></pre></td></tr></table></figure>
+<p>之后便获取本地公钥，设置authorized_keys，之后网站更新时只要git push到repository即可。</p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2015-03-02T17:54:05.000Z" itemprop="datePublished">
+              2015-03-03
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/git/">git</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

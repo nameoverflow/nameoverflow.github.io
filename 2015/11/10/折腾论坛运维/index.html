@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>折腾论坛运维 | Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>折腾论坛运维</h1>
+    </header>
+
+    <section>
+      <blockquote>
+<p>杀一个运维不用枪</p>
+</blockquote>
+<p>接手了学校最大学生论坛的运维（听起来好屌然并卵），结果没想到是个天坑。</p>
+<p>然而，说到底，还是我图样。</p>
+<h3 id="频繁502，数据库报错"><a href="#频繁502，数据库报错" class="headerlink" title="频繁502，数据库报错"></a>频繁502，数据库报错</h3><p>论坛服务器是阿里云一台2核2G内存的ECS，安装LNMP集成环境，运行了十余年，一度是X大学子网络信息交流的首选平台，数据量可观。然而最近数年呈现颓势，访问量下滑，相对压力，应该也不是很大吧！？</p>
+<p>从韩*处刚接手时，我试着ssh到服务器。</p>
+<p>结果。</p>
+<p>TMD。</p>
+<p>连。</p>
+<p>不。</p>
+<p>上。</p>
+<p>你大爷。</p>
+<p><img src="https://dn-hcyue.qbox.me/img/QQ截图20151110005151.png" alt="enter image description here"></p>
+<a id="more"></a>
+<p>吓得我去登录了阿里云控制台，发现CPU爆炸。试着访问论坛，许久无响应，最终502。</p>
+<p>（话说阿里云账号还绑定着几届以前的运维负责人，每次要验证手机号的时候都要发条短信过去问验证码orz）</p>
+<p>试着从阿里云控制台的管理终端连接，休眠屏幕上显示OUT OF MEMORY,并且KILL了几个进程。为了尽快恢复访问便直接重启了整个lnmp。</p>
+<pre><code class="bash">~/lnmp restart
+</code></pre>
+<p>由于经验不足，一时也难以排查，看到论坛正常了便撒手不管了。</p>
+<p>结果，论坛在接下来一段时间的运行中大错小错不断，不断有502和数据库错误的情况发生，几乎每天都要修复。</p>
+<p>于是找到了甩锅的上一任韩师傅的<a href="http://0x0d.im/archives/solve-lnmp-nginx-502-error.html" target="_blank" rel="external">这篇文章</a>，了解了大概原因后，为了避免数据库总是出错把php的进程限制很保守的改到了30+（真尼玛保守），如愿以偿的告别了一天两次的database error。</p>
+<p>然而，我毕竟还是图样。</p>
+<p>论坛开始了地狱般的502。</p>
+<p><img src="https://dn-hcyue.qbox.me/img/502.jpg" alt="enter image description here"></p>
+<p>你大爷。</p>
+<p><img src="https://dn-hcyue.qbox.me/img/QQ截图20151110005151.png" alt="enter image description here"></p>
+<p>最后经过谭师傅和周师傅多名师傅的指点，调节到了80+，报502的频率明显降低。</p>
+<p>然而。后来报502的时候，问题就都比较大了。</p>
+<h3 id="mysqld占用奇高，数据库操作响应间歇奇慢"><a href="#mysqld占用奇高，数据库操作响应间歇奇慢" class="headerlink" title="mysqld占用奇高，数据库操作响应间歇奇慢"></a>mysqld占用奇高，数据库操作响应间歇奇慢</h3><p>在之后的运行中发现，一天中的某些时段论坛经常响应时间非常长（并且最后也基本上是502）。top发现服务器CPU占用奇高，有一、两个php-fpm进程达到了20+占用，mysqld进程则经常破50%，使用top命令监控服务器，负载值高破天际——双核服务器三个时间段内负荷居然经常达到30+。</p>
+<p><img src="https://dn-hcyue.qbox.me/img/QQ截图20151110005151.png" alt="enter image description here"></p>
+<p>（杭州某机房发生爆炸事件，湖南某高校学生组织宣称对此事负责）</p>
+<p>服务器上似乎并没有安装性能监控（有我也不知道在哪），为了更好的分析问题便安装了<a href="http://www.oneapm.com/" target="_blank" rel="external">OneAPM</a> 进行性能分析。</p>
+<p>发现最长的WEB事务执行时间达到了126.6662s。</p>
+<p><img src="https://dn-hcyue.qbox.me/img/QQ截图20151110005151.png" alt="enter image description here"></p>
+<p>这尼玛说没问题我特么都不信了！</p>
+<p>查看数据库分析，发现对于 <code>forum_thread</code> 表的<code>select</code> 操作普遍时间非常长</p>
+<p><img src="https://dn-hcyue.qbox.me/img/QQ%E6%88%AA%E5%9B%BE20151110162153.png" alt="enter image description here"></p>
+<p>288.653秒！报警了好么！</p>
+<p><img src="https://dn-hcyue.qbox.me/img/QQ截图20151110005151.png" alt="enter image description here"></p>
+<p>在OneAPM中查看对应的SQL语句，发现是根据 <code>fid</code> <code>displayorder</code> 字段进行查询并且根据 <code>displayorder</code> 进行排序</p>
+<pre><code class="sql"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> forum_thread <span class="keyword">WHERE</span> <span class="string">`fid`</span>=? <span class="keyword">AND</span> <span class="string">`displayorder`</span> <span class="keyword">IN</span>(?,?) <span class="keyword">ORDER</span> <span class="keyword">BY</span> displayorder <span class="keyword">DESC</span>, lastpost <span class="keyword">DESC</span> <span class="keyword">LIMIT</span> ?, ?
+</code></pre>
+<p>对于一个几十w的表来说<code>select</code> 执行200s肯定不正常。那么首先分析下索引的建立。<del>结合在Google的鼎力支持下找到的<a href="http://www.xiaohui.com/dev/server/20070701-discuz-mysql-cpu-100-optimize.htm" target="_blank" rel="external">这篇文章</a> ，连接终端进入mysql命令行，查看表结构</del></p>
+<p><del>发现<code>displayorder</code> 果然没有建立索引。</del></p>
+<p><del>之后干脆打开了mysql的慢sql日志，结合日志对一个操作频繁的字段进行了索引的建立。</del></p>
+<p><del>终于过上了几天清净日子。</del></p>
+<p>挑了个良辰吉日（502的时候），在MySQL命令行中输入</p>
+<pre><code class="sql"><span class="keyword">show</span> <span class="keyword">full</span> <span class="keyword">processlist</span>;
+</code></pre>
+<p>刷刷刷出现一大堆Query（共计127个），lock一堆，全是UPDATE……. 翻到最上果然有很多条Sorting Data的SELECT，正是这样的语句</p>
+<pre><code class="sql"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> forum_thread  <span class="keyword">WHERE</span> <span class="string">`fid`</span> <span class="keyword">IN</span>(<span class="string">'334'</span>,<span class="string">'268'</span>,<span class="string">'26'</span>) <span class="keyword">AND</span> <span class="string">`displayorder`</span> <span class="keyword">IN</span>(<span class="string">'0'</span>,<span class="string">'1'</span>)  <span class="keyword">ORDER</span> <span class="keyword">BY</span> displayorder <span class="keyword">DESC</span>, lastpost <span class="keyword">DESC</span> <span class="keyword">LIMIT</span> <span class="number">40</span>
+</code></pre>
+<p>作为SELECT，它们勇敢的站在最前方阻塞了100+条Query，值得敬佩。</p>
+<p>EXPLAIN一下</p>
+<pre><code class="sql">+<span class="comment">----+-------------+--------------+-------+------------------------------------+--------------+---------+------+-------+-----------------------------+</span>
+| id | select_type | table        | type  | possible_keys                      | key          | key_len | ref  | rows  | Extra                       |
++<span class="comment">----+-------------+--------------+-------+------------------------------------+--------------+---------+------+-------+-----------------------------+</span>
+|  1 | SIMPLE      | forum_thread | range | displayorder,typeid,displayorder_2 | displayorder | 4       | NULL | 64709 | Using where; Using filesort |
++<span class="comment">----+-------------+--------------+-------+------------------------------------+--------------+---------+------+-------+-----------------------------+</span>
+</code></pre>
+<p>发现是 <code>Using filesort</code> 。这条SQL语句可以说是Discuz最常用SQL之一，难道那些攻城狮们都没给这几个字段建立索引？</p>
+<p>在等待队列中的SQL执行完毕后，打开profile进行分析</p>
+<pre><code class="sql"><span class="keyword">set</span> profiling=<span class="number">1</span>;
+
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> forum_thread  <span class="keyword">WHERE</span> <span class="string">`fid`</span> <span class="keyword">IN</span>(<span class="string">'334'</span>,<span class="string">'268'</span>,<span class="string">'26'</span>) <span class="keyword">AND</span> <span class="string">`displayorder`</span> <span class="keyword">IN</span>(<span class="string">'0'</span>,<span class="string">'1'</span>)  <span class="keyword">ORDER</span> <span class="keyword">BY</span> displayorder <span class="keyword">DESC</span>, lastpost <span class="keyword">DESC</span>    <span class="keyword">LIMIT</span> <span class="number">40</span>;
+
+<span class="keyword">show</span> profile <span class="keyword">for</span> <span class="keyword">query</span> <span class="number">1</span>;
+</code></pre>
+<p>发现确实是sorting占了大头</p>
+<pre><code class="sql">+<span class="comment">--------------------+----------+</span>
+| Status             | Duration |
++<span class="comment">--------------------+----------+</span>
+| starting           | 0.000035 |
+| Opening tables     | 0.000006 |
+| System <span class="keyword">lock</span>        | <span class="number">0.000002</span> |
+| <span class="keyword">Table</span> <span class="keyword">lock</span>         | <span class="number">0.000003</span> |
+| init               | <span class="number">0.000029</span> |
+| optimizing         | <span class="number">0.000005</span> |
+| <span class="keyword">statistics</span>         | <span class="number">0.000077</span> |
+| preparing          | <span class="number">0.000060</span> |
+| executing          | <span class="number">0.000002</span> |
+| Sorting <span class="keyword">result</span>     | <span class="number">0.257200</span> |
+| Sending <span class="keyword">data</span>       | <span class="number">0.000413</span> |
+| <span class="keyword">end</span>                | <span class="number">0.000004</span> |
+| <span class="keyword">query</span> <span class="keyword">end</span>          | <span class="number">0.000002</span> |
+| freeing items      | <span class="number">0.000266</span> |
+| <span class="keyword">logging</span> slow <span class="keyword">query</span> | <span class="number">0.000002</span> |
+| cleaning up        | <span class="number">0.000003</span> |
++<span class="comment">--------------------+----------+</span>
+</code></pre>
+<p>查看一下 <code>forum_thread</code> 表的索引</p>
+<pre><code class="sql">+<span class="comment">--------------+------------+----------------+--------------+--------------+-----------+-------------+----------+--------+------+------------+---------+</span>
+| Table        | Non_unique | Key_name       | Seq_in_index | Column_name  | Collation | Cardinality | Sub_part | Packed | Null | Index_type | <span class="keyword">Comment</span> |
++<span class="comment">--------------+------------+----------------+--------------+--------------+-----------+-------------+----------+--------+------+------------+---------+</span>
+| forum_thread |          <span class="number">1</span> | displayorder   |            <span class="number">1</span> | fid          | A         |        <span class="literal">NULL</span> |     <span class="literal">NULL</span> | <span class="literal">NULL</span>   |      | BTREE      |         |
+| forum_thread |          <span class="number">1</span> | displayorder   |            <span class="number">2</span> | displayorder | A         |        <span class="literal">NULL</span> |     <span class="literal">NULL</span> | <span class="literal">NULL</span>   |      | BTREE      |         |
+| forum_thread |          <span class="number">1</span> | displayorder   |            <span class="number">3</span> | lastpost     | A         |        <span class="literal">NULL</span> |     <span class="literal">NULL</span> | <span class="literal">NULL</span>   |      | BTREE
+</code></pre>
+<p>然而确实是对这几个字段建立了索引的。那么问题有可能是索引的顺序。</p>
+<p>&lt;尚未解决 不立flag&gt;</p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2015-11-09T16:57:48.000Z" itemprop="datePublished">
+              2015-11-10
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/DataBase/">DataBase</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

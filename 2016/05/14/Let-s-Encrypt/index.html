@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Let&#39;s Encrypt! | Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Let&#39;s Encrypt!</h1>
+    </header>
+
+    <section>
+      <blockquote>
+<p>世界因自由软件而美好。</p>
+</blockquote>
+<p>昨天（5月13日）发现 SSL 证书到期了。想起之前谭总说过的 Let’s Encrypt，决定体验一下。</p>
+<p>相比起<a href="https://tms.im/tms/letsencrypt-beta" target="_blank" rel="external">半年前</a>，这玩意完善了很多、傻瓜了很多。</p>
+<p>全程需要做的只需要 clone 一个<a href="https://github.com/certbot/certbot" target="_blank" rel="external">傻瓜工具包</a>，然后运行一行命令</p>
+<pre><code class="bash">./certbot-auto certonly --standalone --email admin@hcyue.me <span class="_">-d</span> hcyue.me
+</code></pre>
+<p>之后坐等几秒，SSL 验证所需要的全部证书就都被放在了 <code>/etc/letsencrypt/live/hcyue.me/</code></p>
+<p>然后把 nginx 配置对应的项目修改为生成的 pem 即可。</p>
+<p><img src="https://dn-hcyue.qbox.me/img%2FS60514-133728.jpg" alt=""></p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2016-05-14T05:40:54.000Z" itemprop="datePublished">
+              2016-05-14
+            </time>
+          </div>
+          
+      </section>
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

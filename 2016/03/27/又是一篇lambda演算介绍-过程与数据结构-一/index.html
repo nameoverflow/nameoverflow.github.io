@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>又是一篇lambda演算介绍：过程与数据结构（一） | Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>又是一篇lambda演算介绍：过程与数据结构（一）</h1>
+    </header>
+
+    <section>
+      <h2 id="λ-calculus"><a href="#λ-calculus" class="headerlink" title="λ-calculus"></a>λ-calculus</h2><blockquote>
+<p>自从了解了lambda演算，我就觉得，每个写代码的人都应该学学它。——沃兹·基硕德</p>
+</blockquote>
+<p>λ演算的详细介绍可以从 <a href="https://zh.wikipedia.org/wiki/%CE%9B%E6%BC%94%E7%AE%97" target="_blank" rel="external">Wikipedia</a> 找到。</p>
+<p>简单来说，这是一个比图灵机早提出几个月的可计算性模型，表达优美形式简洁反正比图灵机高到不知道哪里去了，但是愚蠢的人类没办法在机器上直接实现它所以只能照着图灵机来造计算机，导致图灵那家伙小人得志真正的大神却退居二线（相对图灵来说的二线）</p>
+<p>（为了方便表示，以下将 <code>λV.E</code> 记为 <code>V -&gt; E</code> ）</p>
+<h2 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h2><p>在原始的 lambda 演算中，没有直接的“数字”概念。</p>
+<p>lambda 演算的全部规则仅有两条（其实也可以说是三条），在这种简洁的体系中没有一个容纳原生“数字”概念的空间。</p>
+<p>但是神奇的是，仅仅只有两条“运算方法”，却能够构造出整个直觉上的“数字”体系。这种通过“过程”构造的“数字”，我们叫它“Church Numerals”，因为它正是由引入 lambda 演算的那位神人提出的。</p>
+<a id="more"></a>
+<h3 id="1"><a href="#1" class="headerlink" title="1"></a>1</h3><p>所谓“道生1”，1可以说是“数字”体系的基础。</p>
+<p>想要从“过程”中构造出“1”这个概念，要从“数字”的本质开始推演。</p>
+<p>所谓“数字”，在现实中是用以描述“量”的概念。那么什么是量？</p>
+<p>桌子上放了苹果。有几个？这是“数量”。</p>
+<p>人吃苹果，咬几口？这是“次数”。</p>
+<p>寻找一下“数量”和“次数”两个概念的共性，可以发现，“数字”的含义就是某一指称对另一指称产生作用的次数。</p>
+<p>“桌子上有一个苹果”中的“一个”，含义是“有苹果”这个指称对“桌子”这个指称生效了一次。</p>
+<p>“吃两口苹果”中“两”的含义是“吃”这个指称对“苹果”这个指称生效了两次。</p>
+<p>到这一步就可以很容易从 lambda 演算的基本规则中构建出“数字”了。</p>
+<p>所谓“1”，就是这样一个过程：它是一个过程，接受两个指称作为参数，并将其中一个指称应用在另一个指称上一次。</p>
+<p>写成符号表示便是：<code>ONE = s-&gt;z-&gt;s(z)</code></p>
+<p>那么，很自然的疑问，“0”怎么表示？</p>
+<p>依葫芦画瓢可以写成 <code>ZERO = s-&gt;z-&gt;z</code></p>
+<p>好了，现在已经有了“0”和“1”，只差一个“+”就可以构建出完整的自然数系统了。</p>
+<h3 id=""><a href="#" class="headerlink" title="+"></a>+</h3><p>想想“+”的含义是什么？把前一个数代表的次数全部“累积”到后一个数上。</p>
+<p>更正规一点的说，“加”这个操作接收两个“数字”作为参数，产生另一个“数字”，这个新的“数字”等效于前两个数字的“累积”。</p>
+<p>把这句话符号化写出来：<code>PLUS = x-&gt;y-&gt;(s-&gt;z-&gt;x(s)(y(s)(z)))</code></p>
+<p>来看看 <code>PLUS</code> 的效果。</p>
+<pre><code class="text">PLUS(ONE, ONE)
+=&gt; (x-&gt;y-&gt;(s-&gt;z-&gt;x(s)(y(s)(z))))(s-&gt;z-&gt;s(z))(s-&gt;z-&gt;s(z))
+=&gt; (x-&gt;y-&gt;(s-&gt;z-&gt;x(s)(y(s)(z))))(n-&gt;m-&gt;n(m))(p-&gt;q-&gt;p(q))
+=&gt; (s-&gt;z-&gt;(n-&gt;m-&gt;n(m))(s)((p-&gt;q-&gt;p(q))(s)(z)))
+=&gt; (s-&gt;z-&gt;(n-&gt;m-&gt;n(m))(s)(s(z)))
+=&gt; s-&gt;z-&gt;s(s(z))
+</code></pre>
+<p>对 <code>ONE</code> 和 <code>ONE</code> 进行 <code>PLUS</code> ，得到 <code>s-&gt;z-&gt;s(s(z))</code> ——把s应用在z上两次，不正符合“2”的邱奇数定义吗？</p>
+<p>邱奇真tm是个天才。</p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2016-03-27T08:30:54.000Z" itemprop="datePublished">
+              2016-03-27
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/computer-science/">computer science</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/lambda-calculus/">lambda calculus</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

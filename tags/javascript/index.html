@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <ul class="Index">
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2016/03/08/React-Redux-Isomorphic-踩坑记-数据同步/">React Redux Isomorphic 踩坑记——数据同步</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2016-03-08T08:25:34.000Z" itemprop="datePublished">
+    2016-03-08
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/javascript/">javascript</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/react/">react</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/redux/">redux</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/node/">node</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>同构渲染的好处大家都有目共睹，SEO 优化、首屏速度之类的。这次重写 blog，基于试水的考虑使用了 react + redux 实现同构渲染，然后果不其然踩到了点小坑。</p>
+<h3 id="state-带来的难题"><a href="#state-带来的难题" class="headerlink" title="state 带来的难题"></a><code>state</code> 带来的难题</h3><p>起初我只是想感受一下 react 的服务端渲染，并没有考虑把 redux 这种应对高复杂度应用的框架弄来。然而很快便发现，同构渲染要解决的首要问题——数据同步问题，在传统 react 的 props + state 模式下很难做到。</p>
+<p>一般纯客户端使用 react 时，习惯将数据保存在 state 中，然而在服务端渲染时很难控制组件的 <code>state</code> （至少我在文档中根本没找到解决办法），于是难以将客户端的组件数据与服务端渲染时的数据保持一致。当时想到的一个办法就是将所有的状态全部抽出来由最顶层组件的state提供，然后以props的形式分发到下级组件。然后开始写之后发现，这™不就是 Redux ？于是便高高兴兴的 <code>npm install redux --save</code> </p>
+<h3 id="在服务端分发数据"><a href="#在服务端分发数据" class="headerlink" title="在服务端分发数据"></a>在服务端分发数据</h3><p>Readux 除了能解决数据同步的问题外，还顺带解决了服务端对不同组件数据分发的问题。比如之前对于加载文章的解决方式是：当组件挂载后，ajax拉下组件对应的文章数据保存在state中，然后渲染。</p>
+<pre><code class="js"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">SingleArticle</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>{
+    <span class="keyword">constructor</span>(props) {
+        <span class="keyword">super</span>(props);
+        <span class="keyword">this</span>.state = {<span class="comment">/* Init */</span>}
+    }
+    componentDidMount() {
+        ajax.get(<span class="comment">/*load*/</span>)
+            .then(<span class="comment">/*handle*/</span>)
+    }
+    render() {
+        <span class="comment">// ....</span>
+    }
+}
+</code></pre>
+<p>然而在服务端是不会触发组件生命周期更不能ajax的。</p>
+<p>那么应该如何在前后端公用一套代码的情况下为每个组件加载不同的数据呢？Redux 的另一个好处就体现出来了——它的 <code>action -&gt; reducer</code> 逻辑是独立的，不与组件相关的。于是便可以单独为每种情况抽取“加载”的逻辑，对应不同的 <code>action</code> ，然后 <code>dispatch</code> ，世界和平。</p>
+<p>顺着这种思路下去，又一个问题出现了——如何实现对于不同的 URL 请求，在服务端分发不同的“加载”逻辑，这一套“加载”逻辑还要™和客户端公用一套代码。幸好 <code>react-router</code> 已经给我们提供了用于服务端渲染的 API ，可以方便的获取当前应该渲染的组件。于是解决方法也浮出水面——将数据加载作为组件类的 <code>static</code> 方法（如 <code>static fetchData()</code> ，然后利用 router 的 api 获取当前组件类，调用 <code>fetchData()</code> 触发 <code>action</code> 。</p>
+<p>这样加载数据的上层逻辑就统一了，但是服务端和客户端对于 <code>fetchData()</code> 的实现肯定不能一样——客户端使用ajax，服务端从model读取数据。</p>
+<p>为了保证调用形式的统一，我们可以使用 <code>redux</code> 提供的 <code>middleware</code> 方案抹平差异——使用 <code>action</code> 触发 <code>middleware</code> ，而服务端和客户端分别各自实现。</p>
+<p>最后的服务端形式便化为了这样</p>
+<pre><code class="js"><span class="comment">// Component.jsx</span>
+@connect(<span class="comment">/** Connect functions **/</span>)
+<span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">Page</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>{
+    <span class="comment">// ...other methods</span>
+    render() {
+        <span class="keyword">const</span> { data } = <span class="keyword">this</span>.props
+        <span class="keyword">return</span> (
+            <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>
+                <span class="tag">&lt;<span class="name">ContentView</span>&gt;</span>{ data }<span class="tag">&lt;/<span class="name">ContentView</span>&gt;</span>
+                <span class="tag">&lt;<span class="name">Comment</span> /&gt;</span>
+            <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>
+        )
+    }
+    <span class="keyword">static</span> fetchData(store, props) {
+        <span class="keyword">const</span> id = props.params.id
+        <span class="keyword">return</span> store.dispatch(loadAction(id))
+    }
+}
+
+<span class="comment">// server render</span>
+
+<span class="keyword">const</span> matchRouter = <span class="function">(<span class="params">location, routes</span>) =&gt;</span> {
+    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> {
+        match({
+            location,
+            routes
+        }, (error, redirectLocation, renderProps) =&gt;
+            res({error, redirectLocation, renderProps}))
+    })
+}
+<span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span>* (<span class="params"></span>) </span>{
+    <span class="comment">/** react-router 匹配 **/</span>
+    <span class="keyword">const</span> {
+        error,
+        redirectLocation,
+        renderProps
+    } = <span class="keyword">yield</span> matchRouter(<span class="keyword">this</span>.url.path, routes)
+
+    <span class="keyword">if</span> (error) {
+        <span class="comment">/** 错误处理 **/</span>
+    } <span class="keyword">else</span> <span class="keyword">if</span> (redirectLocation) {
+        <span class="comment">/** 重定向 **/</span>
+    } <span class="keyword">else</span> {
+        <span class="keyword">const</span>
+            midd = applyMiddleware(apiFactory(makeRequest)),
+            store = createStore(reducer, midd)
+        <span class="comment">// 获取将要渲染的组件</span>
+        <span class="keyword">const</span> components = renderProps.components.filter(<span class="function"><span class="params">c</span> =&gt;</span> c &amp;&amp; c.fetchData)
+        <span class="comment">// 分别触发各组件的加载方法</span>
+        <span class="keyword">yield</span> <span class="built_in">Promise</span>.all(components.map(<span class="function"><span class="params">c</span> =&gt;</span>
+                            c.fetchData(store, renderProps)))
+        <span class="comment">/** 渲染，发送response **/</span>
+    }
+}
+</code></pre>
+<p>其中 <code>apiFactory</code> 的实现为</p>
+<pre><code class="js"><span class="keyword">export</span> <span class="keyword">const</span> CALL_API = <span class="built_in">Symbol</span>(<span class="string">'CALL_API'</span>)
+<span class="keyword">export</span> <span class="keyword">const</span> apiFactory = <span class="function"><span class="params">makeRequest</span> =&gt;</span> store =&gt; <span class="function"><span class="params">next</span> =&gt;</span> action =&gt; {
+    <span class="keyword">if</span> (!action[CALL_API]) {
+        <span class="keyword">return</span> next(action)
+    }
+    <span class="keyword">const</span> req = action[CALL_API]
+    <span class="keyword">const</span> { method, url, success, fail, extra } = req
+    <span class="keyword">return</span> makeRequest(url, { method })
+        .then(<span class="comment">/** handle data **/</span>)
+}
+</code></pre>
+<p>服务端环境和客户端环境各自传入不同的 <code>makeRequest</code> 实现，实现抹平上层差异。</p>
+<p>为了偷懒，我在服务端是用 supertest 向自身发送 http 请求调用 api 实现。</p>
+<h3 id="将数据同步到客户端"><a href="#将数据同步到客户端" class="headerlink" title="将数据同步到客户端"></a>将数据同步到客户端</h3><p>解决服务端获取数据的问题后，终于到了最后一步——将数据同步到客户端。</p>
+<p>解决办法非常的简单粗暴——渲染一个模板，把初始状态转为 json 字面量挂载到客户端的 <code>window</code> 对象属性下，客户端脚本读取初始状态生成store。</p>
+<pre><code class="js"><span class="comment">/** 服务端 **/</span>
+<span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span>* (<span class="params"></span>) </span>{
+    <span class="keyword">const</span> {
+        error,
+        redirectLocation,
+        renderProps
+    } = <span class="keyword">yield</span> matchRouter(<span class="keyword">this</span>.url.path, routes)
+    <span class="keyword">if</span> (error) {
+    } <span class="keyword">else</span> <span class="keyword">if</span> (redirectLocation) {
+    } <span class="keyword">else</span> {
+        <span class="keyword">const</span>
+            rendered = getRendered(store, renderProps),
+            initial_state = <span class="built_in">JSON</span>.stringify(store.getState())
+        <span class="comment">/** 渲染模板，发送数据 **/</span>
+        <span class="keyword">this</span>.render(<span class="string">'client'</span>, { rendered, initial_state })
+    }
+}
+
+<span class="comment">/** 客户端 **/</span>
+<span class="keyword">const</span>
+    initial_state = <span class="built_in">window</span>.__INITIAL_STATE__,
+    middleware = applyMiddleware(apiFactory(makeRequest)),
+    store = createStore(reducer, initial_state, middleware),
+    history = syncHistoryWithStore(browserHistory, store)
+</code></pre>
+<p>模板文件：</p>
+<pre><code class="jade">doctype html
+html(lang=&quot;zh-cn&quot;)
+    head
+
+    body
+        div#client!= rendered
+        script!= &apos;window.__INITIAL_STATE__ = &apos; + initial_state
+        script(src = static_path + &quot;client.js&quot;)
+</code></pre>
+<p>于是，终于可以舒心的写真正的“客户端与服务端公用”的代码了……</p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2016/02/21/CPS变换与JavaScript流程控制/">CPS变换与JavaScript流程控制</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2016-02-21T14:26:38.000Z" itemprop="datePublished">
+    2016-02-21
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/javascript/">javascript</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>正如<a href="https://hcyue.me/article/56a8aff28e0d54a562c73ca8">上一篇文章</a>所说，利用CPS原理可以进行流程控制。那么在JavaScript编程中究竟如何消灭callback hell呢？</p>
+<p><a href="https://github.com/tj/co">co</a> 正是一个解决JavaScript异步流程难题的库。它利用ES2015标准中的 <code>yield</code>，实现了与（本来被期望加入ES2016标准却因为大厂跳票没赶上deadline所以只能明年再说的）<code>async/await</code> 相似的功能而红透半边天。其原理就是利用 <code>yield</code> 的状态机特性，将（看起来是）同步的代码转换为CPS的形式。</p>
+<p>co的源文件有两百多行，而其核心思想其实非常简洁——不断的将 <code>yield</code> 的 <code>next</code> 值追加到 <code>promise</code> 链中，达到“一步接一步”执行的效果。</p>
+<p>这个核心思想用coffeescript写出来不到十行：</p>
+<pre><code class="coffeescript"><span class="function"><span class="title">fuck</span> = <span class="params">(gen)</span> -&gt;</span>
+    it = <span class="keyword">do</span> gen
+<span class="function">    <span class="title">go</span> = <span class="params">(res)</span> =&gt;</span>
+        p = it.next(res)
+        <span class="keyword">if</span> p.done
+            <span class="keyword">return</span>
+        p.value.<span class="keyword">then</span> go
+    <span class="keyword">do</span> go
+</code></pre>
+        
+          <div class="more-link">
+            <a href="/2016/02/21/CPS变换与JavaScript流程控制/#more">Read On »</a>
+          </div>
+        
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2015/06/06/前端面试-将嵌套的js数组转化为一维数组的许多种办法/">前端面试：将嵌套的js数组转化为一维数组的许多种办法</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2015-06-06T00:49:21.000Z" itemprop="datePublished">
+    2015-06-06
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/javascript/">javascript</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>事件起源于一道饿了么的前端面试题。</p>
+<blockquote>
+<p>编写一个方法，将嵌套的多维数组转化为一维数组输出。<br>示例：<code>var a = [1, [2, [3, 4]], 5, 6];</code> 输出 <code>[1, 2, 3, 4, 5, 6]</code></p>
+</blockquote>
+<p>这种嵌套的数据结构的处理，最常规的无疑就是递归。例如：</p>
+<pre><code class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">parseArr</span>(<span class="params">arr</span>) </span>{
+    <span class="keyword">var</span> i = <span class="number">0</span>;
+    <span class="keyword">var</span> result = [];
+    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; arr.length; i++) {
+        <span class="keyword">if</span> (arr[i] <span class="keyword">instanceof</span> <span class="built_in">Array</span>) {
+            parseArr(arr[i]);
+        } <span class="keyword">else</span> {
+            result.push(a[i]);
+        }
+    }
+    <span class="keyword">return</span> result;
+}
+</code></pre>
+<p>递归虽然好写，但是劣势也广为人知。而且作为一道面试题，递归这种常规的解法当然是不够吸引眼球的（大雾），于是便有大神提出了js特色的解法：使用<code>toString</code></p>
+<blockquote>
+<p><code>toString()</code> 方法可把数组转换为字符串，并返回结果。</p>
+</blockquote>
+<p>例如<code>[1, [2, [3, 4]], 5, 6].toString()</code> 返回 <code>&quot;1,2,3,4,5,6&quot;</code>，毫不费力的便转化成了一位数组的形式。</p>
+<p>什么，这是一个字符串，需要的是一个数组？</p>
+<p><code>[1, [2, [3, 4]], 5, 6].toString().spilt(&#39;,&#39;).map(function(v){return +v});</code> 就是这样。</p>
+<p><code>join</code>方法也是同样的效果。</p>
+<p>利用es6的<code>reduce</code>方法也能写出漂亮的解。</p>
+<pre><code class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">parseArr</span>(<span class="params">arr</span>) </span>{
+    <span class="keyword">return</span> arr.reduce(<span class="function"><span class="keyword">function</span> (<span class="params">prev, cur, index</span>) </span>{
+        <span class="keyword">var</span> deeparr = [].concat(cur).some(<span class="built_in">Array</span>.isArray);
+        <span class="keyword">return</span> prev.contact(deeparr ? flatarray(cur) : cur);
+    }, []);
+}
+</code></pre>
+<p>然而，一位大神默默写了一个利用正则的神奇的解</p>
+<pre><code class="javascript"><span class="built_in">JSON</span>.stringify([<span class="number">1</span>,[<span class="number">2</span>,<span class="number">3</span>,[<span class="number">4</span>,<span class="number">5</span>]],<span class="number">6</span>]).replace(<span class="regexp">/[\[\]]/g</span>,<span class="string">""</span>).split(<span class="string">","</span>);
+</code></pre>
+<p>直接转化为字符串，将方括号删除，然后用json解析之，牛逼闪闪。</p>
+<p>然而我是看到递归总想转化成循环的人，于是便写了一个不那么js的非递归方法</p>
+<pre><code class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">parseArr</span>(<span class="params">arr</span>) </span>{
+    <span class="keyword">while</span> (!!a[<span class="number">0</span>]) {
+        tmp = a.pop();
+        <span class="keyword">if</span> (tmp <span class="keyword">instanceof</span> <span class="built_in">Array</span>) {
+            <span class="keyword">for</span> (i = <span class="number">0</span>;i &lt; tmp.length; i++) {
+                a.push(tmp[i]);
+            }
+        } <span class="keyword">else</span> {
+            result.push(tmp);
+        }
+    }
+    <span class="keyword">return</span> result.reverse();
+}
+</code></pre>
+<p>直接把原数组当做栈，如果取出的元素是数组则把数组内元素一个个压入栈中，最后把结果反转一下。</p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+</ul>
+
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

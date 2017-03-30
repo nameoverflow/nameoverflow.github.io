@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>博客迁移：使用hexo建站 | Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>博客迁移：使用hexo建站</h1>
+    </header>
+
+    <section>
+      <p>神烦wordpress那一大堆奇怪的插件和功能，何况不懂后台优化的我看到wp页面加载时那几十条http请求就头大，于是毅然决然的始乱终弃（= =）了wp，转投静态博客。</p>
+<p>一番考虑之后选择了hexo。</p>
+<p>理由之一是易于部署，并且风评很好= =</p>
+<blockquote>
+<p>Blazing Fast</p>
+<p>Node.js brings you incredible generating speed. Hundreds of files take only seconds to build.</p>
+<p>Markdown Support</p>
+<p>All features of GitHub Flavored Markdown are supported. You can even use most Octopress plugins in Hexo.</p>
+<p>One-Command Deployment</p>
+<p>You only need one command to deploy your site to GitHub Pages, Heroku or other sites.</p>
+<p>Various Plugins</p>
+<p>Hexo has a powerful plugin system. You can install more plugins for Jade, CoffeeScript plugins.</p>
+</blockquote>
+<p>这便是官网的介绍。听着就很带感= =</p>
+<a id="more"></a>
+<p>##安装使用</p>
+<p>于是动手安装。</p>
+<pre><code>npm install hexo-cli -g
+</code></pre><p>之后在本地新建文件夹blog。</p>
+<pre><code class="bash">$ <span class="built_in">cd</span> blog
+$ hexo init
+$ npm install
+</code></pre>
+<p>便完成了hexo的本地部署。</p>
+<p>用hexo写博客，其实只要知道四个命令。</p>
+<pre><code class="bash">$ hexo new [post/page] &lt;title&gt; <span class="comment">#新建文章或者页面，文章会在source/_post下新建&lt;title&gt;.md，页面会生成在source下。自动生成日期等。</span>
+$ hexo generate <span class="comment">#生成静态网站，将整个网站生成在public文件夹下，部署站点时直接将该文件夹下的文件放置在站点目录下即可</span>
+$ hexo clean <span class="comment">#清除生成的静态文件和缓存，重新生成时使用。</span>
+$ hexo server <span class="comment">#在本地开启一个简单的http服务器，访问http://127.0.0.1:4000即可实时看到网站生成后的效果。</span>
+</code></pre>
+<p>我是从wp上迁移过来，hexo也有导入wp文章和页面的插件。</p>
+<pre><code class="bash">$ npm install hexo-migrator-wordpress --save
+</code></pre>
+<p>把wordpress导出的xml文件放在目录下改名wp.xml，运行</p>
+<pre><code class="bash">$ hexo migrate wordpress wp.xml
+</code></pre>
+<p>即可将wp内容导入hexo。</p>
+<p>至此完成内容迁移。</p>
+<p>##主题</p>
+<p>当然,对于网站更重要的是着手制作主题。</p>
+<p>hexo自带一套主题landscape；github上也有丰富的主题资源。</p>
+<p>不过作为有志前端的青年当然要自己动手！</p>
+<p>大致浏览一下自带主题的文件结构</p>
+<pre>
+├─layout
+│  ├─_partial
+│  │  └─post
+│  └─_widget
+├─scripts
+└─source
+    ├─css
+    │  ├─fonts
+    │  ├─images
+    │  ├─_partial
+    │  └─_util
+    ├─fancybox
+    │  └─helpers
+    └─js
+
+</pre>
+
+<p>layout文件夹中是ejs模板文件；scripts中是脚本；source中是资源文件（在生成后其内的文件会出现在根目录下），css文件夹中是stylus样式文件。</p>
+<p>layout文件夹的结构如下</p>
+<pre>
+│  archive.ejs
+│  category.ejs
+│  index.ejs
+│  layout.ejs
+│  page.ejs
+│  post.ejs
+│  tag.ejs
+│  
+├─_partial
+│  │  after-footer.ejs
+│  │  archive-post.ejs
+│  │  archive.ejs
+│  │  article.ejs
+│  │  footer.ejs
+│  │  google-analytics.ejs
+│  │  head.ejs
+│  │  header.ejs
+│  │  mobile-nav.ejs
+│  │  sidebar.ejs
+│  │  
+│  └─post
+│          category.ejs
+│          date.ejs
+│          gallery.ejs
+│          nav.ejs
+│          tag.ejs
+│          title.ejs
+│          
+└─_widget
+</pre>
+
+<p>ejs语法参考<a href="http://www.embeddedjs.com/" target="_blank" rel="external">http://www.embeddedjs.com/</a></p>
+<p>stylus参考<a href="http://www.zhangxinxu.com/jq/stylus/" target="_blank" rel="external">http://www.zhangxinxu.com/jq/stylus/</a>（中文）<br><a href="https://github.com/LearnBoost/stylus" target="_blank" rel="external">https://github.com/LearnBoost/stylus</a>（github官方）</p>
+<p>hexo主题的渲染方式是:先寻找layout.ejs，再根据具体的页面需求找到index.ejs（首页），archive.ejs（文章列表），post.ejs（文章页）等文件替换layout中的&lt;%- body %&gt;标签。_partial文件夹下则是各个模块组件，在ejs模板中用&lt;%- partial(‘_partial/filename’) %&gt;语句导入。</p>
+<p>制作主题还需要知道博客程序提供的接口。hexo为主题模板提供了page、post对象，包含title、content等属性，代表文章或者页面的标题、内容等，具体参考<a href="http://blog.gfdsa.net/2013/04/09/hexo/hexolessontwo/" target="_blank" rel="external">http://blog.gfdsa.net/2013/04/09/hexo/hexolessontwo/</a></p>
+<p>知道这些后，便可以拿着自己做html模板参考着默认主题改改改，制作出一套完整的hexo主题了。</p>
+<p>hexo全静态的特征让它很适合部署在github等静态空间下，hexo也提供了相应的命令可以直接部署（具体参考官方页面），不过本着不浪费的原则我还是把它放在了vps上。。计划等vps到期后就迁移到github上。</p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2015-02-28T20:24:19.000Z" itemprop="datePublished">
+              2015-03-01
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/hexo/">hexo</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/website/">website</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>CPS变换与JavaScript流程控制 | Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>CPS变换与JavaScript流程控制</h1>
+    </header>
+
+    <section>
+      <p>正如<a href="https://hcyue.me/article/56a8aff28e0d54a562c73ca8" target="_blank" rel="external">上一篇文章</a>所说，利用CPS原理可以进行流程控制。那么在JavaScript编程中究竟如何消灭callback hell呢？</p>
+<p><a href="https://github.com/tj/co" target="_blank" rel="external">co</a> 正是一个解决JavaScript异步流程难题的库。它利用ES2015标准中的 <code>yield</code>，实现了与（本来被期望加入ES2016标准却因为大厂跳票没赶上deadline所以只能明年再说的）<code>async/await</code> 相似的功能而红透半边天。其原理就是利用 <code>yield</code> 的状态机特性，将（看起来是）同步的代码转换为CPS的形式。</p>
+<p>co的源文件有两百多行，而其核心思想其实非常简洁——不断的将 <code>yield</code> 的 <code>next</code> 值追加到 <code>promise</code> 链中，达到“一步接一步”执行的效果。</p>
+<p>这个核心思想用coffeescript写出来不到十行：</p>
+<pre><code class="coffeescript"><span class="function"><span class="title">fuck</span> = <span class="params">(gen)</span> -&gt;</span>
+    it = <span class="keyword">do</span> gen
+<span class="function">    <span class="title">go</span> = <span class="params">(res)</span> =&gt;</span>
+        p = it.next(res)
+        <span class="keyword">if</span> p.done
+            <span class="keyword">return</span>
+        p.value.<span class="keyword">then</span> go
+    <span class="keyword">do</span> go
+</code></pre>
+<a id="more"></a>
+<p>使用起来很简单，在异步语句前面都加上 <code>yield</code> 即可。比如下面的代码很简单的实现了每一毫秒按顺序 <code>log</code> 100个数</p>
+<pre><code class="javascript"><span class="keyword">let</span> shit = <span class="function"><span class="params">i</span> =&gt;</span>
+    <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">res, rej</span>) =&gt;</span> setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> res(i), <span class="number">1</span>))
+
+fuck(<span class="function"><span class="keyword">function</span> *(<span class="params"></span>) </span>{
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) {
+        <span class="keyword">let</span> holy = <span class="keyword">yield</span> shit(i)
+        <span class="built_in">console</span>.log(holy)
+    }
+    <span class="built_in">console</span>.log(<span class="string">"done"</span>)
+})
+</code></pre>
+<p><img src="https://dn-hcyue.qbox.me/img/QQ%E6%88%AA%E5%9B%BE20160204173750.png" alt="运行结果"></p>
+<p>（运行结果，so beautiful）</p>
+<p>看出来了吧？其实它的效果就是把每个 <code>yield</code> 断开之后的代码都写到 <code>Promise::then</code> 里，其实就相当于</p>
+<pre><code class="js">~<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
+    <span class="comment">// 第一次next()</span>
+    <span class="keyword">var</span> p = shit(<span class="number">0</span>).then(<span class="function"><span class="params">holy</span> =&gt;</span> <span class="built_in">console</span>.log(holy))
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i &lt; <span class="number">100</span>; i++) {
+        p.then(shit(i).then(<span class="function"><span class="params">holy</span> =&gt;</span> <span class="built_in">console</span>.log(holy)))
+    }
+    p.then(<span class="function"><span class="params">holy</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">"done!"</span>))
+}()
+</code></pre>
+<p>由于 <code>Promise</code> 的修饰，这段代码看起来不是那么的CPS。如果能把 <code>Promise</code> 拿掉就好了。如何拿掉 <code>Promise</code> 呢？</p>
+<p>从形式上来看，每次添加单个 <code>then</code> 的 <code>Promise</code> 和 <code>callback</code> 调用长得差不多，只是把表示 <code>continuation</code> 的参数移到了 <code>then</code> 中</p>
+<pre><code class="javascript">doSomeThingWithPromise().then(callback)
+
+doSomeThingWithCb(callback)
+</code></pre>
+<p>……那么即使不进行深层次考虑，也很容易实现从 <code>Promise</code> 到 <code>callback</code> 的转化：</p>
+<pre><code class="coffeescript"><span class="function"><span class="title">fuck</span> = <span class="params">(gen)</span> -&gt;</span>
+    it = <span class="keyword">do</span> gen
+<span class="function">    <span class="title">go</span> = <span class="params">(res)</span> =&gt;</span>
+        p = it.next res
+        <span class="keyword">if</span> p.done
+            <span class="keyword">return</span>
+        p.value go
+    <span class="keyword">do</span> go
+</code></pre>
+<p>不就是拿掉一个 <code>then</code> 嘛！</p>
+<p>用起来也就是去掉了<code>Promise</code></p>
+<pre><code class="javascript"><span class="keyword">let</span> shit = <span class="function"><span class="params">i</span> =&gt;</span> callback =&gt;
+    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> callback(i), <span class="number">1</span>)
+
+fuck(<span class="function"><span class="keyword">function</span> *(<span class="params"></span>) </span>{
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) {
+        <span class="keyword">let</span> holy = <span class="keyword">yield</span> shit(i)
+        <span class="built_in">console</span>.log(holy)
+    }
+    <span class="built_in">console</span>.log(<span class="string">"done"</span>)
+})
+</code></pre>
+<p>它的等价调用便是典型的Continuation Passing Style<br>（其实<code>Promise</code> 本身便是一种CPS变换）</p>
+<pre><code class="javascript">~<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>{
+    <span class="keyword">let</span> p = <span class="function">(<span class="params">next</span>) =&gt;</span> next()
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) {
+        <span class="keyword">let</span> c = <span class="function">(<span class="params">(p</span>) =&gt;</span> <span class="comment">// 此处的闭包是考虑到js的执行策略，避免陷入无限递归</span>
+            (next) =&gt; p(<span class="function"><span class="params">()</span> =&gt;</span> 
+                shit(i)(<span class="function">(<span class="params">holy</span>) =&gt;</span> {
+                    <span class="built_in">console</span>.log(holy)
+                    next()
+                })
+            ))(p)
+        p = c
+    }
+    p(<span class="function"><span class="params">holy</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">"done!"</span>))
+}()
+</code></pre>
+<p>So beautiful! tj 真是个天才！</p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2016-02-21T14:26:38.000Z" itemprop="datePublished">
+              2016-02-21
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/javascript/">javascript</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

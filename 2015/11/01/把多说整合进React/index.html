@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ch-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>把多说整合进React | Alpha</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar'>
+        <div class='av-pic'/>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        <div>What the f__k?</div>
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>把多说整合进React</h1>
+    </header>
+
+    <section>
+      <p>由于使用了React构建Single Page Application，多说那种通过每次页面加载完成后在header中插入script标签来实现评论框的插件无疑是不能直接用了，我的博客便有了长达数个月的无法评论状态。</p>
+<p>这种情况终于在10月的最后一天结束。</p>
+<a id="more"></a>
+<h3 id="多说代码分析"><a href="#多说代码分析" class="headerlink" title="多说代码分析"></a>多说代码分析</h3><p>多说提供的傻瓜式插件代码的作用，是创建一个script标签，设置一个全居的duoshuoQuery变量，然后将script插入页面的head中，之后的事情完全交给加载的脚本文件完成。</p>
+<p>这种方法简单却实简单，但是对于spa来说会造成重复插入script标签。虽然一两个并没有什么太大的影响，但毕竟看着不舒服，而且一旦页面跳转次数多了就日狗了。</p>
+<h3 id="评论框API"><a href="#评论框API" class="headerlink" title="评论框API"></a>评论框API</h3><p>在多说的<a href="http://dev.duoshuo.com/docs/50b344447f32d30066000147" target="_blank" rel="external">开发者文档</a>中，有关于“动态载入评论框”的说明。从所给解决办法中可以看出，多说在head中引入的embed.js脚本在找不到“傻瓜式”解决方案中的特定id元素的时候，会只在全局引入一个DUOSHUO对象供API调用。</p>
+<p><code>DUOSHUO.EmbedThread</code> 方法接收一个<code>HTML DOM</code> 元素作为参数，读取其中的几个特定属性然后在这个元素中渲染多说评论框。</p>
+<p>那么接下来的事情就简单了。在HTML head中引入多说脚本，构建一个 <code>DuoshuoComment</code> 组件，在 <code>DOM</code> 属性中提供规定的属性值，在其生命周期中的 <code>componentDidMount</code> 时期调用 <code>DUOSHUO.EmbedThread</code> 方法即可。</p>
+<h3 id="Talk-is-Cheap-Show-Me-the-Code"><a href="#Talk-is-Cheap-Show-Me-the-Code" class="headerlink" title="Talk is Cheap Show Me the Code"></a>Talk is Cheap Show Me the Code</h3><pre><code class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">Comment</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>{
+    <span class="keyword">constructor</span>(props) {
+        <span class="keyword">super</span>(props);
+    }
+    componentDidMount() {
+        <span class="keyword">try</span> {
+            DUOSHUO.EmbedThread(React.findDOMNode(<span class="keyword">this</span>));
+        } <span class="keyword">catch</span> (e) {
+            <span class="built_in">console</span>.log(e);
+            DUOSHUO.EmbedThread(React.findDOMNode(<span class="keyword">this</span>));
+        }
+    }
+    render() {
+        <span class="keyword">return</span> (
+            <span class="xml"><span class="tag">&lt;<span class="name">div</span>
+                <span class="attr">data-thread-key</span>=<span class="string">{this.props.thread}</span>
+                <span class="attr">data-url</span>=<span class="string">{this.props.url}</span>
+            /&gt;</span>
+        );
+    }
+}</span>
+</code></pre>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2015-11-01T10:30:29.000Z" itemprop="datePublished">
+              2015-11-01
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/react/">react</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/javacript/">javacript</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Hcyue</div>
+    <div>
+    Powered by Hexo, all rights reserved
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
