@@ -64,51 +64,6 @@
     <header class="title">
       
         <h1>
-          <a href="/2016/03/13/OOM-Killer-大爆炸/">OOM Killer 大爆炸</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2016-03-13T06:04:55.000Z" itemprop="datePublished">
-    2016-03-13
-  </time>
-  
-  | 
-  <ul>
-    
-  <li class="meta-text">
-  { <a href="/tags/linux/">linux</a> }
-  </li>
-
-
-  </ul>
-  
-</div>
-
-    </header>
-    <div>
-      
-        <p>讲道理把 OOM killer 设成 2 居然会把整个系统搞挂……</p>
-<p><img src="https://dn-hcyue.qbox.me/img/QQ%E6%88%AA%E5%9B%BE20160313134747.png" alt="enter image description here"></p>
-<p>于是整个 OS 的内存管理全部挂掉，能用的命令只有 <code>echo</code> </p>
-<p>还好是可以以文件的形式强行修改服务进程的。</p>
-<pre><code class="bash"><span class="built_in">echo</span> 0 &gt; /proc/sys/vm/overcommit_memory
-</code></pre>
-<p>然后试了试 <code>ls</code> ，终于能够运行。</p>
-<p>一激动之下多按了几个↑，然后……</p>
-<p><img src="https://dn-hcyue.qbox.me/img/QQ%E6%88%AA%E5%9B%BE20160313135140.png" alt="enter image description here"></p>
-<p>……………………………………</p>
-
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
           <a href="/2016/03/08/做了一点微小的贡献/">做了一点微小的贡献</a>
         </h1>
       
@@ -624,11 +579,64 @@ html(lang=&quot;zh-cn&quot;)
 
     </li>
   
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2015/11/10/折腾论坛运维/">折腾论坛运维</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2015-11-09T16:57:48.000Z" itemprop="datePublished">
+    2015-11-10
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/DataBase/">DataBase</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <blockquote>
+<p>杀一个运维不用枪</p>
+</blockquote>
+<p>接手了学校最大学生论坛的运维（听起来好屌然并卵），结果没想到是个天坑。</p>
+<p>然而，说到底，还是我图样。</p>
+<h3 id="频繁502，数据库报错"><a href="#频繁502，数据库报错" class="headerlink" title="频繁502，数据库报错"></a>频繁502，数据库报错</h3><p>论坛服务器是阿里云一台2核2G内存的ECS，安装LNMP集成环境，运行了十余年，一度是X大学子网络信息交流的首选平台，数据量可观。然而最近数年呈现颓势，访问量下滑，相对压力，应该也不是很大吧！？</p>
+<p>从韩*处刚接手时，我试着ssh到服务器。</p>
+<p>结果。</p>
+<p>TMD。</p>
+<p>连。</p>
+<p>不。</p>
+<p>上。</p>
+<p>你大爷。</p>
+<p><img src="https://dn-hcyue.qbox.me/img/QQ截图20151110005151.png" alt="enter image description here"></p>
+        
+          <div class="more-link">
+            <a href="/2015/11/10/折腾论坛运维/#more">Read On »</a>
+          </div>
+        
+      
+    </div>
+</article>
+
+    </li>
+  
 </ul>
 
   <section id="nav-wrapper">
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">« prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">next »</a>
+      <a class="extend prev" rel="prev" href="/">« prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">next »</a>
     </nav>
   </section>
 

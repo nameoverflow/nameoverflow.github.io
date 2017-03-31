@@ -64,19 +64,19 @@
     <header class="title">
       
         <h1>
-          <a href="/2015/02/22/python练手-简单的爬虫爬取贴吧内容/">python练手：简单的爬虫爬取贴吧内容</a>
+          <a href="/2015/03/08/Generating-Identicons-by-Python/">Generating Identicons by Python</a>
         </h1>
       
       <div class='ListMeta'>
-  <time datetime="2015-02-21T16:03:39.000Z" itemprop="datePublished">
-    2015-02-22
+  <time datetime="2015-03-07T20:53:35.000Z" itemprop="datePublished">
+    2015-03-08
   </time>
   
   | 
   <ul>
     
   <li class="meta-text">
-  { <a href="/tags/Python/">Python</a> }
+  { <a href="/tags/python/">python</a> }
   </li>
 
 
@@ -87,56 +87,16 @@
     </header>
     <div>
       
-        <p>（顺便做了寒假作业）</p>
-<p>需求：</p>
-<ol>
-<li>爬取指定贴吧第一页所有帖子内容</li>
-<li>简单的去除内容中的图片标签<br>用python写一个简单爬虫应该是最初级的东西吧= =</li>
-</ol>
-<p>设计思路：get指定链接的html内容，正则表达式获取所有帖子链接，get链接内容html，处理链接内容，写入文本文件（打印）。</p>
-<p>首先导入需要的模块,设置两个全局变量表示要爬的站点（贴吧）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><div class="line"><span class="comment">#coding=utf-8</span></div><div class="line"><span class="keyword">import</span> httplib2</div><div class="line"><span class="keyword">import</span> re</div><div class="line"></div><div class="line">site = <span class="string">"http://tieba.baidu.com"</span></div><div class="line">bing = <span class="string">"http://tieba.baidu.com/f?kw=%E6%B9%96%E5%8D%97%E5%A4%A7%E5%AD%A6&amp;amp;fr=index&amp;amp;fp=0&amp;amp;ie=utf-8"</span></div></pre></td></tr></table></figure>
-<p>（此处为湖南大学吧）</p>
+        <p>If a github’s user has not upload an avatar, github will use gvatar or generate an image basing on the email(gvatar also offers this service).This kind of image called identicon.</p>
+<p>This code does the similar thing in a simple way,using the md5 of a string to generate an identicon.</p>
+<p>#英语渣表示写这段话好吃力啊= =</p>
+<p>example:</p>
+<p>input: hello world</p>
+<p>generated:</p>
+<p><img src="https://dn-hcyue.qbox.me/img/bbe01eeed093cb22bb8f5acdc3.png" alt=""></p>
         
           <div class="more-link">
-            <a href="/2015/02/22/python练手-简单的爬虫爬取贴吧内容/#more">Read On »</a>
-          </div>
-        
-      
-    </div>
-</article>
-
-    </li>
-  
-</ul>
-
-
-            <footer>
-    <div>© 2016 - Hcyue</div>
-    <div>
-    Powered by Hexo, all rights reserved
-    </div>
-</footer>
-
-        </div>
-    </div>
-</div>
-<script src="/js/pager/dist/singlepager.js"></script>
-<script>
-var sp = new Pager('data-pager-shell')
-
-</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-</body>
-</html>��办？</p>
-<p>Virtualenv 就是救星！它的基本原理是为每个项目安装一套 Python ，多套 Python 并存。但它不是真正地安装多套独立的 Python 拷贝，而是使用了一种巧妙的方法让不同 的项目处于各自独立的环境中。<br>（来自flask官方文档）</p>
-</blockquote>
-<p>（再次深刻认识到我的渣英语和渣翻译）</p>
-<p>在linux下安装：</p>
-<pre><code>$ pip install vitrualenv
-</code></pre><p>
-        
-          <div class="more-link">
-            <a href="/2015/02/01/Vitrualenv-Python虚拟环境/#more">Read On »</a>
+            <a href="/2015/03/08/Generating-Identicons-by-Python/#more">Read On »</a>
           </div>
         
       
@@ -162,15 +122,15 @@ var sp = new Pager('data-pager-shell')
   <ul>
     
   <li class="meta-text">
+  { <a href="/tags/python/">python</a> }
+  </li>
+
+  <li class="meta-text">
   { <a href="/tags/become/">become</a> }
   </li>
 
   <li class="meta-text">
   { <a href="/tags/c-cpp/">c/cpp</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/python/">python</a> }
   </li>
 
 

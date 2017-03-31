@@ -460,130 +460,6 @@ Exprs &amp; \rightarrow Expr  ,  Exprs\\\\
     <header class="title">
       
         <h1>
-          <a href="/2016/03/18/The-Mind-Language/">The Mind Language</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2016-03-18T05:31:50.000Z" itemprop="datePublished">
-    2016-03-18
-  </time>
-  
-  | 
-  <ul>
-    
-  <li class="meta-text">
-  { <a href="/tags/computer-science/">computer science</a> }
-  </li>
-
-
-  </ul>
-  
-</div>
-
-    </header>
-    <div>
-      
-        <p>最近开的一个坑，预想中是一门 Lisp 方言。</p>
-<p>另外，手撸状态机真是天坑，一辈子没写过这么多 <code>switch</code></p>
-<h2 id="Example-Code"><a href="#Example-Code" class="headerlink" title="Example Code"></a>Example Code</h2><pre><code class="text"># Definition of cons, car, cdr
-
-def cons fst, snd =
-    sel -&gt; sel fst, snd
-
-def car pair =
-    pair (fst, snd) -&gt; fst
-
-def cdr pair =
-    pair (fst, snd) -&gt; snd
-
-# Definition of boolean
-
-def true x, y =
-    x
-def false x, y =
-    y
-
-def fakeIf condi, fst, snd =
-    condi fst, snd
-
-
-# Codes above are not the real definitions
-# In fact they are implemented in interpreter
-
-def fib n =
-    if n == 0 || n == 1,
-        n,
-        fib (n - 1) + fib (n - 2)
-
-def fizzBuss =
-    def buildList start, end =
-        if start == end then end
-        else cons start, (buildList (start + 1), end)
-    def helper n =
-        if n % 3 == 0 &amp;&amp; n % 5 == 0 then &quot;Fizz Buzz&quot;
-        else if n % 3 == 0 then &quot;Fizz&quot;
-        else if n % 5 == 0 then &quot;Buzz&quot;
-        else n
-    print map (buildList 1, 100), helper
-</code></pre>
-<h2 id="Grammar"><a href="#Grammar" class="headerlink" title="Grammar"></a>Grammar</h2><pre><code class="text">&lt;MindProgram&gt; := &lt;Declarations&gt;
-
-&lt;Declarations&gt; := &lt;Definition&gt; [ &quot;\n+&quot; &lt;Declarations&gt; ]
-
-&lt;Definition&gt; := &quot;def&quot; &quot;(&quot; &lt;ValueDefinition&gt; | &lt;FunctionDefinition&gt; )
-
-&lt;ValueDefinition&gt; := &lt;DefinitionHead&gt; &lt;DefinitionTail&gt;
-
-&lt;FunctionDefinition&gt; := &lt;DefinitionHead&gt; &lt;ParamList&gt; &lt;DefinitionTail&gt;
-
-&lt;DefinitionHead&gt; := &lt;Identifier&gt;
-
-&lt;DefinitionTail&gt; := &lt;DeclarOperator&gt; [ &lt;Declarations&gt; &quot;\n&quot;]  [ &lt;LetBlock&gt; ] &lt;Expression&gt;
-
-&lt;ParamList&gt; := &lt;ParamDeclaration&gt; [&quot;,&quot; &lt;ParamList&gt; ]
-
-&lt;ParamDeclaration&gt; := &lt;Identifier&gt; 
-
-&lt;LetBlock&gt; := &quot;let&quot; &lt;Declarations&gt; &quot;in&quot;
-
-&lt;LetDeclarations&gt; := &lt;Assignment&gt; [&quot;\n&quot; &lt;LetDeclarations&gt;]
-
-&lt;Assignment&gt; := &lt;ValueDefinition&gt; | &lt;FunctionDefinition&gt;
-
-&lt;Expression&gt; := &lt;Value&gt; | &lt;Literal&gt; | &lt;FunctionCall&gt; | &lt;Expression&gt; &lt;Operator&gt; &lt;Expression&gt; 
-
-&lt;Value&gt; := &lt;Identifier&gt;
-
-&lt;Literal&gt; := &lt;StringLiteral&gt; | &lt;CharLiteral&gt; | &lt;NumberLiteral&gt; | &lt;LambdaFunction&gt; | &lt;ListLiteral&gt;
-
-&lt;StringLiteral&gt; := &quot;&quot;* [^&quot;]* &quot;&quot;
-
-&lt;CharLiteral&gt; := &quot;&apos; [^&apos;] &apos;&quot;
-
-&lt;NumberLiteral&gt; := &quot;[0-9]+(&quot;.&quot;[0-9]+)?&quot;
-
-&lt;LambdaFunction&gt; := &lt;Identifier&gt; &quot;-&gt;&quot; &lt;Expression&gt;
-
-&lt;ListLiteral&gt; := &quot;[&quot; &lt;ListElements&gt; &quot;]&quot;
-
-&lt;ListElements&gt; := &lt;ListElement&gt; [&quot;,&quot; &lt;ListElement&gt;]
-
-&lt;ListElement&gt; := &lt;Identifier&gt; | &lt;Literal&gt;
-
-&lt;Identifier&gt; := &quot;[_a-zA-Z][_0-9a-zA-z]&quot;*
-</code></pre>
-
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
           <a href="/2016/03/15/重构半衰期/">重构半衰期</a>
         </h1>
       
@@ -613,11 +489,56 @@ def fizzBuss =
 
     </li>
   
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2016/03/13/OOM-Killer-大爆炸/">OOM Killer 大爆炸</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2016-03-13T06:04:55.000Z" itemprop="datePublished">
+    2016-03-13
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/linux/">linux</a> }
+  </li>
+
+
+  </ul>
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>讲道理把 OOM killer 设成 2 居然会把整个系统搞挂……</p>
+<p><img src="https://dn-hcyue.qbox.me/img/QQ%E6%88%AA%E5%9B%BE20160313134747.png" alt="enter image description here"></p>
+<p>于是整个 OS 的内存管理全部挂掉，能用的命令只有 <code>echo</code> </p>
+<p>还好是可以以文件的形式强行修改服务进程的。</p>
+<pre><code class="bash"><span class="built_in">echo</span> 0 &gt; /proc/sys/vm/overcommit_memory
+</code></pre>
+<p>然后试了试 <code>ls</code> ，终于能够运行。</p>
+<p>一激动之下多按了几个↑，然后……</p>
+<p><img src="https://dn-hcyue.qbox.me/img/QQ%E6%88%AA%E5%9B%BE20160313135140.png" alt="enter image description here"></p>
+<p>……………………………………</p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
 </ul>
 
   <section id="nav-wrapper">
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">next »</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">next »</a>
     </nav>
   </section>
 
