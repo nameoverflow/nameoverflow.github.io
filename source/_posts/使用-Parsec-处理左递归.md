@@ -26,7 +26,7 @@ Exprs & \rightarrow Expr  ,  Exprs\\\\
 
 显然，non-terminal {% math %}Apply{% endmath %} 的派生最左端会进入  {% math %}Factor{% endmath %} ，之后又会回到 {% math %}Apply{% endmath %} 。教科书式的左递归。
 
-
+<!--more-->
 
 龙书中告诉我们，左递归可以通过提取出一个产生式来消除。
 
