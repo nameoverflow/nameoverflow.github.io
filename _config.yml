@@ -3,12 +3,14 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Alpha
-subtitle:
+title: nameoverflow
+subtitle: What the f__k?
 description:
 author: Hcyue
 language: zh-CN
 timezone:
+
+license: CC BY-NC-SA 4.0
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
