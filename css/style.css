@@ -441,6 +441,12 @@ a:hover {
   color: #0e0e0e;
   border-bottom: 1px #0e0e0e solid;
 }
+figure.highlight {
+  display: block;
+  width: 92%;
+  margin: auto;
+  overflow-x: auto;
+}
 .highlight > table {
   width: 100%;
 }
@@ -452,7 +458,6 @@ code {
 }
 .code pre,
 code pre {
-  width: 90%;
   margin: auto;
   overflow-x: auto;
   font-family: inherit;
