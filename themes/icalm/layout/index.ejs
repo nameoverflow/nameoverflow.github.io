@@ -1,0 +1,22 @@
+<ul class="Index">
+  <% if (page.tag || page.category) { %>
+    <header class='PageTitle'>
+        <h1>{ <%= page.tag || page.category %> }</h1>
+    </header>
+  <% } %>
+  <% page.posts.each(function (post) { %>
+    <li>
+      <%- partial('_partial/list-view', { post: post }) %>
+    </li>
+  <% }) %>
+</ul>
+<% if (page.total > 1){ %>
+  <section id="nav-wrapper">
+    <nav id="page-nav">
+      <%- paginator({
+        prev_text: "« prev",
+        next_text: "next »"
+      }) %>
+    </nav>
+  </section>
+<% } %>

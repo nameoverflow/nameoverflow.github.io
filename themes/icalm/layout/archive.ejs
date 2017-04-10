@@ -1,0 +1,14 @@
+<div class="Archives">
+  <% let years = {}; %>
+  <%
+      site.posts.each(post => {
+        const y = post.date.year();
+        if (!years[y]) years[y] = [];
+        years[y].push(post);
+      })
+  %>
+  <% for (const y of Object.keys(years).reverse()) { %>
+    
+    <%- partial('_partial/time-sec', { year: y, posts: years[y].reverse() }) %>
+  <% } %>
+</div>
