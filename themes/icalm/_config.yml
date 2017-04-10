@@ -8,8 +8,8 @@ menu:
 
 # Pictures shown on the sidebar
 # Use the absolute URL after generating
-# avatar: /assets/tree_small.png
-# sidebar_background: /assets/header.png
+avatar: /assets/tree_small.png
+sidebar_background: /assets/header.png
 
 rss: /atom.xml
 
@@ -27,7 +27,7 @@ source_han_font: true
 # Disqus settings
 disqus:
   # 'disabled' | 'all' | 'post'
-  enable: all
+  enable: post
   # Shortname of your disqus website.
   # See disqus admin
   shortname: hcyue
