@@ -450,12 +450,14 @@ figure.highlight {
 .highlight > table {
   width: 100%;
 }
+figure.highlight,
 .code,
 code {
   font-family: Monaco, Menlo, Consolas, 'Microsoft Yahei', monospace;
   font-size: 13px;
   margin: auto 5px;
 }
+figure.highlight pre,
 .code pre,
 code pre {
   margin: auto;
@@ -784,7 +786,6 @@ blockquote {
 .avatar {
   height: 180px;
   background-color: #333;
-  background-image: url("../../assets/header.png");
   position: absolute;
   width: 100%;
   top: 0;
@@ -798,7 +799,6 @@ blockquote {
   margin-right: auto;
   border-radius: 50%;
   background-color: #fff;
-  background-image: url("../../assets/tree_small.png");
   background-size: 100%;
 }
 .Btn {
