@@ -4,7 +4,7 @@
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>nameoverflow</title>
+  <title>基于 Hash 与 Winnowing 方法的文档查重 | nameoverflow</title>
   
   
   <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
@@ -63,29 +63,14 @@
 
     <div class="container">
         <div data-pager-shell>
-            <ul class="Index">
-  
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2017/05/11/plagiarism-detection/">基于 Hash 与 Winnowing 方法的文档查重</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2017-05-11T15:20:08.000Z" itemprop="datePublished">
-    2017-05-11
-  </time>
-  
-  
-</div>
-
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>基于 Hash 与 Winnowing 方法的文档查重</h1>
     </header>
-    <div>
-      
-        <blockquote>
+
+    <section>
+      <blockquote>
 <p>这只是一篇实验报告</p>
 </blockquote>
 <h2 id="设计思路"><a href="#设计思路" class="headerlink" title="设计思路"></a>设计思路</h2><p>基于现实计算能力考虑，许多大段文档之间的相似性比较不可能使用传统的文本 diff 算法等耗时长的方法。Hash 值可以在一定程度上反应数据的特征；但是一般的 Hash 方法强调避免碰撞，源数据的少许改变就可以引起 Hash 值的较大变化。对于查重来说，需要提取出文档的特征，这个特征在源数据相似时也应具有相似性。</p>
@@ -252,483 +237,49 @@
 <p>维基4：<a href="https://zh.wikipedia.org/wiki/%E5%8F%B0%E5%8C%97%E4%B8%96%E7%95%8C%E8%B2%BF%E6%98%93%E4%B8%AD%E5%BF%83" target="_blank" rel="external">台北世界贸易中心 - 维基百科，自由的百科全书</a></p>
 <h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>[1] Schleimer, Saul, Daniel S. Wilkerson, and Alex Aiken. “Winnowing: local algorithms for document fingerprinting.” <em>Proceedings of the 2003 ACM SIGMOD international conference on Management of data</em>. ACM, 2003.</p>
 
-      
-    </div>
-</article>
 
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
       
-        <h1>
-          <a href="/2017/04/09/Windows-LLVM-环境的二三事/">Windows LLVM 环境的二三事</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2017-04-08T17:44:05.000Z" itemprop="datePublished">
-    2017-04-09
-  </time>
-  
-  | 
-  <ul>
+
+    </section>
     
-  <li class="meta-text">
-  { <a href="/tags/LLVM/">LLVM</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/compile/">compile</a> }
-  </li>
-
-
-  </ul>
-  
-  
-</div>
-
-    </header>
-    <div>
-      
-        <p>讲道理，考研党被这种配环境的事情打扰了咸鱼的生活是很不开心的。</p>
-<p>起因是 Haskell 的 LLVM binding —— <code>llvm-general</code> 在 Hackage 上只支持到 3.5 版本。当然 repo 里是有后续版本的，但是作者在 issues 里说后续的版本并没有弄好。</p>
-<p>既然如此那就装 3.5 吧。然而下载了 LLVM 3.5.2 的源码后，Cmake 很顺利，用 VS 2017 打开也很顺利，然而编译的时候报错</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">这里假装有编译 log （好吧忘记存了）</div></pre></td></tr></table></figure>
-<p>总之就是某个类的方法后有 const 限定符，然后调用的上下文却又不是返回 const 于是不给过。</p>
-<p>奇怪的是报错的位置是 VS 提供的标准库文件。这就很尴尬了。我要么改 VS 的标准库要么研究一波 LLVM 源码。</p>
-<p>在 WSL 里试了一下，无痛编译。看来是 VS 有什么蛋疼的限制。网上稍微搜了一圈也没发现有类似情况（毕竟 3.5 的年代他们还没官方支持 VS 编译吧）。于是决定上 MinGW 来构建。</p>
-<p>使用 CMake 生成 MinGW 的 makefile 并没有问题，然而在 make 的时候提示命令语法错误</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">命令语法不正确。</div><div class="line">mingw32-make.exe[2]: *** [tools\lto\CMakeFiles\LTO_exports.dir\build.make:61: tools/lto/LTO.def] Error 1</div><div class="line">mingw32-make.exe[2]: *** Deleting file &apos;tools/lto/LTO.def&apos;</div><div class="line">mingw32-make.exe[1]: *** [CMakeFiles\Makefile2:9977: tools/lto/CMakeFiles/LTO_exports.dir/all] Error 2</div><div class="line">mingw32-make.exe: *** [Makefile:151: all] Error 2</div></pre></td></tr></table></figure>
-<p>找到了这个 build.make 发现这一行的命令很奇怪</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><div class="line">cd /d C:\Users\hcyue\code\llvm-<span class="number">3.5</span>.<span class="number">2</span>.build\tools\lto &amp;&amp; <span class="string">"C:\Program Files\CMake\bin\cmake.exe"</span> -E echo EXPORTS &gt; LTO.def</div><div class="line">cd /d C:\Users\hcyue\code\llvm-<span class="number">3.5</span>.<span class="number">2</span>.build\tools\lto &amp;&amp; type C:/Users/hcyue/code/llvm-<span class="number">3.5</span>.<span class="number">2</span>.src/tools/lto/lto.exports &gt;&gt; LTO.def</div></pre></td></tr></table></figure>
-<p><del>纵横 Windows 这么多年没见过 cd 还可以带个 <code>/d</code> 参数的</del> 似乎 powershell 的 cd 并不支持 /d 参数。那把它删了吧。</p>
-<p>之后继续报错，link 的时候找不到 symbol。发现是刚刚改的那两行生成的目标文件 <code>LTO.def</code> 有问题，不知道为什么没有写入成正常的文本文件，而是二进制文件（VS code 打开提示文件过大或为二进制文件）。直接 <code>type</code> 出来是一个奇怪的、字距拉得很开的、看起来像是文本文件的格式。很气。</p>
-<p>然而既然 <code>.def</code> 反正是文本文件，我大不了手动构建一下 <code>def</code> 。于是手动运行命令把 <code>lto.exports</code> 里的东西 <code>type</code> 出来</p>
-<figure class="highlight powershell"><table><tr><td class="code"><pre><div class="line">type C:/Users/hcyue/code/llvm-<span class="number">3.5</span>.<span class="number">2</span>.src/tools/lto/lto.exports</div></pre></td></tr></table></figure>
-<p>得到一大堆符号名</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">lto_get_error_message</div><div class="line">lto_get_version</div><div class="line">lto_initialize_disassembler</div><div class="line">lto_module_create</div><div class="line">lto_module_create_from_fd</div><div class="line">lto_module_create_from_fd_at_offset</div><div class="line">lto_module_create_from_memory</div><div class="line"></div><div class="line">（……一大堆 lto 符号名）</div><div class="line"></div><div class="line">LLVMCreateDisasm</div><div class="line">LLVMCreateDisasmCPU</div><div class="line">LLVMDisasmDispose</div><div class="line">LLVMDisasmInstruction</div><div class="line">LLVMSetDisasmOptions</div></pre></td></tr></table></figure>
-<p>新建个 <code>LTO.def</code> 把原来的覆盖掉，贴进去。</p>
-<p>重新运行 <code>cmake --build .</code> ，终于过了。</p>
-
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2017/03/03/使用-Parsec-处理左递归/">使用 Parsec 处理左递归</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2017-03-03T12:41:36.000Z" itemprop="datePublished">
-    2017-03-03
-  </time>
-  
-  | 
-  <ul>
-    
-  <li class="meta-text">
-  { <a href="/tags/haskell/">haskell</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/parsec/">parsec</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/compiler/">compiler</a> }
-  </li>
-
-
-  </ul>
-  
-  
-</div>
-
-    </header>
-    <div>
-      
-        <p>在给之前写的 Lisp 解释器之前套上表达式语法时，遇到这样几条文法</p>
-<span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtable><mtr><mtd><mrow><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi><mi>s</mi></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi><mo separator="true">,</mo><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi><mi>s</mi></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi>I</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>g</mi><mi>e</mi><mi>r</mi><mi mathvariant="normal">∣</mi><mi>A</mi><mi>p</mi><mi>p</mi><mi>l</mi><mi>y</mi><mi mathvariant="normal">∣</mi><mi>I</mi><mi>d</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>i</mi><mi>f</mi><mi>y</mi><mi mathvariant="normal">∣</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">∣</mi><mrow><mo>(</mo></mrow><mrow><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi></mrow><mrow><mo>)</mo></mrow></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><mi>I</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>g</mi><mi>e</mi><mi>r</mi></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><mi>A</mi><mi>p</mi><mi>p</mi><mi>l</mi><mi>y</mi></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi><mo>(</mo><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi><mi>s</mi><mo>)</mo></mrow></mtd></mtr></mtable></mrow><annotation encoding="application/x-tex">\begin{aligned}
-Expr &amp; \rightarrow Factor ... \\\\
-Exprs &amp; \rightarrow Expr  ,  Exprs\\\\
- Factor &amp; \rightarrow Integer|Apply|Identify|...|{(}  {Expr} {)} \\\\
-  Integer &amp; \rightarrow... \\\\
-...\\\\
- Apply &amp; \rightarrow  Factor  (  Exprs  )
-\end{aligned}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:6.849999999999999em;"></span><span class="strut bottom" style="height:13.2em;vertical-align:-6.35em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist"><span style="top:-6.009999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span></span><span style="top:-4.809999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:-3.609999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">s</span></span></span><span style="top:-2.409999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:-1.209999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit">a</span><span class="mord mathit">c</span><span class="mord mathit">t</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span></span><span style="top:-0.009999999999997733em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:1.1900000000000024em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.07847em;">I</span><span class="mord mathit">n</span><span class="mord mathit">t</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span></span><span style="top:2.390000000000002em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:3.590000000000001em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span></span></span><span style="top:4.79em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:5.989999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit">A</span><span class="mord mathit">p</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="col-align-l"><span class="vlist"><span style="top:-6.009999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit">a</span><span class="mord mathit">c</span><span class="mord mathit">t</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span></span></span><span style="top:-3.6099999999999985em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">s</span></span></span><span style="top:-1.2099999999999989em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathit" style="margin-right:0.07847em;">I</span><span class="mord mathit">n</span><span class="mord mathit">t</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathrm">∣</span><span class="mord mathit">A</span><span class="mord mathit">p</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mord mathrm">∣</span><span class="mord mathit" style="margin-right:0.07847em;">I</span><span class="mord mathit">d</span><span class="mord mathit">e</span><span class="mord mathit">n</span><span class="mord mathit">t</span><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mord mathrm">∣</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">∣</span><span class="mord displaystyle textstyle uncramped"><span class="mopen">(</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span><span class="mord displaystyle textstyle uncramped"><span class="mclose">)</span></span></span></span><span style="top:1.1900000000000015em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span></span></span><span style="top:5.989999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit">a</span><span class="mord mathit">c</span><span class="mord mathit">t</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">s</span><span class="mclose">)</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></span></span>
-<p>显然，non-terminal <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi>p</mi><mi>p</mi><mi>l</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">Apply</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">A</span><span class="mord mathit">p</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span></span> 的派生最左端会进入  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi></mrow><annotation encoding="application/x-tex">Factor</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit">a</span><span class="mord mathit">c</span><span class="mord mathit">t</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span></span></span> ，之后又会回到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi>p</mi><mi>p</mi><mi>l</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">Apply</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">A</span><span class="mord mathit">p</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span></span> 。教科书式的左递归。</p>
-        
-          <div class="more-link">
-            <a href="/2017/03/03/使用-Parsec-处理左递归/#more">Read On »</a>
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2017-05-11T15:20:08.000Z" itemprop="datePublished">
+              2017-05-11
+            </time>
           </div>
-        
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2016/08/24/Call-With-Current-Continuation-Coroutine/">Call With Current Continuation: Coroutine</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2016-08-24T14:33:53.000Z" itemprop="datePublished">
-    2016-08-24
-  </time>
-  
-  
-</div>
-
-    </header>
-    <div>
-      
-        <p>通过嵌套 <code>call/cc</code> 可以方便的实现协程</p>
-<figure class="highlight"><table><tr><td class="code"><pre><div class="line">(define (coroutine routine)</div><div class="line">  (let ((current routine)</div><div class="line">        (status 'suspended))</div><div class="line">    (lambda args</div><div class="line">      (cond ((null? args) </div><div class="line">             (if (eq? status 'dead)</div><div class="line">                 (error 'dead-coroutine)</div><div class="line">                 (let ((continuation-and-value</div><div class="line">                        (call/cc (lambda (return)</div><div class="line">                                   (let ((returner</div><div class="line">                                          (lambda (value)</div><div class="line">                                            (call/cc (lambda (next)</div><div class="line">                                                       (return (cons next value)))))))</div><div class="line">                                     (current returner)</div><div class="line">                                     (set! status 'dead))))))</div><div class="line">                   (if (pair? continuation-and-value)</div><div class="line">                       (begin (set! current (car continuation-and-value))</div><div class="line">                              (cdr continuation-and-value))</div><div class="line">                       continuation-and-value))))</div><div class="line">            ((eq? (car args) 'status?) status)</div><div class="line">            ((eq? (car args) 'dead?) (eq? status 'dead))</div><div class="line">            ((eq? (car args) 'alive?) (not (eq? status 'dead)))</div><div class="line">            ((eq? (car args) 'kill!) (set! status 'dead))</div><div class="line">            (true nil)))))</div></pre></td></tr></table></figure>
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2016/08/01/Write-You-a-Scheme/">Write You a Scheme</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2016-08-01T01:33:57.000Z" itemprop="datePublished">
-    2016-08-01
-  </time>
-  
-  | 
-  <ul>
+          
+      </section>
     
-  <li class="meta-text">
-  { <a href="/tags/haskell/">haskell</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/scheme/">scheme</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/interpreter/">interpreter</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/lambda-calculus/">lambda calculus</a> }
-  </li>
-
-
-  </ul>
-  
-  
-</div>
-
-    </header>
-    <div>
-      
-        <p>撸了个 <a href="https://github.com/nameoverflow/LittleScheme">Scheme 解释器</a>，也算是拿 Haskell 做过东西了（虽然只是个玩具</p>
-<p>最大的体会就是，既熟悉了 Haskell，也巩固了 Scheme （虽然看过 SICP 但是并不是很明白它的 quosiquote 和 call/cc 之类的鬼东西</p>
-<p>本来是打算自己定义一门语言（像<a href="https://hcyue.me/article/56eb92c6d09a19dd0956c469">这个</a>），但是发现挺麻烦的（大雾），而且我比较关心的也是解释执行的过程，于是还是决定把 Scheme 实现一下。大体上是跟着 <a href="https://en.wikibooks.org/wiki/Write_Yourself_a_Scheme_in_48_Hours">Write Yourself a Scheme in 48 Hours</a> 来的，在它的基础上增加了 Continuation 之类的玩意儿</p>
-        
-          <div class="more-link">
-            <a href="/2016/08/01/Write-You-a-Scheme/#more">Read On »</a>
-          </div>
-        
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2016/05/14/什么是函数式编程思维/">什么是函数式编程思维？</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2016-05-14T06:00:30.000Z" itemprop="datePublished">
-    2016-05-14
-  </time>
-  
-  | 
-  <ul>
     
-  <li class="meta-text">
-  { <a href="/tags/functional-programming/">functional programming</a> }
-  </li>
-
-
-  </ul>
-  
-  
-</div>
-
-    </header>
-    <div>
-      
-        <p>我为什么要把我的知乎回答搬到这里呢……大概是太久没发东西了来凑数吧。</p>
-<p>作者：nameoverflow</p>
-<p>链接：<a href="https://www.zhihu.com/question/28292740/answer/100284611" target="_blank" rel="external">https://www.zhihu.com/question/28292740/answer/100284611</a></p>
-<p>来源：知乎</p>
-<p>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
-<p>函数式编程与命令式编程最大的不同其实在于：</p>
-<p><strong>函数式编程关心数据的映射，命令式编程关心解决问题的步骤</strong></p>
-<p>这里的映射就是数学上“函数”的概念——一种东西和另一种东西之间的对应关系。</p>
-<p>这也是为什么“函数式编程”叫做“函数式编程”。</p>
-<p>这是什么意思呢？</p>
-<p>假如，现在你来到 google 面试，面试官让你把二叉树镜像反转一下（大雾</p>
-<p>几乎不假思索的，就可以写出这样的 Python 代码：</p>
-<pre><code class="python"><span class="function"><span class="keyword">def</span> <span class="title">invertTree</span><span class="params">(root)</span>:</span>
-    <span class="keyword">if</span> root <span class="keyword">is</span> <span class="keyword">None</span>:
-        <span class="keyword">return</span> <span class="keyword">None</span>
-    <span class="keyword">if</span> root.left:
-        invertTree(root.left)
-    <span class="keyword">if</span> root.right:
-        invertTree(root.right)
-    root.left, root.right = root.right, root.left
-    <span class="keyword">return</span> root
-</code></pre>
-<p>好了，现在停下来看看这段代码究竟代表着什么——</p>
-<p>它的含义是：首先判断节点是否为空；然后翻转左树；然后翻转右树；最后左右互换。</p>
-<p>这就是命令式编程——你要做什么事情，你得把达到目的的步骤详细的描述出来，然后交给机器去运行。</p>
-<p>这也正是命令式编程的理论模型——图灵机的特点。一条写满数据的纸带，一条根据纸带内容运动的机器，机器每动一步都需要纸带上写着如何达到。</p>
-<p>那么，不用这种方式，如何翻转二叉树呢？</p>
-<p>函数式思维提供了另一种思维的途径——</p>
-<p>所谓“翻转二叉树”，可以看做是要得到一颗和原来二叉树对称的新二叉树。</p>
-<p>这颗新二叉树的特点是每一个节点都递归地和原树相反。</p>
-<p>用 haskell 代码表达出来就是：</p>
-<pre><code class="haskell"><span class="class"><span class="keyword">data</span> <span class="type">Tree</span> a = <span class="type">Node</span> a (<span class="type">Maybe</span> (<span class="type">Tree</span> <span class="title">a</span>)) (<span class="type">Maybe</span> (<span class="type">Tree</span> <span class="title">a</span>))</span>
-            <span class="keyword">deriving</span> (<span class="type">Show</span>, <span class="type">Eq</span>)
-
-<span class="title">invert</span> :: <span class="type">Maybe</span> (<span class="type">Tree</span> a) -&gt; <span class="type">Maybe</span> (<span class="type">Tree</span> a)
-<span class="title">invert</span> <span class="type">Nothing</span> = <span class="type">Nothing</span>
-<span class="title">invert</span> (<span class="type">Just</span> <span class="type">Node</span> v l r) = <span class="type">Just</span> (<span class="type">Node</span> v (invert r) (invert l))
-</code></pre>
-<p>（防止看不懂，翻译成等价的 python ）</p>
-<pre><code class="python"><span class="function"><span class="keyword">def</span> <span class="title">invert</span><span class="params">(node)</span>:</span>
-    <span class="keyword">if</span> node <span class="keyword">is</span> <span class="keyword">None</span>:
-        <span class="keyword">return</span> <span class="keyword">None</span>
-    <span class="keyword">else</span>
-        <span class="keyword">return</span> Tree(node.value, invert(node.right), invert(node.left))
-</code></pre>
-<p>这段代码体现的思维，就是旧树到新树的映射——对一颗二叉树而言，它的镜像树就是左右节点递归镜像的树。</p>
-<p>这段代码最终达到的目的同样是翻转二叉树，但是它得到结果的方式和 python 代码有着本质的差别：通过描述一个 旧树-&gt;新树 的映射，而不是描述“从旧树得到新树应该怎样做”来达到目的。</p>
-<p>那么这样思考有什么好处呢？</p>
-<p>首先，最直观的角度来说，函数式风格的代码可以写得很精简，大大减少了键盘的损耗（</p>
-<p>更重要的是，函数式的代码是“对映射的描述”，它不仅可以描述二叉树这样的数据结构之间的对应关系，任何能在计算机中体现的东西之间的对应关系都可以描述——比如函数和函数之间的映射（比如 functor）；比如外部操作到 GUI 之间的映射（就是现在前端热炒的所谓 FRP）。它的抽象程度可以很高，这就意味着函数式的代码可以更方便的复用。</p>
-<p>同时，将代码写成这种样子可以方便用数学的方法进行研究（这就是为什么可以扯上“___范畴上的___”这种数学上的高深概念）</p>
-<p>至于什么科里化、什么数据不可变，都只是外延体现而已。</p>
-
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2016/05/14/Let-s-Encrypt/">Let&#39;s Encrypt!</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2016-05-14T05:40:54.000Z" itemprop="datePublished">
-    2016-05-14
-  </time>
-  
-  
-</div>
-
-    </header>
-    <div>
-      
-        <blockquote>
-<p>世界因自由软件而美好。</p>
-</blockquote>
-<p>昨天（5月13日）发现 SSL 证书到期了。想起之前谭总说过的 Let’s Encrypt，决定体验一下。</p>
-<p>相比起<a href="https://tms.im/tms/letsencrypt-beta" target="_blank" rel="external">半年前</a>，这玩意完善了很多、傻瓜了很多。</p>
-<p>全程需要做的只需要 clone 一个<a href="https://github.com/certbot/certbot" target="_blank" rel="external">傻瓜工具包</a>，然后运行一行命令</p>
-<pre><code class="bash">./certbot-auto certonly --standalone --email admin@hcyue.me <span class="_">-d</span> hcyue.me
-</code></pre>
-<p>之后坐等几秒，SSL 验证所需要的全部证书就都被放在了 <code>/etc/letsencrypt/live/hcyue.me/</code></p>
-<p>然后把 nginx 配置对应的项目修改为生成的 pem 即可。</p>
-<p><img src="https://dn-hcyue.qbox.me/img%2FS60514-133728.jpg" alt=""></p>
-
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2016/05/08/Haskeller-的-PureScript-试水/">Haskeller 的 PureScript 试水</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2016-05-07T16:21:33.000Z" itemprop="datePublished">
-    2016-05-08
-  </time>
-  
-  | 
-  <ul>
+      <section>
+        <div id="disqus_thread"></div>
+        <script>
+          window.disqus_config = function () {
+            this.page.url = window.location.toString()
+            this.page.identifier = window.location.pathname
+          }
+          if (typeof DISQUS === 'undefined') {
+            (function() { // DON'T EDIT BELOW THIS LINE
+              var d = document, s = d.createElement('script');
+              s.src = 'https://hcyue.disqus.com/embed.js';
+              s.setAttribute('data-timestamp', +new Date());
+              (d.head || d.body).appendChild(s);
+            })();
+          } else {
+            DISQUS.reset({
+                reload: true,
+                config: window.disqus_config
+            })
+          }
+        </script>
+      </section>
     
-  <li class="meta-text">
-  { <a href="/tags/haskell/">haskell</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/purescript/">purescript</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/functional-programming/">functional programming</a> }
-  </li>
-
-
-  </ul>
-  
-  
-</div>
-
-    </header>
-    <div>
-      
-        <p>– 讲道理虽然自称 Haskeller ，但是其实我根本不会 Haskell（</p>
-<blockquote>
-<p>为什么我要尝试 PureScript ？</p>
-<p>因为它是 Haskell 和 JavaScript 生的娃啊。</p>
-</blockquote>
-<p>Facebook 的 React.js 可以说是给 JavaScript 社区带来了一次 functional programming 的热潮。然而 JavaScript 毕竟不是真正的函数式编程语言——虽然有着 closure 等特性让它可以支持这种独特的范式，但是整体而言它还是基于顺序指令和事件回调的语言。</p>
-<p>PureScript 是一门年轻的语言——现在在 github 上可以查到的最早提交来自于 30 Sep 2013 。它致力于创造一种“类似 haskell 的编程体验”和“生成可读的 JavaScript 代码”。于是，有了它，我们终于可以在项目前端部分中愉快的写“ monoid in the category of endofunctors of X, with product × replaced by composition of endofunctors and unit set by the identity endofunctor ”了（</p>
-        
-          <div class="more-link">
-            <a href="/2016/05/08/Haskeller-的-PureScript-试水/#more">Read On »</a>
-          </div>
-        
-      
-    </div>
 </article>
 
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2016/03/27/又是一篇lambda演算介绍-过程与数据结构-一/">又是一篇lambda演算介绍：过程与数据结构（一）</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2016-03-27T08:30:54.000Z" itemprop="datePublished">
-    2016-03-27
-  </time>
-  
-  | 
-  <ul>
-    
-  <li class="meta-text">
-  { <a href="/tags/computer-science/">computer science</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/lambda-calculus/">lambda calculus</a> }
-  </li>
-
-
-  </ul>
-  
   
 </div>
-
-    </header>
-    <div>
-      
-        <h2 id="λ-calculus"><a href="#λ-calculus" class="headerlink" title="λ-calculus"></a>λ-calculus</h2><blockquote>
-<p>自从了解了lambda演算，我就觉得，每个写代码的人都应该学学它。——沃兹·基硕德</p>
-</blockquote>
-<p>λ演算的详细介绍可以从 <a href="https://zh.wikipedia.org/wiki/%CE%9B%E6%BC%94%E7%AE%97">Wikipedia</a> 找到。</p>
-<p>简单来说，这是一个比图灵机早提出几个月的可计算性模型，表达优美形式简洁反正比图灵机高到不知道哪里去了，但是愚蠢的人类没办法在机器上直接实现它所以只能照着图灵机来造计算机，导致图灵那家伙小人得志真正的大神却退居二线（相对图灵来说的二线）</p>
-<p>（为了方便表示，以下将 <code>λV.E</code> 记为 <code>V -&gt; E</code> ）</p>
-<h2 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h2><p>在原始的 lambda 演算中，没有直接的“数字”概念。</p>
-<p>lambda 演算的全部规则仅有两条（其实也可以说是三条），在这种简洁的体系中没有一个容纳原生“数字”概念的空间。</p>
-<p>但是神奇的是，仅仅只有两条“运算方法”，却能够构造出整个直觉上的“数字”体系。这种通过“过程”构造的“数字”，我们叫它“Church Numerals”，因为它正是由引入 lambda 演算的那位神人提出的。</p>
-        
-          <div class="more-link">
-            <a href="/2016/03/27/又是一篇lambda演算介绍-过程与数据结构-一/#more">Read On »</a>
-          </div>
-        
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2016/03/21/找到了一个炒鸡好的-MacType-配置/">找到了一个炒鸡好的 MacType 配置</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2016-03-21T14:27:42.000Z" itemprop="datePublished">
-    2016-03-21
-  </time>
-  
-  
-</div>
-
-    </header>
-    <div>
-      
-        <p>穷逼买不起 mac 但是受不了 windows 的辣鸡字体渲染，只能自己动手丰衣足食。</p>
-<p>效果图：</p>
-<p><img src="https://dn-hcyue.qbox.me/img%2FQQ%E6%88%AA%E5%9B%BE20160321222022.png" alt=""></p>
-<p><a href="https://github.com/renkun-ken/MacType.Decency" target="_blank" rel="external">原配置</a> 是我从<a href="https://www.zhihu.com/question/22425454/answer/21930065" target="_blank" rel="external">知乎这个回答</a>上扒的。但是他用到了很多魔改字体然而我懒得装，于是 <code>fork</code> 了一份把魔改字体都删了嗯。</p>
-<p>所以修改版<a href="https://github.com/nameoverflow/MacType.Decency" target="_blank" rel="external">在这</a></p>
-
-      
-    </div>
-</article>
-
-    </li>
-  
-</ul>
-
-  <section id="nav-wrapper">
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">next »</a>
-    </nav>
-  </section>
-
 
             <footer>
     <div>© 2016 - Hcyue  , CC BY-NC-SA 4.0 </div>

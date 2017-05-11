@@ -71,6 +71,44 @@
     <header class="title">
       
         <h1>
+          <a href="/2015/11/14/大综合楼-一跃解千愁/">H大综合楼，一跃解千愁</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2015-11-13T18:27:11.000Z" itemprop="datePublished">
+    2015-11-14
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/haskell/">haskell</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <figure class="highlight haskell"><table><tr><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">-- fuck**u.hs</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> Data.List</div><div class="line"></div><div class="line"><span class="keyword">import</span> Data.List.Split</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">-- *大综合楼</span></div><div class="line"></div><div class="line"><span class="comment">-- 一跃解千愁</span></div><div class="line"></div><div class="line"><span class="title">getFloor</span> :: <span class="type">Int</span> -&gt; <span class="type">String</span> -&gt; <span class="type">String</span></div><div class="line"></div><div class="line"><span class="title">getFloor</span> count char =</div><div class="line"></div><div class="line">    <span class="string">"│"</span> ++ fuck char ++ <span class="string">"│"</span></div><div class="line"></div><div class="line">    <span class="keyword">where</span></div><div class="line"></div><div class="line">        fuck = concat.replicate count</div><div class="line"></div><div class="line"><span class="title">build</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">String</span></div><div class="line"></div><div class="line"><span class="title">build</span> width height jump =</div><div class="line"></div><div class="line">    concat (top : fuck ++ [ground])</div><div class="line"></div><div class="line">    <span class="keyword">where</span></div><div class="line"></div><div class="line">        top = '┌' : replicate (width * <span class="number">2</span>) '─' ++ <span class="string">"┐\n"</span></div><div class="line"></div><div class="line">        ground = '┴' : replicate (width * <span class="number">2</span>) '─' ++ <span class="string">"┴"</span> ++ replicate <span class="number">10</span> '─'</div><div class="line"></div><div class="line">        fuck = zipWith `++` (concat (replicate height floors)) overflow</div><div class="line"></div><div class="line">                <span class="keyword">where</span></div><div class="line"></div><div class="line">                    floors = map (getFloor width) [<span class="string">"┌┐"</span>, <span class="string">"└┘"</span>]</div><div class="line"></div><div class="line">                    body = [<span class="string">"  ╰O╯\n"</span>, <span class="string">"   /\n"</span>, <span class="string">"  /)\n"</span>]</div><div class="line"></div><div class="line">                    repl' p c = replicate c p</div><div class="line"></div><div class="line">                    overflow = replicate ((height - jump) * <span class="number">2</span> - <span class="number">1</span>) <span class="string">"\n"</span> ++ body ++ replicate (jump * <span class="number">2</span> - <span class="number">1</span>) <span class="string">"\n"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="title">main</span> :: <span class="type">IO</span> ()</div><div class="line"></div><div class="line"><span class="title">main</span> = <span class="keyword">do</span></div><div class="line"></div><div class="line">    putStrLn <span class="string">"综合楼高 综合楼宽 飞翔层数"</span></div><div class="line"></div><div class="line">    params &lt;- getLine</div><div class="line"></div><div class="line">    <span class="keyword">let</span> [width, height, jump] = splitOn <span class="string">" "</span> params <span class="keyword">in</span></div><div class="line"></div><div class="line">        putStrLn $ build (read width :: <span class="type">Int</span>) (read height :: <span class="type">Int</span>) (read jump :: <span class="type">Int</span>)</div><div class="line"></div><div class="line">    putStrLn <span class="string">"*大综合楼\n一跃解千愁"</span></div></pre></td></tr></table></figure>
+<p><img src="https://dn-hcyue.qbox.me/img/QQ%E6%88%AA%E5%9B%BE20151114022522_1.png" alt="hehe"></p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
           <a href="/2015/11/10/折腾论坛运维/">折腾论坛运维</a>
         </h1>
       
@@ -487,53 +525,6 @@ iptables -A OUTPUT -p tcp -m multiport --dports 80,443 -m state --state NEW,ESTA
 <p>倒是学了学coffeescript，感觉写起来和python一样如沐清风233</p>
 <p>（然而只是为了更新博客而更新博客么）</p>
 
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2015/03/08/Generating-Identicons-by-Python/">Generating Identicons by Python</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2015-03-07T20:53:35.000Z" itemprop="datePublished">
-    2015-03-08
-  </time>
-  
-  | 
-  <ul>
-    
-  <li class="meta-text">
-  { <a href="/tags/python/">python</a> }
-  </li>
-
-
-  </ul>
-  
-  
-</div>
-
-    </header>
-    <div>
-      
-        <p>If a github’s user has not upload an avatar, github will use gvatar or generate an image basing on the email(gvatar also offers this service).This kind of image called identicon.</p>
-<p>This code does the similar thing in a simple way,using the md5 of a string to generate an identicon.</p>
-<p>#英语渣表示写这段话好吃力啊= =</p>
-<p>example:</p>
-<p>input: hello world</p>
-<p>generated:</p>
-<p><img src="https://dn-hcyue.qbox.me/img/bbe01eeed093cb22bb8f5acdc3.png" alt=""></p>
-        
-          <div class="more-link">
-            <a href="/2015/03/08/Generating-Identicons-by-Python/#more">Read On »</a>
-          </div>
-        
       
     </div>
 </article>
