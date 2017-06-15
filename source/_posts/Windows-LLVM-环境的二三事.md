@@ -39,7 +39,7 @@ cd /d C:\Users\hcyue\code\llvm-3.5.2.build\tools\lto && "C:\Program Files\CMake\
 cd /d C:\Users\hcyue\code\llvm-3.5.2.build\tools\lto && type C:/Users/hcyue/code/llvm-3.5.2.src/tools/lto/lto.exports >> LTO.def
 ```
 
-纵横 Windows 这么多年没见过 cd 还可以带个 `/d` 参数的。那把它删了吧。
+<del>纵横 Windows 这么多年没见过 cd 还可以带个 `/d` 参数的</del> 似乎 powershell 的 cd 并不支持 /d 参数。那把它删了吧。
 
 之后继续报错，link 的时候找不到 symbol。发现是刚刚改的那两行生成的目标文件 `LTO.def` 有问题，不知道为什么没有写入成正常的文本文件，而是二进制文件（VS code 打开提示文件过大或为二进制文件）。直接 `type` 出来是一个奇怪的、字距拉得很开的、看起来像是文本文件的格式。很气。
 
