@@ -9,7 +9,7 @@
   
   <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
   <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
-  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css'><!-- hexo-inject:end -->
 </head>
 
 <body>
@@ -75,6 +75,55 @@
     <header class="title">
       
         <h1>
+          <a href="/2017/09/04/如何编译函数闭包/">如何编译函数闭包</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-09-04T08:16:53.000Z" itemprop="datePublished">
+    2017-09-04
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/functional-programming/">functional programming</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/compile/">compile</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>// 知乎不仅不给我开专栏还说我这篇文章zz敏感，破网站吃枣药丸</p>
+<blockquote>
+<p> <strong>闭包</strong>（英语：Closure），又称<strong>词法闭包</strong>（Lexical Closure）或<strong>函数闭包</strong>（function closures），是引用了自由变量的函数。这个被引用的自由变量将和这个函数一同存在，即使已经离开了创造它的环境也不例外。所以，有另一种说法认为闭包是由函数和与其相关的引用环境组合而成的实体。闭包在运行时可以有多个实例，不同的引用环境和相同的函数组合可以产生不同的实例。</p>
+</blockquote>
+<p>想要实现一个同时支持词法作用域与 first-class function 的编程语言，一个重要的转换就是所谓的 lambda-lifting：把嵌套函数定义（包括匿名函数）转换为独立的全局函数定义；把自由变量的引用转换为参数传递。</p>
+        
+          <div class="more-link">
+            <a href="/2017/09/04/如何编译函数闭包/#more">Read On »</a>
+          </div>
+        
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
           <a href="/2017/04/09/Windows-LLVM-环境的二三事/">Windows LLVM 环境的二三事</a>
         </h1>
       
@@ -123,6 +172,64 @@
 <p>新建个 <code>LTO.def</code> 把原来的覆盖掉，贴进去。</p>
 <p>重新运行 <code>cmake --build .</code> ，终于过了。</p>
 
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2017/03/03/使用-Parsec-处理左递归/">使用 Parsec 处理左递归</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-03-03T12:41:36.000Z" itemprop="datePublished">
+    2017-03-03
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/haskell/">haskell</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/compile/">compile</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/parsec/">parsec</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>在给之前写的 Lisp 解释器之前套上表达式语法时，遇到这样几条文法</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtable><mtr><mtd><mrow><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi><mi>s</mi></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi><mo separator="true">,</mo><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi><mi>s</mi></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi>I</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>g</mi><mi>e</mi><mi>r</mi><mi mathvariant="normal">∣</mi><mi>A</mi><mi>p</mi><mi>p</mi><mi>l</mi><mi>y</mi><mi mathvariant="normal">∣</mi><mi>I</mi><mi>d</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>i</mi><mi>f</mi><mi>y</mi><mi mathvariant="normal">∣</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">∣</mi><mrow><mo>(</mo></mrow><mrow><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi></mrow><mrow><mo>)</mo></mrow></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><mi>I</mi><mi>n</mi><mi>t</mi><mi>e</mi><mi>g</mi><mi>e</mi><mi>r</mi></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi></mrow></mtd></mtr><mtr><mtd><mrow></mrow></mtd></mtr><mtr><mtd><mrow><mi>A</mi><mi>p</mi><mi>p</mi><mi>l</mi><mi>y</mi></mrow></mtd><mtd><mrow><mrow></mrow><mo>→</mo><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi><mo>(</mo><mi>E</mi><mi>x</mi><mi>p</mi><mi>r</mi><mi>s</mi><mo>)</mo></mrow></mtd></mtr></mtable></mrow><annotation encoding="application/x-tex">\begin{aligned}
+Expr &amp; \rightarrow Factor ... \\\\
+Exprs &amp; \rightarrow Expr  ,  Exprs\\\\
+ Factor &amp; \rightarrow Integer|Apply|Identify|...|{(}  {Expr} {)} \\\\
+  Integer &amp; \rightarrow... \\\\
+...\\\\
+ Apply &amp; \rightarrow  Factor  (  Exprs  )
+\end{aligned}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:6.849999999999999em;"></span><span class="strut bottom" style="height:13.2em;vertical-align:-6.35em;"></span><span class="base displaystyle textstyle uncramped"><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist"><span style="top:-6.009999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span></span><span style="top:-4.809999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:-3.609999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">s</span></span></span><span style="top:-2.409999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:-1.209999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit">a</span><span class="mord mathit">c</span><span class="mord mathit">t</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span></span><span style="top:-0.009999999999997733em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:1.1900000000000024em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.07847em;">I</span><span class="mord mathit">n</span><span class="mord mathit">t</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span></span><span style="top:2.390000000000002em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:3.590000000000001em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span></span></span><span style="top:4.79em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"></span></span><span style="top:5.989999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit">A</span><span class="mord mathit">p</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="col-align-l"><span class="vlist"><span style="top:-6.009999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit">a</span><span class="mord mathit">c</span><span class="mord mathit">t</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span></span></span><span style="top:-3.6099999999999985em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mpunct">,</span><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">s</span></span></span><span style="top:-1.2099999999999989em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathit" style="margin-right:0.07847em;">I</span><span class="mord mathit">n</span><span class="mord mathit">t</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathrm">∣</span><span class="mord mathit">A</span><span class="mord mathit">p</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mord mathrm">∣</span><span class="mord mathit" style="margin-right:0.07847em;">I</span><span class="mord mathit">d</span><span class="mord mathit">e</span><span class="mord mathit">n</span><span class="mord mathit">t</span><span class="mord mathit">i</span><span class="mord mathit" style="margin-right:0.10764em;">f</span><span class="mord mathit" style="margin-right:0.03588em;">y</span><span class="mord mathrm">∣</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">∣</span><span class="mord displaystyle textstyle uncramped"><span class="mopen">(</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span><span class="mord displaystyle textstyle uncramped"><span class="mclose">)</span></span></span></span><span style="top:1.1900000000000015em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span><span class="mord mathrm">.</span></span></span><span style="top:5.989999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="mord displaystyle textstyle uncramped"><span class="mord displaystyle textstyle uncramped"></span><span class="mrel">→</span><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit">a</span><span class="mord mathit">c</span><span class="mord mathit">t</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mord mathit">x</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">s</span><span class="mclose">)</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span></span></span></span>
+<p>显然，non-terminal <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi>p</mi><mi>p</mi><mi>l</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">Apply</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">A</span><span class="mord mathit">p</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span></span> 的派生最左端会进入  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>F</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>o</mi><mi>r</mi></mrow><annotation encoding="application/x-tex">Factor</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.68333em;"></span><span class="strut bottom" style="height:0.68333em;vertical-align:0em;"></span><span class="base textstyle uncramped"><span class="mord mathit" style="margin-right:0.13889em;">F</span><span class="mord mathit">a</span><span class="mord mathit">c</span><span class="mord mathit">t</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span></span></span> ，之后又会回到 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mi>p</mi><mi>p</mi><mi>l</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">Apply</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="base textstyle uncramped"><span class="mord mathit">A</span><span class="mord mathit">p</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit" style="margin-right:0.03588em;">y</span></span></span></span> 。教科书式的左递归。</p>
+        
+          <div class="more-link">
+            <a href="/2017/03/03/使用-Parsec-处理左递归/#more">Read On »</a>
+          </div>
+        
       
     </div>
 </article>
