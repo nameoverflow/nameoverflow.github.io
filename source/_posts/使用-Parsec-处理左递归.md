@@ -4,7 +4,7 @@ date: 2017-03-03 20:41:36
 tags:
   - haskell
   - parsec
-  - compiler
+  - compile
 ---
 
 
