@@ -2,14 +2,17 @@
 title: About
 date: 2017-03-29 01:38:14
 ---
-Undergraduate of Hunan University.
 
-Cis male.
+末流 985 双一流 B 类预定大学计算机专业本科（快毕业了）。
 
-Have tried many kinds of development such as WEB/Android/game/desktop... be fascinated by compilation techniques and functional programming.
+顺性单身直男。
+
+接触的东西多而且杂。
+
+还没到输出知识的程度，这里只是写着玩、吐槽、偶尔总结一下阶段所学。
 
 <img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" />
 
-All posts published on hcyue.me are licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+HcYue.me 或 NameOverflow.GitHub.io 所有发布内容使用 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a> 授权。
 
-本站推荐安装[思源宋体](https://github.com/adobe-fonts/source-han-serif)以获得最佳浏览体验。
+推荐安装[思源宋体](https://github.com/adobe-fonts/source-han-serif)以获得最佳浏览体验。
