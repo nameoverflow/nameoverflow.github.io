@@ -71,6 +71,59 @@
     <header class="title">
       
         <h1>
+          <a href="/2018/01/06/Miko-Geisha-的半残编译器/">Miko: Geisha 的半残编译器</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2018-01-06T07:13:23.000Z" itemprop="datePublished">
+    2018-01-06
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/programming-language/">programming language</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/compiler/">compiler</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/rust/">rust</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>人的命运就是这么不可预料，最后 Geisha 的编译器实现居然是作为学校的课程设计在考研期间抽空肝出来的。</p>
+<p>因为各种因素，最后交上去的结果和预想的其实差了挺远——比如没来得及实现 GC 所以闭包是残缺的；比如自定义类型根本就没有。不过总归最后做成了一个有结果的东西（虽然是半残的）。</p>
+<p>这篇是暑假期间作为课程报告交上去的文档。至于后续的工作，虽然现在已经考完研了但是突然又多出了一堆事情，只能看看什么时候有空能继续完善了……</p>
+<p>代码当然也<a href="https://github.com/geisha-lang/miko">在 GitHub 上</a>，只不过 star 都点在了之前那个 Haskell 写的前端 demo 上，这个就无人问津 emmmm</p>
+<h2 id="整体设计"><a href="#整体设计" class="headerlink" title="整体设计"></a>整体设计</h2><p>利用了 <a href="https://github.com/kevinmehall/rust-peg">rust-peg</a> 生成语法分析程序，以 LLVM 为代码生成后端。</p>
+        
+          <div class="more-link">
+            <a href="/2018/01/06/Miko-Geisha-的半残编译器/#more">Read On »</a>
+          </div>
+        
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
           <a href="/2017/09/04/如何编译函数闭包/">如何编译函数闭包</a>
         </h1>
       
@@ -501,59 +554,6 @@ Exprs &amp; \rightarrow Expr  ,  Exprs\\\\
         
           <div class="more-link">
             <a href="/2016/05/08/Haskeller-的-PureScript-试水/#more">Read On »</a>
-          </div>
-        
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2016/03/27/又是一篇lambda演算介绍-过程与数据结构-一/">又是一篇lambda演算介绍：过程与数据结构（一）</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2016-03-27T08:30:54.000Z" itemprop="datePublished">
-    2016-03-27
-  </time>
-  
-  | 
-  <ul>
-    
-  <li class="meta-text">
-  { <a href="/tags/computer-science/">computer science</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/lambda-calculus/">lambda calculus</a> }
-  </li>
-
-
-  </ul>
-  
-  
-</div>
-
-    </header>
-    <div>
-      
-        <h2 id="λ-calculus"><a href="#λ-calculus" class="headerlink" title="λ-calculus"></a>λ-calculus</h2><blockquote>
-<p>自从了解了lambda演算，我就觉得，每个写代码的人都应该学学它。——沃兹·基硕德</p>
-</blockquote>
-<p>λ演算的详细介绍可以从 <a href="https://zh.wikipedia.org/wiki/%CE%9B%E6%BC%94%E7%AE%97">Wikipedia</a> 找到。</p>
-<p>简单来说，这是一个比图灵机早提出几个月的可计算性模型，表达优美形式简洁反正比图灵机高到不知道哪里去了，但是愚蠢的人类没办法在机器上直接实现它所以只能照着图灵机来造计算机，导致图灵那家伙小人得志真正的大神却退居二线（相对图灵来说的二线）</p>
-<p>（为了方便表示，以下将 <code>λV.E</code> 记为 <code>V -&gt; E</code> ）</p>
-<h2 id="数据"><a href="#数据" class="headerlink" title="数据"></a>数据</h2><p>在原始的 lambda 演算中，没有直接的“数字”概念。</p>
-<p>lambda 演算的全部规则仅有两条（其实也可以说是三条），在这种简洁的体系中没有一个容纳原生“数字”概念的空间。</p>
-<p>但是神奇的是，仅仅只有两条“运算方法”，却能够构造出整个直觉上的“数字”体系。这种通过“过程”构造的“数字”，我们叫它“Church Numerals”，因为它正是由引入 lambda 演算的那位神人提出的。</p>
-        
-          <div class="more-link">
-            <a href="/2016/03/27/又是一篇lambda演算介绍-过程与数据结构-一/#more">Read On »</a>
           </div>
         
       

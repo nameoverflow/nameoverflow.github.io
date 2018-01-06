@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Miko: Geisha 的半残编译器 | nameoverflow</title>
+  
+  
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css'><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(/assets/header.png)">
+        <div class='av-pic' style="background-image: url(/assets/tree_small.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>nameoverflow</div>
+        
+            <div>What the f__k?</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives/" class="Btn">
+              <li>Archive</li>
+            </a>  
+          
+            <a href="/tags/" class="Btn">
+              <li>Tags</li>
+            </a>  
+          
+            <a href="/about/" class="Btn">
+              <li>About</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+            
+                <a href="https://github.com/nameoverflow">
+                    <img src="/assets/github.svg" />
+                </a>
+            
+        
+            
+                <a href="https://www.facebook.com/profile.php?id=100004252391322">
+                    <img src="/assets/facebook.svg" />
+                </a>
+            
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Miko: Geisha 的半残编译器</h1>
+    </header>
+
+    <section>
+      <p>人的命运就是这么不可预料，最后 Geisha 的编译器实现居然是作为学校的课程设计在考研期间抽空肝出来的。</p>
+<p>因为各种因素，最后交上去的结果和预想的其实差了挺远——比如没来得及实现 GC 所以闭包是残缺的；比如自定义类型根本就没有。不过总归最后做成了一个有结果的东西（虽然是半残的）。</p>
+<p>这篇是暑假期间作为课程报告交上去的文档。至于后续的工作，虽然现在已经考完研了但是突然又多出了一堆事情，只能看看什么时候有空能继续完善了……</p>
+<p>代码当然也<a href="https://github.com/geisha-lang/miko" target="_blank" rel="external">在 GitHub 上</a>，只不过 star 都点在了之前那个 Haskell 写的前端 demo 上，这个就无人问津 emmmm</p>
+<h2 id="整体设计"><a href="#整体设计" class="headerlink" title="整体设计"></a>整体设计</h2><p>利用了 <a href="https://github.com/kevinmehall/rust-peg" target="_blank" rel="external">rust-peg</a> 生成语法分析程序，以 LLVM 为代码生成后端。</p>
+<a id="more"></a>
+<p>整体处理流程：</p>
+<p><img src="/img/1505374261499.png" alt="1505374261499"></p>
+<p>程序构建环境为 rust 最新 nightly 环境并依赖 LLVM 3.9。附件附带了 Windows x64 平台的可执行文件；链接过程需要执行 C 语言链接器。</p>
+<p>命令行编译 input.gs 文件到 output.o 静态库文件命令为：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">miko -o output.o input.gs</div></pre></td></tr></table></figure>
+<p>使用 clang/gcc 手动与 base.o 基础库链接生成可执行文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">cc -o output base.o output.o</div></pre></td></tr></table></figure>
+<h2 id="语言定义"><a href="#语言定义" class="headerlink" title="语言定义"></a>语言定义</h2><p>语言语义类似 OCaml 与 Haskell ，但是比 OCaml 更为严格，相较弱于 Haskell。</p>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>全局函数定义与调用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">def factorial(n) = if (n == 0) 1 else n * frac(n - 1)</div><div class="line"></div><div class="line">def main() = putNumber(factorial(10))</div></pre></td></tr></table></figure>
+<p>输出 10!</p>
+<p>变量绑定、闭包函数定义与调用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">def main() =</div><div class="line">    let n = 1 in</div><div class="line">    let adder = (a) -&gt; a + n in</div><div class="line">    putNumber(adder(4))</div></pre></td></tr></table></figure>
+<p>输出 5</p>
+<p>带类型注解的尾递归闭包函数定义</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">fib: Int -&gt; Int</div><div class="line">def fib(n) =</div><div class="line">    let fib_tail = (n, p, c) -&gt;</div><div class="line">        if (n == 0)</div><div class="line">            -1</div><div class="line">        else if (n == 1)</div><div class="line">            p</div><div class="line">        else</div><div class="line">            fib_tail(n - 1, c, p + c)</div><div class="line">    in fib_tail(n, 0, 1)</div><div class="line"></div><div class="line">main: Void -&gt; Void</div><div class="line">def main() =</div><div class="line">    let f = fib(10) in</div><div class="line">        putNumber(f)</div></pre></td></tr></table></figure>
+<p>输出 Fibonacci 数列第 10 项（从 1 开始计数）</p>
+<h3 id="文法定义"><a href="#文法定义" class="headerlink" title="文法定义"></a>文法定义</h3><p>位于 <code>CFG</code> 文件（与当前实现有差异）。</p>
+<h3 id="类型系统"><a href="#类型系统" class="headerlink" title="类型系统"></a>类型系统</h3><p>采用 HM 类型系统进行类型推导和类型检查。</p>
+<p>（已经实现的部分）</p>
+<ul>
+<li><p>基本类型</p>
+<ul>
+<li><p>Int</p>
+<p>32 位有符号整数</p>
+</li>
+<li><p>Float</p>
+<p>64 位有符号 IEEE 浮点数</p>
+</li>
+<li><p>Char</p>
+<p>8 位有符号整数（字符）</p>
+</li>
+<li><p>String</p>
+<p>元素为 Char 的向量类型（暂未实现）</p>
+<p>暂时实现为静态字符数组常量</p>
+</li>
+</ul>
+</li>
+<li><p>函数类型（arrow）</p>
+<p>HM 函数类型</p>
+<p>应用规则：</p>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mi mathvariant="normal">Γ</mi><msub><mo>⊢</mo><mi>D</mi></msub><msub><mi>e</mi><mn>0</mn></msub><mo>:</mo><mi>τ</mi><mo>→</mo><msup><mi>τ</mi><mrow><mi mathvariant="normal">′</mi></mrow></msup><mspace width="0.277778em"></mspace><mi mathvariant="normal">Γ</mi><msub><mo>⊢</mo><mi>D</mi></msub><msub><mi>e</mi><mn>1</mn></msub><mo>:</mo><mi>τ</mi></mrow><mrow><mi mathvariant="normal">Γ</mi><msub><mo>⊢</mo><mi>D</mi></msub><msub><mi>e</mi><mn>0</mn></msub><mo>(</mo><msub><mi>e</mi><mn>1</mn></msub><mo>)</mo><mo>:</mo><msup><mi>τ</mi><mrow><mi mathvariant="normal">′</mi></mrow></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{\Gamma \vdash _D e_0 : \tau \to \tau&#x27; \; \Gamma \vdash _D e_1 : \tau}{\Gamma \vdash _D e_0(e_1) : \tau&#x27;}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.9468799999999999em;"></span><span class="strut bottom" style="height:1.46688em;vertical-align:-0.52em;"></span><span class="base textstyle uncramped"><span class="mord reset-textstyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.34500000000000003em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathrm">Γ</span><span class="mrel"><span class="mrel">⊢</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit" style="margin-right:0.02778em;">D</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit">e</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathrm">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathit">e</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mclose">)</span><span class="mrel">:</span><span class="mord"><span class="mord mathit" style="margin-right:0.1132em;">τ</span><span class="vlist"><span style="top:-0.289em;margin-right:0.07142857142857144em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord scriptscriptstyle cramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.4149999999999999em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">Γ</span><span class="mrel"><span class="mrel">⊢</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit" style="margin-right:0.02778em;">D</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit">e</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathrm">0</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">:</span><span class="mord mathit" style="margin-right:0.1132em;">τ</span><span class="mrel">→</span><span class="mord"><span class="mord mathit" style="margin-right:0.1132em;">τ</span><span class="vlist"><span style="top:-0.363em;margin-right:0.07142857142857144em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle uncramped"><span class="mord scriptscriptstyle uncramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mspace thickspace"></span><span class="mord mathrm">Γ</span><span class="mrel"><span class="mrel">⊢</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit" style="margin-right:0.02778em;">D</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord"><span class="mord mathit">e</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathrm">1</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mrel">:</span><span class="mord mathit" style="margin-right:0.1132em;">τ</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span>
+<p>抽象规则：</p>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mi mathvariant="normal">Γ</mi><mo separator="true">,</mo><mi>x</mi><mo>:</mo><mi>τ</mi><msub><mo>⊢</mo><mi>D</mi></msub><mi>e</mi><mo>:</mo><msup><mi>τ</mi><mrow><mi mathvariant="normal">′</mi></mrow></msup></mrow><mrow><mi mathvariant="normal">Γ</mi><msub><mo>⊢</mo><mi>D</mi></msub><mo>(</mo><mi>x</mi><mo>)</mo><mo>→</mo><mi>e</mi><mo>:</mo><mi>τ</mi><mo>→</mo><msup><mi>τ</mi><mrow><mi mathvariant="normal">′</mi></mrow></msup></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{\Gamma,x : \tau \vdash _D  e : \tau&#x27;}{\Gamma \vdash _D (x) \to  e : \tau \to \tau&#x27;}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.9779880000000001em;"></span><span class="strut bottom" style="height:1.497988em;vertical-align:-0.52em;"></span><span class="base textstyle uncramped"><span class="mord reset-textstyle textstyle uncramped"><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span><span class="mfrac"><span class="vlist"><span style="top:0.34500000000000003em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle cramped"><span class="mord scriptstyle cramped"><span class="mord mathrm">Γ</span><span class="mrel"><span class="mrel">⊢</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit" style="margin-right:0.02778em;">D</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mopen">(</span><span class="mord mathit">x</span><span class="mclose">)</span><span class="mrel">→</span><span class="mord mathit">e</span><span class="mrel">:</span><span class="mord mathit" style="margin-right:0.1132em;">τ</span><span class="mrel">→</span><span class="mord"><span class="mord mathit" style="margin-right:0.1132em;">τ</span><span class="vlist"><span style="top:-0.289em;margin-right:0.07142857142857144em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord scriptscriptstyle cramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span style="top:-0.22999999999999998em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle textstyle uncramped frac-line"></span></span><span style="top:-0.44610799999999995em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-textstyle scriptstyle uncramped"><span class="mord scriptstyle uncramped"><span class="mord mathrm">Γ</span><span class="mpunct">,</span><span class="mord mathit">x</span><span class="mrel">:</span><span class="mord mathit" style="margin-right:0.1132em;">τ</span><span class="mrel"><span class="mrel">⊢</span><span class="vlist"><span style="top:0.15em;margin-right:0.07142857142857144em;margin-left:0em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle cramped"><span class="mord mathit" style="margin-right:0.02778em;">D</span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="mord mathit">e</span><span class="mrel">:</span><span class="mord"><span class="mord mathit" style="margin-right:0.1132em;">τ</span><span class="vlist"><span style="top:-0.363em;margin-right:0.07142857142857144em;"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span><span class="reset-scriptstyle scriptscriptstyle uncramped"><span class="mord scriptscriptstyle uncramped"><span class="mord mathrm">′</span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span></span></span></span><span class="baseline-fix"><span class="fontsize-ensurer reset-size5 size5"><span style="font-size:0em;">​</span></span>​</span></span></span><span class="sizing reset-size5 size5 reset-textstyle textstyle uncramped nulldelimiter"></span></span></span></span></span>
+<p>​</p>
+</li>
+</ul>
+<ul>
+<li><p>积类型（production）</p>
+<p>两个类型的积为一个新类型，其可能的取值范围为原来两类型的笛卡儿积。表现为多参数函数的参数类型或元组（tuple）。</p>
+</li>
+</ul>
+<p>（暂未实现部分）</p>
+<ul>
+<li><p>泛型</p>
+<p>基于具体化代码生成机制的泛型（类似 C++ 模板），并支持 concept 接口约束检查，进行静态接口多态分派。</p>
+<p>当前编译器中只支持数值运算符的泛型。如 <code>+</code> 运算符的类型定义为 <code>+ : forall a . a * a -&gt; a</code> ，是一个对任何类型都可以应用的泛型函数（实际上只能用于 <code>Int</code> 和 <code>Float</code> 两种类型） 。而实际上在支持 concept 接口约束的情况下，应该为 <code>+ : forall (Abelian a) . a * a -&gt; a</code> ，即作为内置接口 <code>Abelian</code> （阿贝尔群）的接口函数。</p>
+</li>
+<li><p>自定义类型（ADT）</p>
+<p>关键字 data 定义一组枚举量，每个分支可附有具名或匿名字段，可附带泛型参数。如一个含有泛型 a 的类型 AbstractDataType 的定义：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">data AbstractDataType a &#123;</div><div class="line">  Variant1(a, Int),</div><div class="line">  Variant2 &#123;</div><div class="line">    field1: a,</div><div class="line">    field2: String</div><div class="line">  &#125;,</div><div class="line">  Vartiant3</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>Concept（接口）</p>
+<p>一个 concept 对于一个类型 a 给予一组函数定义，若一个类型 a’ 满足该 concept，则这组函数定义中的 a 类型必须全部满足 a 到 a’ 的替换。</p>
+</li>
+</ul>
+<h3 id="值语义"><a href="#值语义" class="headerlink" title="值语义"></a>值语义</h3><p>用户不能直接接触内存，而是使用抽象的值。一旦将一个值绑定到特定名称上，在其作用域内不发生改变。绑定可以在子作用域内被暂时覆盖，但不能被取消。作用域结束后绑定失效。</p>
+<h3 id="函数闭包"><a href="#函数闭包" class="headerlink" title="函数闭包"></a>函数闭包</h3><p>函数定义时可以引用同作用域下的值（自由变量）。当一个函数被返回出它定义的作用域时，它所引用到的值的生存期将与其同步。</p>
+<p>由于垃圾回收机制未完善，当前只支持同作用域下的函数闭包，而不支持返回引用了自由变量的函数闭包。</p>
+<h2 id="语法分析与抽象语法树"><a href="#语法分析与抽象语法树" class="headerlink" title="语法分析与抽象语法树"></a>语法分析与抽象语法树</h2><p>基于 rust-peg 生成 peg 语法分析器。位于 <code>src/syntax/parser/grammar.rustpeg</code> 。</p>
+<p>顶层定义节点用 <code>Def</code> 表示，保存定义名、定义类型、位置等信息。</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><div class="line"><span class="comment">/// Represents a top level definition,</span></div><div class="line"><span class="comment">/// `def` or `data` or `type`</span></div><div class="line"><span class="meta">#[derive(Clone, PartialEq, Debug)]</span></div><div class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">struct</span> <span class="title">Def</span></span> &#123;</div><div class="line">    <span class="keyword">pub</span> ident: Id,</div><div class="line">    <span class="keyword">pub</span> node: Item,</div><div class="line">    <span class="keyword">pub</span> pos: Span,</div><div class="line">&#125;</div><div class="line"><span class="meta">#[derive(Clone, PartialEq, Debug)]</span></div><div class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">enum</span> <span class="title">Item</span></span> &#123;</div><div class="line">    Form(E),</div><div class="line">    Alias(<span class="built_in">Vec</span>&lt;Id&gt;, P&lt;Scheme&gt;),</div><div class="line">    Alg(<span class="built_in">Vec</span>&lt;Id&gt;, <span class="built_in">Vec</span>&lt;Variant&gt;),</div><div class="line">&#125;</div><div class="line"><span class="meta">#[derive(Clone, PartialEq, Eq, Hash, Debug, Copy)]</span></div><div class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">struct</span> <span class="title">Span</span></span> &#123;</div><div class="line">    start: <span class="built_in">usize</span>,</div><div class="line">    end: <span class="built_in">usize</span>,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>表达式（语法树）节点为 <code>Form</code> 。语法树 <code>Form</code> 中除了保存节点类型、名称、子节点外，还保存该节点对应源码的位置、类型约束。在完成类型推导之后还将保存类型结果。该定义位于 <code>src/syntax/form.rs</code></p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><div class="line"><span class="comment">/// Represents a form</span></div><div class="line"><span class="meta">#[derive(Clone, PartialEq,  Debug)]</span></div><div class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">struct</span> <span class="title">Form</span></span> &#123;</div><div class="line">    <span class="comment">/// Expression content</span></div><div class="line">    <span class="keyword">pub</span> node: Expr,</div><div class="line">    <span class="comment">/// Form tag</span></div><div class="line">    <span class="keyword">pub</span> tag: FormTag,</div><div class="line">&#125;</div><div class="line"><span class="meta">#[derive(Clone, PartialEq, Eq, Hash, Debug)]</span></div><div class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">struct</span> <span class="title">FormTag</span></span> &#123;</div><div class="line">    <span class="comment">/// Position in source</span></div><div class="line">    <span class="keyword">pub</span> pos: Span,</div><div class="line">    <span class="comment">/// Type of node</span></div><div class="line">    <span class="keyword">pub</span> ty: Scheme,</div><div class="line">    <span class="comment">/// Annotate type</span></div><div class="line">    <span class="keyword">pub</span> annotate: <span class="built_in">Option</span>&lt;Scheme&gt;,</div><div class="line">&#125;</div><div class="line"><span class="comment">/// Represents a expression to be evalutated to a value</span></div><div class="line"><span class="meta">#[derive(Clone, PartialEq, Debug)]</span></div><div class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">enum</span> <span class="title">Expr</span></span> &#123;</div><div class="line">    <span class="comment">/// Literial value</span></div><div class="line">    Lit(Lit),</div><div class="line">    <span class="comment">/// Identifier (binding/definition)</span></div><div class="line">    Var(Id),</div><div class="line">    <span class="comment">/// List (array)</span></div><div class="line">    <span class="comment">/// e.g. `[fuck, shit]`</span></div><div class="line">    List(<span class="built_in">Vec</span>&lt;E&gt;),</div><div class="line">    <span class="comment">/// Block (statement sequence)</span></div><div class="line">    <span class="comment">/// e.g. `&#123; print(fuck); print(shit); 1 &#125;`</span></div><div class="line">    Block(<span class="built_in">Vec</span>&lt;E&gt;),</div><div class="line">    <span class="comment">/// Function apply</span></div><div class="line">    <span class="comment">/// `fuck(shit, 1)`</span></div><div class="line">    Apply(E, <span class="built_in">Vec</span>&lt;E&gt;),</div><div class="line">    <span class="comment">/// Abstruction (function)</span></div><div class="line">    <span class="comment">/// e.g. `(fuck, shit) -&gt; fuck + shit`</span></div><div class="line">    Abs(Lambda),</div><div class="line">    <span class="comment">/// Binary operator expression</span></div><div class="line">    <span class="comment">/// e.g. `fuck + shit`</span></div><div class="line">    Binary(BinOp, E, E),</div><div class="line">    <span class="comment">/// Unary operator expression</span></div><div class="line">    <span class="comment">/// e.g. `!fuck`</span></div><div class="line">    <span class="comment">/// e.g. `-shit`</span></div><div class="line">    Unary(UnOp, E),</div><div class="line">    <span class="comment">/// Let-in expression</span></div><div class="line">    <span class="comment">/// e.g. `let fuck = shit in fuck + 1`</span></div><div class="line">    Let(VarDecl, E, E),</div><div class="line">    <span class="comment">/// Conditional expression</span></div><div class="line">    <span class="comment">/// e.g. `if (fuck == shit) 1 else 0`</span></div><div class="line">    If(E, E, E),</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中 <code>VarDecl</code> 为名称与类型的组合，<code>Lit</code> 为字面量表示，两者为整个程序中的通用结构，位于 <code>src/internal.rs</code></p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><div class="line"><span class="meta">#[derive(Debug, PartialEq, Clone)]</span></div><div class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">struct</span> <span class="title">VarDecl</span></span>(<span class="keyword">pub</span> Id, <span class="keyword">pub</span> Scheme);</div><div class="line"><span class="meta">#[derive(Clone, PartialEq, Debug)]</span></div><div class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">enum</span> <span class="title">Lit</span></span> &#123;</div><div class="line">    Int(<span class="built_in">i32</span>),</div><div class="line">    Float(<span class="built_in">f64</span>),</div><div class="line">    Str(<span class="built_in">String</span>),</div><div class="line">    Bool(<span class="built_in">bool</span>),</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="类型推导（类型检查）"><a href="#类型推导（类型检查）" class="headerlink" title="类型推导（类型检查）"></a>类型推导（类型检查）</h2><p>表达式的类型分为两种：单态类型与多态类型（泛型），除此之外还有用于类型推导中表示未确定类型的 <code>Slot</code> ，定义位于 <code>src/types.rs</code>。多态类型在单态类型的基础上还保存了一个多态类型参数列表（泛型参数列表）。</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><div class="line"><span class="comment">/// Type scheme</span></div><div class="line"><span class="meta">#[derive(Clone, PartialEq, Eq, Hash, Debug)]</span></div><div class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">enum</span> <span class="title">Scheme</span></span> &#123;</div><div class="line">    <span class="comment">/// A monomorphism type</span></div><div class="line">    <span class="comment">/// `Int * Int -&gt; Double`</span></div><div class="line">    Mono(Type),</div><div class="line"></div><div class="line">    <span class="comment">/// Polymorphism type</span></div><div class="line">    <span class="comment">/// `forall a. a * a -&gt; a`</span></div><div class="line">    Poly(<span class="built_in">Vec</span>&lt;Name&gt;, Type),</div><div class="line"></div><div class="line">    <span class="comment">/// Unknown type</span></div><div class="line">    Slot,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>表达式的类型由六种基本类型组合成类型树，分别为 <code>Void</code> 表示无返回值、<code>Var</code> 泛型变量或未定类型、<code>Con</code> 确定的类型、<code>Arr</code> 函数类型、<code>Prod</code> 积类型、<code>Comp</code> 带参数的类型。</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><div class="line"><span class="meta">#[derive(Clone, PartialEq, Eq, Hash, Debug)]</span></div><div class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">enum</span> <span class="title">Type</span></span> &#123;</div><div class="line">    Void,</div><div class="line">    <span class="comment">/// Type variable</span></div><div class="line">    Var(Name),</div><div class="line">    <span class="comment">/// Constant type name</span></div><div class="line">    Con(Name),</div><div class="line">    <span class="comment">/// Arrow (-&gt;) type</span></div><div class="line">    Arr(P&lt;Type&gt;, P&lt;Type&gt;),</div><div class="line">    <span class="comment">/// Product (*) type</span></div><div class="line">    Prod(P&lt;Type&gt;, P&lt;Type&gt;),</div><div class="line">    <span class="comment">/// Composite type</span></div><div class="line">    Comp(P&lt;Type&gt;, P&lt;Type&gt;),</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>类型推导的主要部分位于 <code>src/typeinfer/infer.rs</code></p>
+<p>类型推导的基本思想基于 Hindley–Milner 类型系统：</p>
+<ul>
+<li>自底而上地把表达式的类型分为已知类型、多态类型、未知类型三种；</li>
+<li>根据 HM 合一规则，把符合条件的未知类型约束为已知类型和多态类型；</li>
+<li>如果发生冲突则报错，否则继续替换直到确定所有表达式的类型。</li>
+</ul>
+<p>例如上例</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">def main() =</div><div class="line">    let n = 1 in</div><div class="line">    let adder = (a) -&gt; a + n in</div><div class="line">    putNumber(adder(4))</div></pre></td></tr></table></figure>
+<ul>
+<li>编译器内置的 <code>+</code> 运算符类型为 <code>forall a. a * a -&gt; a</code> ，代表着两个参数和返回值需要是同一个类型，并且不限制它们的具体的类型。</li>
+<li>表达式 <code>(a) -&gt; a + n</code> 由于 <code>+</code> 的约束可以确定类型 <code>m -&gt; m</code> ，其中 m 为待定类型；又由于 <code>+</code> 的约束，<code>a</code> 和 <code>n</code> 必须为同一类型，即 <code>m</code>。</li>
+<li>由 <code>let n = 1</code> ，1 确定为 <code>Int</code> 类型，故 <code>n</code> 确定为 <code>Int</code> 类型；故 <code>m</code> 类型即为 <code>Int</code>；故 <code>adder</code> 类型即为 <code>Int -&gt; Int</code> 。</li>
+<li>如此推断 <code>adder(4)</code> 为 <code>Int</code> 类型。又<code>putNumber</code> 为 <code>Int -&gt; Void</code> 类型，参数类型相符；推断出 <code>main</code> 函数返回值为 <code>Void</code> 类型。</li>
+</ul>
+<p>具体实现方面，使用了基于 constraint 的合一策略[1]，并在推导过程中追溯类型定义的位置用于报错信息。由于暂时没有实现泛型，类型推导出的非单态结果即使符合语义检查也将报错。</p>
+<h2 id="闭包转换"><a href="#闭包转换" class="headerlink" title="闭包转换"></a>闭包转换</h2><p>该部分位于 <code>src/core/convert.rs</code>。由于语言支持函数闭包——即嵌套的函数定义可以引用同级或上级作用域下的其它变量（自由变量），编译过程中需要找出每个函数所引用的所有自由变量，将其汇集成一个向量后作为函数的一个额外参数，之后将函数中所引用的自由变量对应到该额外参数的对应分量中。</p>
+<p>即上例中的</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">def main() =</div><div class="line">    let n = 1 in</div><div class="line">    let adder = (a) -&gt; a + n in</div><div class="line">    putNumber(adder(4))</div></pre></td></tr></table></figure>
+<p>编译后的结果用类 C 语言表示即为</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">adder</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">void</span>* fv)</span></span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">return</span> (a + ((<span class="keyword">int</span> *)fv)[<span class="number">0</span>])</div><div class="line">&#125;</div><div class="line"><span class="keyword">int</span> main()</div><div class="line">&#123;</div><div class="line">  <span class="keyword">int</span> fv[] = &#123;<span class="number">1</span>&#125;;</div><div class="line">  putNumber(adder(<span class="number">4</span>, (<span class="keyword">void</span>*)fv));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>具体过程与<a href="https://zhuanlan.zhihu.com/p/28787934" target="_blank" rel="external">这篇文章</a>类似，自底向上归纳每个子节点的自由变量，最后得到整个函数的自由变量，将嵌套的函数定义全部展开为全局函数定义。</p>
+<h2 id="中间表示"><a href="#中间表示" class="headerlink" title="中间表示"></a>中间表示</h2><p>闭包转换的结果是将 AST 转换为编译器的内部中间表示 core term。该中间表示较 AST 有几种不同的节点类型，并省去了不必要的信息。</p>
+<p>其中全局定义的表示被具体定义为 <code>FunDef</code> 全局函数定义（类型定义尚未实现）。</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><div class="line"><span class="meta">#[derive(Clone, PartialEq, Debug)]</span></div><div class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">struct</span> <span class="title">FunDef</span></span> &#123;</div><div class="line">    name: Id,</div><div class="line">    params: <span class="built_in">Vec</span>&lt;VarDecl&gt;,</div><div class="line">    freevars: <span class="built_in">Vec</span>&lt;VarDecl&gt;,</div><div class="line">    body: Node,</div><div class="line">    ty: Scheme, </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>表达式定义变为 <code>TaggedTerm</code> ，包含类型信息和真正的表达式 <code>Term</code>。</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><div class="line"><span class="comment">/// Represents a expression term</span></div><div class="line"><span class="meta">#[derive(Clone, PartialEq, Debug)]</span></div><div class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">struct</span> <span class="title">TaggedTerm</span></span> &#123;</div><div class="line">    ty: Scheme,</div><div class="line">    node: Term,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>Term</code> 与 AST 相比，没有了 lambda 函数节点和函数调用 <code>Apply</code> 节点，取而代之的是生成闭包的 <code>MakeCls</code> 节点和表示闭包调用与直接调用两种调用形式的节点。 </p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><div class="line"><span class="comment">/// Represents a expression term</span></div><div class="line"><span class="meta">#[derive(Clone, PartialEq, Debug)]</span></div><div class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">enum</span> <span class="title">Term</span></span> &#123;</div><div class="line">    <span class="comment">/// Literal value</span></div><div class="line">    Lit(Lit),</div><div class="line">    <span class="comment">/// Identifier (binding/definition)</span></div><div class="line">    Var(Id),</div><div class="line">    <span class="comment">/// List (array)</span></div><div class="line">    <span class="comment">/// e.g. `[fuck, shit]`</span></div><div class="line">    List(<span class="built_in">Vec</span>&lt;Node&gt;),</div><div class="line">    <span class="comment">/// Block (statement sequence)</span></div><div class="line">    <span class="comment">/// e.g. `&#123; print(fuck); print(shit); 1 &#125;`</span></div><div class="line">    Block(<span class="built_in">Vec</span>&lt;Node&gt;),</div><div class="line">    <span class="comment">/// Make closure with free variables</span></div><div class="line">    MakeCls(VarDecl, P&lt;Closure&gt;, Node),</div><div class="line">    <span class="comment">/// Apply a closure</span></div><div class="line">    ApplyCls(Node, <span class="built_in">Vec</span>&lt;Node&gt;),</div><div class="line">    <span class="comment">/// Apply function without free variables</span></div><div class="line">    ApplyDir(VarDecl, <span class="built_in">Vec</span>&lt;Node&gt;),</div><div class="line">    <span class="comment">/// Binary operator expression</span></div><div class="line">    <span class="comment">/// e.g. `fuck + shit`</span></div><div class="line">    Binary(BinOp, Node, Node),</div><div class="line">    <span class="comment">/// Unary operator expression</span></div><div class="line">    <span class="comment">/// e.g. `!fuck`</span></div><div class="line">    <span class="comment">/// e.g. `-shit`</span></div><div class="line">    Unary(UnOp, Node),</div><div class="line">    <span class="comment">/// Let-in expression</span></div><div class="line">    <span class="comment">/// e.g. `let fuck = shit in fuck + 1`</span></div><div class="line">    Let(VarDecl, Node, Node),</div><div class="line">    <span class="comment">/// Conditional expression</span></div><div class="line">    <span class="comment">/// e.g. `if (fuck == shit) 1 else 0`</span></div><div class="line">    If(Node, Node, Node),</div><div class="line">&#125;</div><div class="line"><span class="comment">/// Represents a closure, including a entry as</span></div><div class="line"><span class="comment">///   global definition and a actual free variable list.</span></div><div class="line"><span class="meta">#[derive(Clone, PartialEq, Debug)]</span></div><div class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">struct</span> <span class="title">Closure</span></span> &#123;</div><div class="line">    entry: Id,</div><div class="line">    actualFv: <span class="built_in">Vec</span>&lt;Id&gt;,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>该部分位于 <code>src/core/term.rs</code></p>
+<h2 id="代码生成"><a href="#代码生成" class="headerlink" title="代码生成"></a>代码生成</h2><p>考虑到代码生成的质量和跨平台，使用 LLVM 作为代码生成目标。编译器使用 LLVM API 生成 LLVM IR 并转化为汇编代码或二进制库文件。代码生成模块主要位于 <code>src/codegen/emit.rs</code> 。</p>
+<p>这里使用了 rust 版本的 LLVM 基础库 <a href="https://github.com/tari/llvm-sys.rs" target="_blank" rel="external">llvm-sys</a> 并进行了额外封装，封装代码位于 <code>libllvm/src</code> 和 <code>src/codegen/llvm.rs</code>。</p>
+<h2 id="运行时"><a href="#运行时" class="headerlink" title="运行时"></a>运行时</h2><p>运行时调用的代码位于 <code>src/lib</code> 。编译器附带了一个供用户运行时调用的语言基础库（静态库 base.o），暂时只包含了示例代码中用到的输出函数。同时还有用于垃圾回收的库，不过由于时间紧迫并没有实装到编译过程中。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>[1]  <a href="http://soft.vub.ac.be/~cfscholl/Capita-Selecta-2015/papers/2002%20Heeren.pdf" target="_blank" rel="external">Generalizing Hindley-Milner Type Inference Algorithms</a></p>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2018-01-06T07:13:23.000Z" itemprop="datePublished">
+              2018-01-06
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/programming-language/">programming language</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/compiler/">compiler</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/rust/">rust</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+    
+      <section>
+        <div id="disqus_thread"></div>
+        <script>
+          window.disqus_config = function () {
+            this.page.url = window.location.toString()
+            this.page.identifier = window.location.pathname
+          }
+          if (typeof DISQUS === 'undefined') {
+            (function() { // DON'T EDIT BELOW THIS LINE
+              var d = document, s = d.createElement('script');
+              s.src = 'https://hcyue.disqus.com/embed.js';
+              s.setAttribute('data-timestamp', +new Date());
+              (d.head || d.body).appendChild(s);
+            })();
+          } else {
+            DISQUS.reset({
+                reload: true,
+                config: window.disqus_config
+            })
+          }
+        </script>
+      </section>
+    
+</article>
+
+  
+</div>
+
+            <footer>
+    <div>© 2016 - Hcyue  , CC BY-NC-SA 4.0 </div>
+    <div>
+    Powered by Hexo
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
