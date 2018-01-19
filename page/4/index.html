@@ -71,6 +71,56 @@
     <header class="title">
       
         <h1>
+          <a href="/2015/08/03/撸了个node的微型web-server/">撸了个node的微型web server</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2015-08-02T17:16:00.000Z" itemprop="datePublished">
+    2015-08-03
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/nodejs/">nodejs</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p><a href="https://github.com/NameIsUseless/yue" target="_blank" rel="external">Github 链接在此</a></p>
+<p>（明明是全是coffee文件强行叫.js，凑表碾）</p>
+<hr>
+<blockquote>
+<p>yue.js is a tiny web server based on Node.js and CoffeeScript, supporting <code>route</code>, <code>session</code>, <code>database</code> (based on mongodb and is not completed yet..) and <code>static file</code>.</p>
+</blockquote>
+<p>已经实现的功能有：路由(<code>Router</code>)，静态文件(<code>Static File</code>)， Session相关。</p>
+<p>Router用了一种简单粗暴的实现，即把输入的uri解析之后拼成正则保存下来，接受请求的时候一个个正则去match。</p>
+<p>主要的想法是做成松散的结构，支持各种中间件，虽然现有的核心功能都是写的比较死的，但是后续的扩展方式应该是各种中间件。</p>
+<p>其中把对request和response的相关操作封装在了一个connection对象里，各种中间件可以给它添加属性方法之类。</p>
+<p>这东西其实是为了我的新版博客写的，然后新版博客是想做成spa，于是还有一堆前端的东西要写=。=</p>
+<p>（然而说好的函数式信徒结果写成了依赖副作用的架构）</p>
+<p>（以后再重构吧）</p>
+<p>（以后===说不定就忘记了）</p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
           <a href="/2015/05/17/记一次离散作业/">记一次离散作业</a>
         </h1>
       
@@ -433,42 +483,6 @@
 <p>选一个喜欢的目录建立bare repository</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">$ cd &lt;path&gt;</div><div class="line">$ mkdir website.git</div><div class="line">$ sudo git init --bare website.git</div><div class="line">#赋予给git用户</div><div class="line">$ sudo chown -R git:git website.git</div><div class="line">#配置hook</div><div class="line">$ sudo vi website.git/hooks/post-receive</div><div class="line"></div><div class="line">#!/bin/sh</div><div class="line">GIT_WORK_TREE=path/to/websiteroot  git checkout -f</div><div class="line"></div><div class="line">$ chmod +x post-receive</div><div class="line">$ sudo chown -R git:git path/to/websiteroot</div></pre></td></tr></table></figure>
 <p>之后便获取本地公钥，设置authorized_keys，之后网站更新时只要git push到repository即可。</p>
-
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2015/03/03/寒假快完了/">寒假快完了</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2015-03-02T17:16:50.000Z" itemprop="datePublished">
-    2015-03-03
-  </time>
-  
-  
-</div>
-
-    </header>
-    <div>
-      
-        <p>寒假快完了</p>
-<p>又一个寒假快完了</p>
-<p>大学第一个寒假，似乎和其余的假期并没有什么区别。</p>
-<p>也同样是睡睡睡，玩玩玩，浪浪浪。</p>
-<p>刚开始时在coursa上报的几门课后来都不了了之。。</p>
-<p>那一堆书虽然看了确也完全没有达到预期。</p>
-<p>连一直在练的那首rylynn都没有撸到头</p>
-<p>唯一的收获是撸了python？</p>
-<p>嗯还撸了个博客的前端。</p>
-<p>就这样吧= =</p>
 
       
     </div>

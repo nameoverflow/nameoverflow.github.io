@@ -29,21 +29,23 @@ class Pager {
             // Create DOM Object from loaded HTML
             const doc = document.implementation.createHTMLDocument('');
             doc.documentElement.innerHTML = HTMLText;
+            const newTitle = doc.title;
             // Take the specified element
             const shell = doc.querySelector(`[${this.config.shellMark}]`);
-            const scripts = Array.from(shell.getElementsByTagName('script'));
-            // const runBefore = scripts.filter()
+            const scripts = Array.from(shell.getElementsByTagName('script'))
+                .filter((el) => (el.getAttribute('type') === null || el.getAttribute('type') === 'text/javascript')
+                && !el.hasAttribute(this.config.ignoreScript));
             scripts.forEach(el => el.remove());
             const runBefore = scripts.filter(el => el.hasAttribute(this.config.runBefore))
                 .map(copyScriptTag);
-            const runAfter = scripts.filter(el => !el.hasAttribute(this.config.runBefore)
-                && !el.hasAttribute(this.config.ignoreScript))
+            const runAfter = scripts.filter(el => !el.hasAttribute(this.config.runBefore))
                 .map(copyScriptTag);
             runBefore.forEach(scr => this.shell.appendChild(scr));
             window.requestAnimationFrame(() => {
                 this.shell.innerHTML = shell.innerHTML;
                 runAfter.forEach(scr => this.shell.appendChild(scr));
                 window.scrollTo(0, 0);
+                window.document.title = newTitle;
                 callback && callback();
             });
         };
