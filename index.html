@@ -71,7 +71,7 @@
     <header class="title">
       
         <h1>
-          <a href="/2018/01/13/Windows-输入法，UWP，作孽的微软/">Windows 输入法，UWP，作孽的微软</a>
+          <a href="/2018/01/13/老旧输入法的 metro 应用兼容性改造/">〔吐槽向〕老旧输入法的 metro 应用兼容性改造</a>
         </h1>
       
       <div class='ListMeta'>
@@ -79,12 +79,43 @@
     2018-01-13
   </time>
   
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/input-method/">input method</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/windows/">windows</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/named-pipe/">named pipe</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/interprocess/">interprocess</a> }
+  </li>
+
+
+  </ul>
+  
   
 </div>
 
     </header>
     <div>
       
+        <h2 id="TL-DR"><a href="#TL-DR" class="headerlink" title="TL;DR"></a>TL;DR</h2><p>微软真是坑爹不允许在 UWP 里用共享内存结果小狼毫就挂了，改成用 Windows 的 <code>named pipe</code> 来做跨进程交互后就可以用了。</p>
+<h2 id="缘由"><a href="#缘由" class="headerlink" title="缘由"></a>缘由</h2><p>重新捡起五笔后，一直苦恼没有一个合用的五笔输入法。身为半个初学者，很看中的一个功能就是五笔反查——总不能每个不会的字都专门打开一个反查工具；而 Windows 自带的五笔只有一个并不好用的五笔拼音混输功能。各种老牌的五笔输入法要么面界太丑要么久不更新，更有甚者会摆出一幅流氓作派。</p>
+<p>几年之前试水过 RIME 输入法，知道它是一个很强大的输入法，可以满足各种定制需求。但是当初的我并没有开发能力，RIME 的定制又稍显复杂，于是并没有继续下去。现在有了需求后回头看，发现 RIME 无疑是最适合现在的我的。</p>
+<p>但是现在要在 Windows 下使用 RIME 却有了个当初没有的新问题——兼容性。作为第一批 Windows 10 用户，无疑需要一个能够在 UWP 应用下正常使用的输入法。但是 RIME 最初的 Windows 前端「小狼毫」却对从 Windows 8 开始的 Metro 应用——包括 Windows 10 的 UWP 都不兼容。原作者也因为无暇分身而<a href="https://github.com/rime/home/issues/25">放弃了「小狼毫」的维护</a>；其它开发者实现的其它前端又存在各种不稳定的问题——比如 RIME 吧的用户将 RIME 移植到了一个叫作 <a href="https://github.com/EasyIME/PIME">PIME</a> 的输入法框架下，这个框架的界面实现非常的搓，除此之外它的输入服务实现也很蛋疼，经常崩溃，也没有可靠的异常处理，很多时候需要手动重启输入服务。</p>
+<p>开源界的一大准则就是「你行你上」和「show me the code」。当年使用小狼毫的时候没有经历过什么异常崩溃，说明它在这方面的设计是十分优秀的；现在的主要问题也就是不兼容 Metro 应用而已。既然现在自己有了开发能力，不如自已维护一下，方便自己，也方便他人。</p>
+        
+          <div class="more-link">
+            <a href="/2018/01/13/老旧输入法的 metro 应用兼容性改造/#more">Read On »</a>
+          </div>
         
       
     </div>
