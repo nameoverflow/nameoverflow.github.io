@@ -2,7 +2,6 @@
 title: C++ Has Become More Pythonic
 date: 2015-01-18 21:20:53
 tags:
-  - become
   - c/cpp
   - python
 ---

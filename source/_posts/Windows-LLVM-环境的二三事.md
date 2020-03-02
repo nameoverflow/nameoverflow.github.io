@@ -2,7 +2,7 @@
 title: Windows LLVM 环境的二三事
 date: 2017-04-09 01:44:05
 tags:
-  - LLVM
+  - llvm
   - compile
 ---
 
