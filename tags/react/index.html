@@ -111,7 +111,7 @@
     </header>
     <div>
       
-        <p>同构渲染的好处大家都有目共睹，SEO 优化、首屏速度之类的。这次重写 blog，基于试水的考虑使用了 react + redux 实现同构渲染，然后果不其然踩到了点小坑。</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>同构渲染的好处大家都有目共睹，SEO 优化、首屏速度之类的。这次重写 blog，基于试水的考虑使用了 react + redux 实现同构渲染，然后果不其然踩到了点小坑。</p>
 <h3 id="state-带来的难题"><a href="#state-带来的难题" class="headerlink" title="state 带来的难题"></a><code>state</code> 带来的难题</h3><p>起初我只是想感受一下 react 的服务端渲染，并没有考虑把 redux 这种应对高复杂度应用的框架弄来。然而很快便发现，同构渲染要解决的首要问题——数据同步问题，在传统 react 的 props + state 模式下很难做到。</p>
 <p>一般纯客户端使用 react 时，习惯将数据保存在 state 中，然而在服务端渲染时很难控制组件的 <code>state</code> （至少我在文档中根本没找到解决办法），于是难以将客户端的组件数据与服务端渲染时的数据保持一致。当时想到的一个办法就是将所有的状态全部抽出来由最顶层组件的state提供，然后以props的形式分发到下级组件。然后开始写之后发现，这™不就是 Redux ？于是便高高兴兴的 <code>npm install redux --save</code> </p>
 <h3 id="在服务端分发数据"><a href="#在服务端分发数据" class="headerlink" title="在服务端分发数据"></a>在服务端分发数据</h3><p>Readux 除了能解决数据同步的问题外，还顺带解决了服务端对不同组件数据分发的问题。比如之前对于加载文章的解决方式是：当组件挂载后，ajax拉下组件对应的文章数据保存在state中，然后渲染。</p>

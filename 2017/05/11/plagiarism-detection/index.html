@@ -70,7 +70,7 @@
     </header>
 
     <section>
-      <blockquote>
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><blockquote>
 <p>这只是一篇实验报告</p>
 </blockquote>
 <h2 id="设计思路"><a href="#设计思路" class="headerlink" title="设计思路"></a>设计思路</h2><p>基于现实计算能力考虑，许多大段文档之间的相似性比较不可能使用传统的文本 diff 算法等耗时长的方法。Hash 值可以在一定程度上反应数据的特征；但是一般的 Hash 方法强调避免碰撞，源数据的少许改变就可以引起 Hash 值的较大变化。对于查重来说，需要提取出文档的特征，这个特征在源数据相似时也应具有相似性。</p>

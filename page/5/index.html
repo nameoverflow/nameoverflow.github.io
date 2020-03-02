@@ -71,6 +71,50 @@
     <header class="title">
       
         <h1>
+          <a href="/2015/03/03/使用git部署网站/">使用git部署网站</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2015-03-02T17:54:05.000Z" itemprop="datePublished">
+    2015-03-03
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/git/">git</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>(Someone said a coder who’s blog is full of “using some tools to do sth” is totally unreliable….)</p>
+<p>大致方法是创建一个bare repository，然后利用hook脚本在每次push时更新网站内容。</p>
+<p>##服务端</p>
+<p>创建git用户和，禁用shell登陆</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">$ sudo useradd git &amp;&amp; sudo groupadd git</div><div class="line">#创建并修改密码</div><div class="line">$ passwd git </div><div class="line">$ sudo vi /etc/passwd</div><div class="line">将git一行设置为:/home/git:/usr/bin/git-shell</div></pre></td></tr></table></figure>
+<p>选一个喜欢的目录建立bare repository</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">$ cd &lt;path&gt;</div><div class="line">$ mkdir website.git</div><div class="line">$ sudo git init --bare website.git</div><div class="line">#赋予给git用户</div><div class="line">$ sudo chown -R git:git website.git</div><div class="line">#配置hook</div><div class="line">$ sudo vi website.git/hooks/post-receive</div><div class="line"></div><div class="line">#!/bin/sh</div><div class="line">GIT_WORK_TREE=path/to/websiteroot  git checkout -f</div><div class="line"></div><div class="line">$ chmod +x post-receive</div><div class="line">$ sudo chown -R git:git path/to/websiteroot</div></pre></td></tr></table></figure>
+<p>之后便获取本地公钥，设置authorized_keys，之后网站更新时只要git push到repository即可。</p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
           <a href="/2015/03/03/寒假快完了/">寒假快完了</a>
         </h1>
       
@@ -85,7 +129,7 @@
     </header>
     <div>
       
-        <p>寒假快完了</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>寒假快完了</p>
 <p>又一个寒假快完了</p>
 <p>大学第一个寒假，似乎和其余的假期并没有什么区别。</p>
 <p>也同样是睡睡睡，玩玩玩，浪浪浪。</p>
@@ -177,15 +221,11 @@
   <ul>
     
   <li class="meta-text">
-  { <a href="/tags/become/">become</a> }
+  { <a href="/tags/python/">python</a> }
   </li>
 
   <li class="meta-text">
   { <a href="/tags/c-cpp/">c/cpp</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/python/">python</a> }
   </li>
 
 

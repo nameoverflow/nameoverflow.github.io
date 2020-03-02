@@ -70,7 +70,7 @@
     </header>
 
     <section>
-      <p>由于使用了 React 构建 Single Page Application，多说那种通过每次页面加载完成后在header中插入script标签来实现评论框的插件无疑是不能直接用了，我的博客便有了长达数个月的无法评论状态。</p>
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>由于使用了 React 构建 Single Page Application，多说那种通过每次页面加载完成后在header中插入script标签来实现评论框的插件无疑是不能直接用了，我的博客便有了长达数个月的无法评论状态。</p>
 <p>这种情况终于在10月的最后一天结束。</p>
 <a id="more"></a>
 <h3 id="多说代码分析"><a href="#多说代码分析" class="headerlink" title="多说代码分析"></a>多说代码分析</h3><p>多说提供的傻瓜式插件代码的作用，是创建一个script标签，设置一个全居的duoshuoQuery变量，然后将script插入页面的head中，之后的事情完全交给加载的脚本文件完成。</p>

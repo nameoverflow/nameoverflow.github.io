@@ -70,7 +70,7 @@
     </header>
 
     <section>
-      <blockquote>
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><blockquote>
 <p>杀一个运维不用枪</p>
 </blockquote>
 <p>接手了学校最大学生论坛的运维（听起来好屌然并卵），结果没想到是个天坑。</p>
@@ -88,8 +88,7 @@
 <p>吓得我去登录了阿里云控制台，发现CPU爆炸。试着访问论坛，许久无响应，最终502。</p>
 <p>（话说阿里云账号还绑定着几届以前的运维负责人，每次要验证手机号的时候都要发条短信过去问验证码orz）</p>
 <p>试着从阿里云控制台的管理终端连接，休眠屏幕上显示OUT OF MEMORY,并且KILL了几个进程。为了尽快恢复访问便直接重启了整个lnmp。</p>
-<pre><code class="bash">~/lnmp restart
-</code></pre>
+<figure class="highlight bash"><table><tr><td class="code"><pre><div class="line"></div><div class="line">~/lnmp restart</div></pre></td></tr></table></figure>
 <p>由于经验不足，一时也难以排查，看到论坛正常了便撒手不管了。</p>
 <p>结果，论坛在接下来一段时间的运行中大错小错不断，不断有502和数据库错误的情况发生，几乎每天都要修复。</p>
 <p>于是找到了甩锅的上一任韩师傅的<a href="http://0x0d.im/archives/solve-lnmp-nginx-502-error.html" target="_blank" rel="external">这篇文章</a>，了解了大概原因后，为了避免数据库总是出错把php的进程限制很保守的改到了30+（真尼玛保守），如愿以偿的告别了一天两次的database error。</p>
@@ -112,64 +111,25 @@
 <p>288.653秒！报警了好么！</p>
 <p><img src="https://dn-hcyue.qbox.me/img/QQ截图20151110005151.png" alt="enter image description here"></p>
 <p>在OneAPM中查看对应的SQL语句，发现是根据 <code>fid</code> <code>displayorder</code> 字段进行查询并且根据 <code>displayorder</code> 进行排序</p>
-<pre><code class="sql"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> forum_thread <span class="keyword">WHERE</span> <span class="string">`fid`</span>=? <span class="keyword">AND</span> <span class="string">`displayorder`</span> <span class="keyword">IN</span>(?,?) <span class="keyword">ORDER</span> <span class="keyword">BY</span> displayorder <span class="keyword">DESC</span>, lastpost <span class="keyword">DESC</span> <span class="keyword">LIMIT</span> ?, ?
-</code></pre>
+<figure class="highlight sql"><table><tr><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> forum_thread <span class="keyword">WHERE</span> <span class="string">`fid`</span>=? <span class="keyword">AND</span> <span class="string">`displayorder`</span> <span class="keyword">IN</span>(?,?) <span class="keyword">ORDER</span> <span class="keyword">BY</span> displayorder <span class="keyword">DESC</span>, lastpost <span class="keyword">DESC</span> <span class="keyword">LIMIT</span> ?, ?</div></pre></td></tr></table></figure>
 <p>对于一个几十w的表来说<code>select</code> 执行200s肯定不正常。那么首先分析下索引的建立。<del>结合在Google的鼎力支持下找到的<a href="http://www.xiaohui.com/dev/server/20070701-discuz-mysql-cpu-100-optimize.htm" target="_blank" rel="external">这篇文章</a> ，连接终端进入mysql命令行，查看表结构</del></p>
 <p><del>发现<code>displayorder</code> 果然没有建立索引。</del></p>
 <p><del>之后干脆打开了mysql的慢sql日志，结合日志对一个操作频繁的字段进行了索引的建立。</del></p>
 <p><del>终于过上了几天清净日子。</del></p>
 <p>挑了个良辰吉日（502的时候），在MySQL命令行中输入</p>
-<pre><code class="sql"><span class="keyword">show</span> <span class="keyword">full</span> <span class="keyword">processlist</span>;
-</code></pre>
+<figure class="highlight sql"><table><tr><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">show</span> <span class="keyword">full</span> <span class="keyword">processlist</span>;</div></pre></td></tr></table></figure>
 <p>刷刷刷出现一大堆Query（共计127个），lock一堆，全是UPDATE……. 翻到最上果然有很多条Sorting Data的SELECT，正是这样的语句</p>
-<pre><code class="sql"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> forum_thread  <span class="keyword">WHERE</span> <span class="string">`fid`</span> <span class="keyword">IN</span>(<span class="string">'334'</span>,<span class="string">'268'</span>,<span class="string">'26'</span>) <span class="keyword">AND</span> <span class="string">`displayorder`</span> <span class="keyword">IN</span>(<span class="string">'0'</span>,<span class="string">'1'</span>)  <span class="keyword">ORDER</span> <span class="keyword">BY</span> displayorder <span class="keyword">DESC</span>, lastpost <span class="keyword">DESC</span> <span class="keyword">LIMIT</span> <span class="number">40</span>
-</code></pre>
+<figure class="highlight sql"><table><tr><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> forum_thread  <span class="keyword">WHERE</span> <span class="string">`fid`</span> <span class="keyword">IN</span>(<span class="string">'334'</span>,<span class="string">'268'</span>,<span class="string">'26'</span>) <span class="keyword">AND</span> <span class="string">`displayorder`</span> <span class="keyword">IN</span>(<span class="string">'0'</span>,<span class="string">'1'</span>)  <span class="keyword">ORDER</span> <span class="keyword">BY</span> displayorder <span class="keyword">DESC</span>, lastpost <span class="keyword">DESC</span> <span class="keyword">LIMIT</span> <span class="number">40</span></div></pre></td></tr></table></figure>
 <p>作为SELECT，它们勇敢的站在最前方阻塞了100+条Query，值得敬佩。</p>
 <p>EXPLAIN一下</p>
-<pre><code class="sql">+<span class="comment">----+-------------+--------------+-------+------------------------------------+--------------+---------+------+-------+-----------------------------+</span>
-| id | select_type | table        | type  | possible_keys                      | key          | key_len | ref  | rows  | Extra                       |
-+<span class="comment">----+-------------+--------------+-------+------------------------------------+--------------+---------+------+-------+-----------------------------+</span>
-|  1 | SIMPLE      | forum_thread | range | displayorder,typeid,displayorder_2 | displayorder | 4       | NULL | 64709 | Using where; Using filesort |
-+<span class="comment">----+-------------+--------------+-------+------------------------------------+--------------+---------+------+-------+-----------------------------+</span>
-</code></pre>
+<figure class="highlight sql"><table><tr><td class="code"><pre><div class="line"></div><div class="line">+<span class="comment">----+-------------+--------------+-------+------------------------------------+--------------+---------+------+-------+-----------------------------+</span></div><div class="line"></div><div class="line">| id | select_type | table        | type  | possible_keys                      | key          | key_len | ref  | rows  | Extra                       |</div><div class="line"></div><div class="line">+<span class="comment">----+-------------+--------------+-------+------------------------------------+--------------+---------+------+-------+-----------------------------+</span></div><div class="line"></div><div class="line">|  1 | SIMPLE      | forum_thread | range | displayorder,typeid,displayorder_2 | displayorder | 4       | NULL | 64709 | Using where; Using filesort |</div><div class="line"></div><div class="line">+<span class="comment">----+-------------+--------------+-------+------------------------------------+--------------+---------+------+-------+-----------------------------+</span></div></pre></td></tr></table></figure>
 <p>发现是 <code>Using filesort</code> 。这条SQL语句可以说是Discuz最常用SQL之一，难道那些攻城狮们都没给这几个字段建立索引？</p>
 <p>在等待队列中的SQL执行完毕后，打开profile进行分析</p>
-<pre><code class="sql"><span class="keyword">set</span> profiling=<span class="number">1</span>;
-
-<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> forum_thread  <span class="keyword">WHERE</span> <span class="string">`fid`</span> <span class="keyword">IN</span>(<span class="string">'334'</span>,<span class="string">'268'</span>,<span class="string">'26'</span>) <span class="keyword">AND</span> <span class="string">`displayorder`</span> <span class="keyword">IN</span>(<span class="string">'0'</span>,<span class="string">'1'</span>)  <span class="keyword">ORDER</span> <span class="keyword">BY</span> displayorder <span class="keyword">DESC</span>, lastpost <span class="keyword">DESC</span>    <span class="keyword">LIMIT</span> <span class="number">40</span>;
-
-<span class="keyword">show</span> profile <span class="keyword">for</span> <span class="keyword">query</span> <span class="number">1</span>;
-</code></pre>
+<figure class="highlight sql"><table><tr><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">set</span> profiling=<span class="number">1</span>;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> forum_thread  <span class="keyword">WHERE</span> <span class="string">`fid`</span> <span class="keyword">IN</span>(<span class="string">'334'</span>,<span class="string">'268'</span>,<span class="string">'26'</span>) <span class="keyword">AND</span> <span class="string">`displayorder`</span> <span class="keyword">IN</span>(<span class="string">'0'</span>,<span class="string">'1'</span>)  <span class="keyword">ORDER</span> <span class="keyword">BY</span> displayorder <span class="keyword">DESC</span>, lastpost <span class="keyword">DESC</span>    <span class="keyword">LIMIT</span> <span class="number">40</span>;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">show</span> profile <span class="keyword">for</span> <span class="keyword">query</span> <span class="number">1</span>;</div></pre></td></tr></table></figure>
 <p>发现确实是sorting占了大头</p>
-<pre><code class="sql">+<span class="comment">--------------------+----------+</span>
-| Status             | Duration |
-+<span class="comment">--------------------+----------+</span>
-| starting           | 0.000035 |
-| Opening tables     | 0.000006 |
-| System <span class="keyword">lock</span>        | <span class="number">0.000002</span> |
-| <span class="keyword">Table</span> <span class="keyword">lock</span>         | <span class="number">0.000003</span> |
-| init               | <span class="number">0.000029</span> |
-| optimizing         | <span class="number">0.000005</span> |
-| <span class="keyword">statistics</span>         | <span class="number">0.000077</span> |
-| preparing          | <span class="number">0.000060</span> |
-| executing          | <span class="number">0.000002</span> |
-| Sorting <span class="keyword">result</span>     | <span class="number">0.257200</span> |
-| Sending <span class="keyword">data</span>       | <span class="number">0.000413</span> |
-| <span class="keyword">end</span>                | <span class="number">0.000004</span> |
-| <span class="keyword">query</span> <span class="keyword">end</span>          | <span class="number">0.000002</span> |
-| freeing items      | <span class="number">0.000266</span> |
-| <span class="keyword">logging</span> slow <span class="keyword">query</span> | <span class="number">0.000002</span> |
-| cleaning up        | <span class="number">0.000003</span> |
-+<span class="comment">--------------------+----------+</span>
-</code></pre>
+<figure class="highlight sql"><table><tr><td class="code"><pre><div class="line"></div><div class="line">+<span class="comment">--------------------+----------+</span></div><div class="line"></div><div class="line">| Status             | Duration |</div><div class="line"></div><div class="line">+<span class="comment">--------------------+----------+</span></div><div class="line"></div><div class="line">| starting           | 0.000035 |</div><div class="line"></div><div class="line">| Opening tables     | 0.000006 |</div><div class="line"></div><div class="line">| System <span class="keyword">lock</span>        | <span class="number">0.000002</span> |</div><div class="line"></div><div class="line">| <span class="keyword">Table</span> <span class="keyword">lock</span>         | <span class="number">0.000003</span> |</div><div class="line"></div><div class="line">| init               | <span class="number">0.000029</span> |</div><div class="line"></div><div class="line">| optimizing         | <span class="number">0.000005</span> |</div><div class="line"></div><div class="line">| <span class="keyword">statistics</span>         | <span class="number">0.000077</span> |</div><div class="line"></div><div class="line">| preparing          | <span class="number">0.000060</span> |</div><div class="line"></div><div class="line">| executing          | <span class="number">0.000002</span> |</div><div class="line"></div><div class="line">| Sorting <span class="keyword">result</span>     | <span class="number">0.257200</span> |</div><div class="line"></div><div class="line">| Sending <span class="keyword">data</span>       | <span class="number">0.000413</span> |</div><div class="line"></div><div class="line">| <span class="keyword">end</span>                | <span class="number">0.000004</span> |</div><div class="line"></div><div class="line">| <span class="keyword">query</span> <span class="keyword">end</span>          | <span class="number">0.000002</span> |</div><div class="line"></div><div class="line">| freeing items      | <span class="number">0.000266</span> |</div><div class="line"></div><div class="line">| <span class="keyword">logging</span> slow <span class="keyword">query</span> | <span class="number">0.000002</span> |</div><div class="line"></div><div class="line">| cleaning up        | <span class="number">0.000003</span> |</div><div class="line"></div><div class="line">+<span class="comment">--------------------+----------+</span></div></pre></td></tr></table></figure>
 <p>查看一下 <code>forum_thread</code> 表的索引</p>
-<pre><code class="sql">+<span class="comment">--------------+------------+----------------+--------------+--------------+-----------+-------------+----------+--------+------+------------+---------+</span>
-| Table        | Non_unique | Key_name       | Seq_in_index | Column_name  | Collation | Cardinality | Sub_part | Packed | Null | Index_type | <span class="keyword">Comment</span> |
-+<span class="comment">--------------+------------+----------------+--------------+--------------+-----------+-------------+----------+--------+------+------------+---------+</span>
-| forum_thread |          <span class="number">1</span> | displayorder   |            <span class="number">1</span> | fid          | A         |        <span class="literal">NULL</span> |     <span class="literal">NULL</span> | <span class="literal">NULL</span>   |      | BTREE      |         |
-| forum_thread |          <span class="number">1</span> | displayorder   |            <span class="number">2</span> | displayorder | A         |        <span class="literal">NULL</span> |     <span class="literal">NULL</span> | <span class="literal">NULL</span>   |      | BTREE      |         |
-| forum_thread |          <span class="number">1</span> | displayorder   |            <span class="number">3</span> | lastpost     | A         |        <span class="literal">NULL</span> |     <span class="literal">NULL</span> | <span class="literal">NULL</span>   |      | BTREE
-</code></pre>
+<figure class="highlight sql"><table><tr><td class="code"><pre><div class="line"></div><div class="line">+<span class="comment">--------------+------------+----------------+--------------+--------------+-----------+-------------+----------+--------+------+------------+---------+</span></div><div class="line"></div><div class="line">| Table        | Non_unique | Key_name       | Seq_in_index | Column_name  | Collation | Cardinality | Sub_part | Packed | Null | Index_type | <span class="keyword">Comment</span> |</div><div class="line"></div><div class="line">+<span class="comment">--------------+------------+----------------+--------------+--------------+-----------+-------------+----------+--------+------+------------+---------+</span></div><div class="line"></div><div class="line">| forum_thread |          <span class="number">1</span> | displayorder   |            <span class="number">1</span> | fid          | A         |        <span class="literal">NULL</span> |     <span class="literal">NULL</span> | <span class="literal">NULL</span>   |      | BTREE      |         |</div><div class="line"></div><div class="line">| forum_thread |          <span class="number">1</span> | displayorder   |            <span class="number">2</span> | displayorder | A         |        <span class="literal">NULL</span> |     <span class="literal">NULL</span> | <span class="literal">NULL</span>   |      | BTREE      |         |</div><div class="line"></div><div class="line">| forum_thread |          <span class="number">1</span> | displayorder   |            <span class="number">3</span> | lastpost     | A         |        <span class="literal">NULL</span> |     <span class="literal">NULL</span> | <span class="literal">NULL</span>   |      | BTREE</div></pre></td></tr></table></figure>
 <p>然而确实是对这几个字段建立了索引的。那么问题有可能是索引的顺序。</p>
 <p>&lt;尚未解决 不立flag&gt;</p>
 
@@ -189,7 +149,7 @@
             <div>
               tags: 
   <li class="meta-text">
-  { <a href="/tags/DataBase/">DataBase</a> }
+  { <a href="/tags/database/">database</a> }
   </li>
 
 

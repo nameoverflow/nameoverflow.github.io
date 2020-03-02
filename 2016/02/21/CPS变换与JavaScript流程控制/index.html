@@ -70,7 +70,7 @@
     </header>
 
     <section>
-      <p>正如<a href="https://hcyue.me/article/56a8aff28e0d54a562c73ca8" target="_blank" rel="external">上一篇文章</a>所说，利用CPS原理可以进行流程控制。那么在JavaScript编程中究竟如何消灭callback hell呢？</p>
+      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>正如<a href="https://hcyue.me/article/56a8aff28e0d54a562c73ca8" target="_blank" rel="external">上一篇文章</a>所说，利用CPS原理可以进行流程控制。那么在JavaScript编程中究竟如何消灭callback hell呢？</p>
 <p><a href="https://github.com/tj/co" target="_blank" rel="external">co</a> 正是一个解决JavaScript异步流程难题的库。它利用ES2015标准中的 <code>yield</code>，实现了与（本来被期望加入ES2016标准却因为大厂跳票没赶上deadline所以只能明年再说的）<code>async/await</code> 相似的功能而红透半边天。其原理就是利用 <code>yield</code> 的状态机特性，将（看起来是）同步的代码转换为CPS的形式。</p>
 <p>co的源文件有两百多行，而其核心思想其实非常简洁——不断的将 <code>yield</code> 的 <code>next</code> 值追加到 <code>promise</code> 链中，达到“一步接一步”执行的效果。</p>
 <p>这个核心思想用coffeescript写出来不到十行：</p>

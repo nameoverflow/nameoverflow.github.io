@@ -71,6 +71,55 @@
     <header class="title">
       
         <h1>
+          <a href="/2016/01/27/学习笔记-Continuation-passing-Style/">学习笔记：Continuation-passing Style</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2016-01-27T11:54:26.000Z" itemprop="datePublished">
+    2016-01-27
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/computer-science/">computer science</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/cps/">cps</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>说来惭愧，虽然对于 <code>CPS transform</code> 这个概念略有耳闻（当时的理解是一种将普通递归调用变化为尾递归的方法），但是对于 <code>CPS</code> 这个概念还是在看<a href="http://www.cppblog.com/vczh/archive/2014/01/19/205468.html">轮子哥的文章</a> 时才想起去详细了解。终究还是CS基础不牢。</p>
+<h3 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h3><blockquote>
+<p>In <a href="https://en.wikipedia.org/wiki/Functional_programming" title="Functional programming">functional programming</a>, <b>continuation-passing style</b> (<b>CPS</b>) is a style of programming in which <a href="https://en.wikipedia.org/wiki/Control_flow" title="Control flow">control</a> is passed explicitly in the form of a <a href="https://en.wikipedia.org/wiki/Continuation" title="Continuation">continuation</a>. This is contrasted with <a href="https://en.wikipedia.org/wiki/Direct_style" title="Direct style">direct style</a>, which is the usual style of programming. <a href="https://en.wikipedia.org/wiki/Gerald_Jay_Sussman" title="Gerald Jay Sussman">Gerald Jay Sussman</a> and <a href="https://en.wikipedia.org/wiki/Guy_L._Steele,_Jr." title="Guy L. Steele, Jr.">Guy L. Steele, Jr.</a> coined the phrase in <a href="https://en.wikipedia.org/wiki/AI_Memo" title="AI Memo">AI Memo</a> 349 (1975), which sets out the first version of the <a href="https://en.wikipedia.org/wiki/Scheme_(programming_language)" title="Scheme (programming language)">Scheme</a> programming language.<sup id="cite_ref-1" class="reference"><a href="https://en.wikipedia.org/wiki/Continuation-passing_style#cite_note-1"><span>[</span>1<span>]</span></a></sup><sup id="cite_ref-2" class="reference"><a href="https://en.wikipedia.org/wiki/Continuation-passing_style#cite_note-2"><span>[</span>2<span>]</span></a></sup> <a href="https://en.wikipedia.org/wiki/John_C._Reynolds" title="John C. Reynolds">John C. Reynolds</a> gives a detailed account of the numerous discoveries of continuations.<sup id="cite_ref-3" class="reference"><a href="https://en.wikipedia.org/wiki/Continuation-passing_style#cite_note-3"><span>[</span>3<span>]</span></a></sup></p>
+</blockquote>
+<p>简单来说，就是一种程序调用方式，在每次函数调用时通过传参决定下一步执行的内容。</p>
+        
+          <div class="more-link">
+            <a href="/2016/01/27/学习笔记-Continuation-passing-Style/#more">Read On »</a>
+          </div>
+        
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
           <a href="/2016/01/25/由Gulp转投Webpack/">由Gulp转投Webpack</a>
         </h1>
       
@@ -130,7 +179,7 @@
     </header>
     <div>
       
-        <p>2016年的21天后</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>2016年的21天后</p>
 <p>我写下了这个标题</p>
 <p>只是为了</p>
 <p>测试一下博客的时间轴</p>
@@ -175,7 +224,7 @@
     </header>
     <div>
       
-        <p>This shit is not supported by any version of stock Linux.</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>This shit is not supported by any version of stock Linux.</p>
 <p><code>rfkill</code> showed this device but cannot work at all.</p>
 <p>I found <a href="https://outhereinthefield.wordpress.com/2014/03/01/ubuntu-13-10-and-bluetooth-on-broadcom-bcm43142-wifibt-combo-adapter/" target="_blank" rel="external">this post</a> and <a href="https://bugs.launchpad.net/ubuntu/+source/bluez/+bug/1366418/comments/12" target="_blank" rel="external">this bug</a>, using hex file in windows, but seems that i must rebuild kernel. F**k.</p>
 
@@ -214,7 +263,7 @@
     </header>
     <div>
       
-        <figure class="highlight haskell"><table><tr><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">-- fuck**u.hs</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> Data.List</div><div class="line"></div><div class="line"><span class="keyword">import</span> Data.List.Split</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">-- *大综合楼</span></div><div class="line"></div><div class="line"><span class="comment">-- 一跃解千愁</span></div><div class="line"></div><div class="line"><span class="title">getFloor</span> :: <span class="type">Int</span> -&gt; <span class="type">String</span> -&gt; <span class="type">String</span></div><div class="line"></div><div class="line"><span class="title">getFloor</span> count char =</div><div class="line"></div><div class="line">    <span class="string">"│"</span> ++ fuck char ++ <span class="string">"│"</span></div><div class="line"></div><div class="line">    <span class="keyword">where</span></div><div class="line"></div><div class="line">        fuck = concat.replicate count</div><div class="line"></div><div class="line"><span class="title">build</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">String</span></div><div class="line"></div><div class="line"><span class="title">build</span> width height jump =</div><div class="line"></div><div class="line">    concat (top : fuck ++ [ground])</div><div class="line"></div><div class="line">    <span class="keyword">where</span></div><div class="line"></div><div class="line">        top = '┌' : replicate (width * <span class="number">2</span>) '─' ++ <span class="string">"┐\n"</span></div><div class="line"></div><div class="line">        ground = '┴' : replicate (width * <span class="number">2</span>) '─' ++ <span class="string">"┴"</span> ++ replicate <span class="number">10</span> '─'</div><div class="line"></div><div class="line">        fuck = zipWith `++` (concat (replicate height floors)) overflow</div><div class="line"></div><div class="line">                <span class="keyword">where</span></div><div class="line"></div><div class="line">                    floors = map (getFloor width) [<span class="string">"┌┐"</span>, <span class="string">"└┘"</span>]</div><div class="line"></div><div class="line">                    body = [<span class="string">"  ╰O╯\n"</span>, <span class="string">"   /\n"</span>, <span class="string">"  /)\n"</span>]</div><div class="line"></div><div class="line">                    repl' p c = replicate c p</div><div class="line"></div><div class="line">                    overflow = replicate ((height - jump) * <span class="number">2</span> - <span class="number">1</span>) <span class="string">"\n"</span> ++ body ++ replicate (jump * <span class="number">2</span> - <span class="number">1</span>) <span class="string">"\n"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="title">main</span> :: <span class="type">IO</span> ()</div><div class="line"></div><div class="line"><span class="title">main</span> = <span class="keyword">do</span></div><div class="line"></div><div class="line">    putStrLn <span class="string">"综合楼高 综合楼宽 飞翔层数"</span></div><div class="line"></div><div class="line">    params &lt;- getLine</div><div class="line"></div><div class="line">    <span class="keyword">let</span> [width, height, jump] = splitOn <span class="string">" "</span> params <span class="keyword">in</span></div><div class="line"></div><div class="line">        putStrLn $ build (read width :: <span class="type">Int</span>) (read height :: <span class="type">Int</span>) (read jump :: <span class="type">Int</span>)</div><div class="line"></div><div class="line">    putStrLn <span class="string">"*大综合楼\n一跃解千愁"</span></div></pre></td></tr></table></figure>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><figure class="highlight haskell"><table><tr><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">-- fuck**u.hs</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> Data.List</div><div class="line"></div><div class="line"><span class="keyword">import</span> Data.List.Split</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">-- *大综合楼</span></div><div class="line"></div><div class="line"><span class="comment">-- 一跃解千愁</span></div><div class="line"></div><div class="line"><span class="title">getFloor</span> :: <span class="type">Int</span> -&gt; <span class="type">String</span> -&gt; <span class="type">String</span></div><div class="line"></div><div class="line"><span class="title">getFloor</span> count char =</div><div class="line"></div><div class="line">    <span class="string">"│"</span> ++ fuck char ++ <span class="string">"│"</span></div><div class="line"></div><div class="line">    <span class="keyword">where</span></div><div class="line"></div><div class="line">        fuck = concat.replicate count</div><div class="line"></div><div class="line"><span class="title">build</span> :: <span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">Int</span> -&gt; <span class="type">String</span></div><div class="line"></div><div class="line"><span class="title">build</span> width height jump =</div><div class="line"></div><div class="line">    concat (top : fuck ++ [ground])</div><div class="line"></div><div class="line">    <span class="keyword">where</span></div><div class="line"></div><div class="line">        top = '┌' : replicate (width * <span class="number">2</span>) '─' ++ <span class="string">"┐\n"</span></div><div class="line"></div><div class="line">        ground = '┴' : replicate (width * <span class="number">2</span>) '─' ++ <span class="string">"┴"</span> ++ replicate <span class="number">10</span> '─'</div><div class="line"></div><div class="line">        fuck = zipWith `++` (concat (replicate height floors)) overflow</div><div class="line"></div><div class="line">                <span class="keyword">where</span></div><div class="line"></div><div class="line">                    floors = map (getFloor width) [<span class="string">"┌┐"</span>, <span class="string">"└┘"</span>]</div><div class="line"></div><div class="line">                    body = [<span class="string">"  ╰O╯\n"</span>, <span class="string">"   /\n"</span>, <span class="string">"  /)\n"</span>]</div><div class="line"></div><div class="line">                    repl' p c = replicate c p</div><div class="line"></div><div class="line">                    overflow = replicate ((height - jump) * <span class="number">2</span> - <span class="number">1</span>) <span class="string">"\n"</span> ++ body ++ replicate (jump * <span class="number">2</span> - <span class="number">1</span>) <span class="string">"\n"</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="title">main</span> :: <span class="type">IO</span> ()</div><div class="line"></div><div class="line"><span class="title">main</span> = <span class="keyword">do</span></div><div class="line"></div><div class="line">    putStrLn <span class="string">"综合楼高 综合楼宽 飞翔层数"</span></div><div class="line"></div><div class="line">    params &lt;- getLine</div><div class="line"></div><div class="line">    <span class="keyword">let</span> [width, height, jump] = splitOn <span class="string">" "</span> params <span class="keyword">in</span></div><div class="line"></div><div class="line">        putStrLn $ build (read width :: <span class="type">Int</span>) (read height :: <span class="type">Int</span>) (read jump :: <span class="type">Int</span>)</div><div class="line"></div><div class="line">    putStrLn <span class="string">"*大综合楼\n一跃解千愁"</span></div></pre></td></tr></table></figure>
 <p><img src="https://dn-hcyue.qbox.me/img/QQ%E6%88%AA%E5%9B%BE20151114022522_1.png" alt="hehe"></p>
 
       
@@ -240,7 +289,7 @@
   <ul>
     
   <li class="meta-text">
-  { <a href="/tags/DataBase/">DataBase</a> }
+  { <a href="/tags/database/">database</a> }
   </li>
 
 
@@ -352,7 +401,7 @@
     </header>
     <div>
       
-        <p>之前因为误操作把老版站点的服务器给挂了【手残把iptables drop all了orz】，新版博客弄到了另一台服务器，于是便没有开启https。</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>之前因为误操作把老版站点的服务器给挂了【手残把iptables drop all了orz】，新版博客弄到了另一台服务器，于是便没有开启https。</p>
 <p>今天把证书弄了回来，于是重新开启了https访问。</p>
 <p>然而个人小站开https存粹装逼罢了= =</p>
 <p>开启https需要把证书放在指定的位置，然后配置nginx开启ssl</p>
@@ -425,7 +474,7 @@ iptables -A OUTPUT -p tcp -m multiport --dports 80,443 -m state --state NEW,ESTA
     </header>
     <div>
       
-        <p>从上个期末开始到上个星期，总算撸完了这个<a href="https://github.com/NameIsUseless/blog" target="_blank" rel="external">新版博客</a>wwwww</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>从上个期末开始到上个星期，总算撸完了这个<a href="https://github.com/NameIsUseless/blog" target="_blank" rel="external">新版博客</a>wwwww</p>
 <p>采用的是后端nodejs+mongodb前端react渲染的架构，其中后台使用的是顺便撸的web框架<a href="http://hcyue.me/article/5606d46dc8cf12e30db29d54" target="_blank" rel="external">yue.js</a>。前端本来也想造轮子，后来中了react的毒就用了react（比传统的渲染方便多了啊摔）</p>
 <p>大体目录结构附下。handler即路由处理模块（controller层）；model即m层；view中放置的是html静态文件和jade模板文件。</p>
 <p>整个博客的前端是spa形式，使用<a href="https://github.com/rackt/react-router" target="_blank" rel="external">React-Router</a>实现前端路由控制.</p>
@@ -477,46 +526,11 @@ iptables -A OUTPUT -p tcp -m multiport --dports 80,443 -m state --state NEW,ESTA
     </header>
     <div>
       
-        <p>怎么说呢，学校这个越权访问漏洞貌似并没有什么卵用。</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>怎么说呢，学校这个越权访问漏洞貌似并没有什么卵用。</p>
 <p>查看照片时候的search参数是学号，然后只要有登录的cookie就可以拿到任意学号的照片= =</p>
 <p>于是写了个python脚本把我们院新生照片全部扒下来了</p>
 <p>（欸好像韩师傅也干过这事）</p>
 <p>改天找个图床上传一下。</p>
-
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2015/08/26/Fedora-22-新内核下-BCMA-43142网卡无WiFi的解决/">Fedora 22 新内核下 BCMA 43142网卡无WiFi的解决</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2015-08-26T01:36:19.000Z" itemprop="datePublished">
-    2015-08-26
-  </time>
-  
-  
-</div>
-
-    </header>
-    <div>
-      
-        <p>先说解决办法：</p>
-<pre><code class="bash">sudo dnf install akmod-wl
-</code></pre>
-<p>Fedora的更新一向很快，带来的问题之一就是兼容性。</p>
-<p>比如4.1.5的kernel下，并没有兼容bcma43142的内置driver。</p>
-<p>第一反应是去下载内核编译，然并卵。</p>
-<p>编译之后可以搜寻wifi，但是不能连接wpa2加密的wifi。</p>
-<p>最后灵机一动想到了那个闭源驱动的rpm源，安装之，解决。</p>
-<p>睡觉。</p>
 
       
     </div>

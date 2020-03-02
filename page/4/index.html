@@ -71,6 +71,41 @@
     <header class="title">
       
         <h1>
+          <a href="/2015/08/26/Fedora-22-新内核下-BCMA-43142网卡无WiFi的解决/">Fedora 22 新内核下 BCMA 43142网卡无WiFi的解决</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2015-08-26T01:36:19.000Z" itemprop="datePublished">
+    2015-08-26
+  </time>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>先说解决办法：</p>
+<pre><code class="bash">sudo dnf install akmod-wl
+</code></pre>
+<p>Fedora的更新一向很快，带来的问题之一就是兼容性。</p>
+<p>比如4.1.5的kernel下，并没有兼容bcma43142的内置driver。</p>
+<p>第一反应是去下载内核编译，然并卵。</p>
+<p>编译之后可以搜寻wifi，但是不能连接wpa2加密的wifi。</p>
+<p>最后灵机一动想到了那个闭源驱动的rpm源，安装之，解决。</p>
+<p>睡觉。</p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
           <a href="/2015/08/03/撸了个node的微型web-server/">撸了个node的微型web server</a>
         </h1>
       
@@ -95,7 +130,7 @@
     </header>
     <div>
       
-        <p><a href="https://github.com/NameIsUseless/yue" target="_blank" rel="external">Github 链接在此</a></p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p><a href="https://github.com/NameIsUseless/yue" target="_blank" rel="external">Github 链接在此</a></p>
 <p>（明明是全是coffee文件强行叫.js，凑表碾）</p>
 <hr>
 <blockquote>
@@ -180,7 +215,7 @@
     </header>
     <div>
       
-        <p>这段时间为前一阵的天真付出了代价，各种ddl轮番上阵简直醉。</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>这段时间为前一阵的天真付出了代价，各种ddl轮番上阵简直醉。</p>
 <p>最近在看SICP和CSAPP，果然应了贪多嚼不烂这句话。买了很多书确并不能静下心来读。SICP构建树结构那一章看了两个星期仍然没有看完= =</p>
 <p>一直想写的web游戏引擎，也因为时间的关系一直坑在那里，徘徊在绘制直线和显示图像的边缘。</p>
 <p>倒是学了学coffeescript，感觉写起来和python一样如沐清风233</p>
@@ -256,7 +291,7 @@
   <ul>
     
   <li class="meta-text">
-  { <a href="/tags/OOP/">OOP</a> }
+  { <a href="/tags/object-oriented-programming/">object-oriented programming</a> }
   </li>
 
 
@@ -268,7 +303,7 @@
     </header>
     <div>
       
-        <p>(ref: <a href="http://www.quora.com/Is-object-oriented-programming-both-anti-modular-and-anti-parallel-by-its-very-nature-Why-or-why-not" target="_blank" rel="external">http://www.quora.com/Is-object-oriented-programming-both-anti-modular-and-anti-parallel-by-its-very-nature-Why-or-why-not</a>)</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>(ref: <a href="http://www.quora.com/Is-object-oriented-programming-both-anti-modular-and-anti-parallel-by-its-very-nature-Why-or-why-not" target="_blank" rel="external">http://www.quora.com/Is-object-oriented-programming-both-anti-modular-and-anti-parallel-by-its-very-nature-Why-or-why-not</a>)</p>
 <blockquote>
 <p>According to a blog post from Professor Robert Harper, the CMU Computer Science department is removing the required study of O-O from the Freshman curriculum for this reason. But why?</p>
 </blockquote>
@@ -313,7 +348,7 @@
     </header>
     <div>
       
-        <p>一开始是看到谭总博客里面那纵享丝滑的像是ajax的加载</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>一开始是看到谭总博客里面那纵享丝滑的像是ajax的加载</p>
 <p>（还有上面那个神奇的进度条）</p>
 <p>然后就发现了这个神奇的instantclick</p>
 <p>利用pjax，在鼠标放到a上的时候开始加载页面，当你点下鼠标的时候页面已经加载完毕了，这时只要替换页面的title和body，纵享丝滑~</p>
@@ -358,7 +393,7 @@
     </header>
     <div>
       
-        <p>蛋疼的升级。。</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>蛋疼的升级。。</p>
 <p>一开始是莫名的插件错误，让我好生看源码，看着看着发现不对啊这为什么报错只能是api问题啊</p>
 <p>然后到hexo.io一看，果然。。升级了3.0，还是”the API has breaking changes”的节奏</p>
 <p>按照文档里写的去掉版本号，<code>npm install hexo-cli -g</code> ，<code>npm install hexo --save</code> ，然后发现folder又要重新出屎化，出屎化完了还要重新安装全套插件，还要重新设置环境变量。。。</p>
@@ -399,7 +434,7 @@
     </header>
     <div>
       
-        <p>供在这里，时时观摩学习。</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>供在这里，时时观摩学习。</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Zj_MhQ_x8Ao" frameborder="0" allowfullscreen style="
     max-width: 100%;"></iframe>
       
@@ -437,52 +472,8 @@
     </header>
     <div>
       
-        <p>starsector是款好游戏。</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>starsector是款好游戏。</p>
 <p>但是是用java开发的，可惜了。</p>
-
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2015/03/03/使用git部署网站/">使用git部署网站</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2015-03-02T17:54:05.000Z" itemprop="datePublished">
-    2015-03-03
-  </time>
-  
-  | 
-  <ul>
-    
-  <li class="meta-text">
-  { <a href="/tags/git/">git</a> }
-  </li>
-
-
-  </ul>
-  
-  
-</div>
-
-    </header>
-    <div>
-      
-        <p>(Someone said a coder who’s blog is full of “using some tools to do sth” is totally unreliable….)</p>
-<p>大致方法是创建一个bare repository，然后利用hook脚本在每次push时更新网站内容。</p>
-<p>##服务端</p>
-<p>创建git用户和，禁用shell登陆</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">$ sudo useradd git &amp;&amp; sudo groupadd git</div><div class="line">#创建并修改密码</div><div class="line">$ passwd git </div><div class="line">$ sudo vi /etc/passwd</div><div class="line">将git一行设置为:/home/git:/usr/bin/git-shell</div></pre></td></tr></table></figure>
-<p>选一个喜欢的目录建立bare repository</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">$ cd &lt;path&gt;</div><div class="line">$ mkdir website.git</div><div class="line">$ sudo git init --bare website.git</div><div class="line">#赋予给git用户</div><div class="line">$ sudo chown -R git:git website.git</div><div class="line">#配置hook</div><div class="line">$ sudo vi website.git/hooks/post-receive</div><div class="line"></div><div class="line">#!/bin/sh</div><div class="line">GIT_WORK_TREE=path/to/websiteroot  git checkout -f</div><div class="line"></div><div class="line">$ chmod +x post-receive</div><div class="line">$ sudo chown -R git:git path/to/websiteroot</div></pre></td></tr></table></figure>
-<p>之后便获取本地公钥，设置authorized_keys，之后网站更新时只要git push到repository即可。</p>
 
       
     </div>

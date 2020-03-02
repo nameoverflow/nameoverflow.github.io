@@ -71,6 +71,43 @@
     <header class="title">
       
         <h1>
+          <a href="/2016/05/14/Let-s-Encrypt/">Let&#39;s Encrypt!</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2016-05-14T05:40:54.000Z" itemprop="datePublished">
+    2016-05-14
+  </time>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><blockquote>
+<p>世界因自由软件而美好。</p>
+</blockquote>
+<p>昨天（5月13日）发现 SSL 证书到期了。想起之前谭总说过的 Let’s Encrypt，决定体验一下。</p>
+<p>相比起<a href="https://tms.im/tms/letsencrypt-beta" target="_blank" rel="external">半年前</a>，这玩意完善了很多、傻瓜了很多。</p>
+<p>全程需要做的只需要 clone 一个<a href="https://github.com/certbot/certbot" target="_blank" rel="external">傻瓜工具包</a>，然后运行一行命令</p>
+<pre><code class="bash">./certbot-auto certonly --standalone --email admin@hcyue.me <span class="_">-d</span> hcyue.me
+</code></pre>
+<p>之后坐等几秒，SSL 验证所需要的全部证书就都被放在了 <code>/etc/letsencrypt/live/hcyue.me/</code></p>
+<p>然后把 nginx 配置对应的项目修改为生成的 pem 即可。</p>
+<p><img src="https://dn-hcyue.qbox.me/img%2FS60514-133728.jpg" alt=""></p>
+
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
           <a href="/2016/05/08/Haskeller-的-PureScript-试水/">Haskeller 的 PureScript 试水</a>
         </h1>
       
@@ -138,11 +175,11 @@
   <ul>
     
   <li class="meta-text">
-  { <a href="/tags/lambda-calculus/">lambda calculus</a> }
+  { <a href="/tags/computer-science/">computer science</a> }
   </li>
 
   <li class="meta-text">
-  { <a href="/tags/computer-science/">computer science</a> }
+  { <a href="/tags/lambda-calculus/">lambda calculus</a> }
   </li>
 
 
@@ -193,7 +230,7 @@
     </header>
     <div>
       
-        <p>穷逼买不起 mac 但是受不了 windows 的辣鸡字体渲染，只能自己动手丰衣足食。</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>穷逼买不起 mac 但是受不了 windows 的辣鸡字体渲染，只能自己动手丰衣足食。</p>
 <p>效果图：</p>
 <p><img src="https://dn-hcyue.qbox.me/img%2FQQ%E6%88%AA%E5%9B%BE20160321222022.png" alt=""></p>
 <p><a href="https://github.com/renkun-ken/MacType.Decency" target="_blank" rel="external">原配置</a> 是我从<a href="https://www.zhihu.com/question/22425454/answer/21930065" target="_blank" rel="external">知乎这个回答</a>上扒的。但是他用到了很多魔改字体然而我懒得装，于是 <code>fork</code> 了一份把魔改字体都删了嗯。</p>
@@ -224,7 +261,7 @@
     </header>
     <div>
       
-        <p>所谓“重构半衰期”，就是“写一段代码，在时间T之后你会觉得这一段代码写得像坨 shit ”中 T 的最小值。</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>所谓“重构半衰期”，就是“写一段代码，在时间T之后你会觉得这一段代码写得像坨 shit ”中 T 的最小值。</p>
 <p>之所以突然想到这个概念，是因为我发现，现在的我看几个月之前的文章简直就是羞耻 play ：</p>
 <p><a href="/article/56462b7f149b44851f0e03a7">*大综合楼，一跃解千愁</a></p>
 <p><a href="/article/561d28e92da1ec4753e8a5b6">Haskell 练习</a></p>
@@ -269,7 +306,7 @@
     </header>
     <div>
       
-        <p>讲道理把 OOM killer 设成 2 居然会把整个系统搞挂……</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>讲道理把 OOM killer 设成 2 居然会把整个系统搞挂……</p>
 <p><img src="https://dn-hcyue.qbox.me/img/QQ%E6%88%AA%E5%9B%BE20160313134747.png" alt="enter image description here"></p>
 <p>于是整个 OS 的内存管理全部挂掉，能用的命令只有 <code>echo</code> </p>
 <p>还好是可以以文件的形式强行修改服务进程的。</p>
@@ -315,7 +352,7 @@
     </header>
     <div>
       
-        <p>这次重写 Blog ，主要做了三件事：</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>这次重写 Blog ，主要做了三件事：</p>
 <ol>
 <li>试用了 Redux </li>
 <li>实现了服务端渲染</li>
@@ -370,7 +407,7 @@
     </header>
     <div>
       
-        <p>同构渲染的好处大家都有目共睹，SEO 优化、首屏速度之类的。这次重写 blog，基于试水的考虑使用了 react + redux 实现同构渲染，然后果不其然踩到了点小坑。</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>同构渲染的好处大家都有目共睹，SEO 优化、首屏速度之类的。这次重写 blog，基于试水的考虑使用了 react + redux 实现同构渲染，然后果不其然踩到了点小坑。</p>
 <h3 id="state-带来的难题"><a href="#state-带来的难题" class="headerlink" title="state 带来的难题"></a><code>state</code> 带来的难题</h3><p>起初我只是想感受一下 react 的服务端渲染，并没有考虑把 redux 这种应对高复杂度应用的框架弄来。然而很快便发现，同构渲染要解决的首要问题——数据同步问题，在传统 react 的 props + state 模式下很难做到。</p>
 <p>一般纯客户端使用 react 时，习惯将数据保存在 state 中，然而在服务端渲染时很难控制组件的 <code>state</code> （至少我在文档中根本没找到解决办法），于是难以将客户端的组件数据与服务端渲染时的数据保持一致。当时想到的一个办法就是将所有的状态全部抽出来由最顶层组件的state提供，然后以props的形式分发到下级组件。然后开始写之后发现，这™不就是 Redux ？于是便高高兴兴的 <code>npm install redux --save</code> </p>
 <h3 id="在服务端分发数据"><a href="#在服务端分发数据" class="headerlink" title="在服务端分发数据"></a>在服务端分发数据</h3><p>Readux 除了能解决数据同步的问题外，还顺带解决了服务端对不同组件数据分发的问题。比如之前对于加载文章的解决方式是：当组件挂载后，ajax拉下组件对应的文章数据保存在state中，然后渲染。</p>
@@ -527,7 +564,7 @@ html(lang=&quot;zh-cn&quot;)
     </header>
     <div>
       
-        <p>以下按坑大小升序排列</p>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/hint.css/2.4.1/hint.min.css"><p>以下按坑大小升序排列</p>
 <ul>
 <li><p>博客 Dashboard 的前端</p>
 <p>  <s>顺便和 <a href="http://new.hcyue.me" target="_blank" rel="external">new.hcyue.me</a> 一起上线</s></p>
@@ -601,55 +638,6 @@ html(lang=&quot;zh-cn&quot;)
         
           <div class="more-link">
             <a href="/2016/02/21/CPS变换与JavaScript流程控制/#more">Read On »</a>
-          </div>
-        
-      
-    </div>
-</article>
-
-    </li>
-  
-    <li>
-      <article class='ListView'>
-    <header class="title">
-      
-        <h1>
-          <a href="/2016/01/27/学习笔记-Continuation-passing-Style/">学习笔记：Continuation-passing Style</a>
-        </h1>
-      
-      <div class='ListMeta'>
-  <time datetime="2016-01-27T11:54:26.000Z" itemprop="datePublished">
-    2016-01-27
-  </time>
-  
-  | 
-  <ul>
-    
-  <li class="meta-text">
-  { <a href="/tags/computer-science/">computer science</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/cps/">cps</a> }
-  </li>
-
-
-  </ul>
-  
-  
-</div>
-
-    </header>
-    <div>
-      
-        <p>说来惭愧，虽然对于 <code>CPS transform</code> 这个概念略有耳闻（当时的理解是一种将普通递归调用变化为尾递归的方法），但是对于 <code>CPS</code> 这个概念还是在看<a href="http://www.cppblog.com/vczh/archive/2014/01/19/205468.html">轮子哥的文章</a> 时才想起去详细了解。终究还是CS基础不牢。</p>
-<h3 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h3><blockquote>
-<p>In <a href="https://en.wikipedia.org/wiki/Functional_programming" title="Functional programming">functional programming</a>, <b>continuation-passing style</b> (<b>CPS</b>) is a style of programming in which <a href="https://en.wikipedia.org/wiki/Control_flow" title="Control flow">control</a> is passed explicitly in the form of a <a href="https://en.wikipedia.org/wiki/Continuation" title="Continuation">continuation</a>. This is contrasted with <a href="https://en.wikipedia.org/wiki/Direct_style" title="Direct style">direct style</a>, which is the usual style of programming. <a href="https://en.wikipedia.org/wiki/Gerald_Jay_Sussman" title="Gerald Jay Sussman">Gerald Jay Sussman</a> and <a href="https://en.wikipedia.org/wiki/Guy_L._Steele,_Jr." title="Guy L. Steele, Jr.">Guy L. Steele, Jr.</a> coined the phrase in <a href="https://en.wikipedia.org/wiki/AI_Memo" title="AI Memo">AI Memo</a> 349 (1975), which sets out the first version of the <a href="https://en.wikipedia.org/wiki/Scheme_(programming_language)" title="Scheme (programming language)">Scheme</a> programming language.<sup id="cite_ref-1" class="reference"><a href="https://en.wikipedia.org/wiki/Continuation-passing_style#cite_note-1"><span>[</span>1<span>]</span></a></sup><sup id="cite_ref-2" class="reference"><a href="https://en.wikipedia.org/wiki/Continuation-passing_style#cite_note-2"><span>[</span>2<span>]</span></a></sup> <a href="https://en.wikipedia.org/wiki/John_C._Reynolds" title="John C. Reynolds">John C. Reynolds</a> gives a detailed account of the numerous discoveries of continuations.<sup id="cite_ref-3" class="reference"><a href="https://en.wikipedia.org/wiki/Continuation-passing_style#cite_note-3"><span>[</span>3<span>]</span></a></sup></p>
-</blockquote>
-<p>简单来说，就是一种程序调用方式，在每次函数调用时通过传参决定下一步执行的内容。</p>
-        
-          <div class="more-link">
-            <a href="/2016/01/27/学习笔记-Continuation-passing-Style/#more">Read On »</a>
           </div>
         
       
