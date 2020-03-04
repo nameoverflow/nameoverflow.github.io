@@ -1,11 +1,10 @@
 ---
 title: Bayesian Neural Networks：贝叶斯神经网络
-date: 2020-03-02 16:18:00
+date: 2019-09-06 11:45:14
 tags:
   - neural network
-  - machine learning
   - deep learning
-  - bayesian inference
+  - variational inference
 ---
 
 贝叶斯神经网络，简单来说可以理解为通过为神经网络的权重引入不确定性进行正则化（regularization），也相当于集成（ensemble）某权重分布上的无穷多组神经网络进行预测。
